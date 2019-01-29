@@ -104,10 +104,9 @@ public:
         return !(lhs == rhs);
     }
 
-    template <class CharT>
     friend std::ostream& operator<<(std::ostream& os, const byte_string_view& o)
     {
-        std::basic_ostringstream<CharT> ss;
+        std::basic_ostringstream<char> ss;
         ss.flags(std::ios::hex | std::ios::showbase);
         for (auto b : o)
         {
@@ -248,7 +247,6 @@ public:
         return byte_string_view(lhs) != byte_string_view(rhs);
     }
 
-    template <class CharT>
     friend std::ostream& operator<<(std::ostream& os, const basic_byte_string& o)
     {
         os << byte_string_view(o);
