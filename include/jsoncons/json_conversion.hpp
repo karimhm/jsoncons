@@ -148,12 +148,12 @@ void encode_json(const T& val, const json_options& options,
 {
     if (line_indent == indenting::indent)
     {
-        json_serializer serializer(s, options);
+        basic_json_serializer<char,jsoncons::string_result<std::basic_string<char>>> serializer(s, options);
         encode_json(val, serializer);
     }
     else
     {
-        json_compressed_serializer serializer(s, options);
+        basic_json_compressed_serializer<char,jsoncons::string_result<std::basic_string<char>>> serializer(s, options);
         encode_json(val, serializer);
     }
 }
