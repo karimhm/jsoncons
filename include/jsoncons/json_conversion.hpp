@@ -144,7 +144,7 @@ void encode_json(const T& val, std::basic_string<char>& s, indenting line_indent
 
 template <class T>
 void encode_json(const T& val, const json_options& options,
-                 std::basic_string<char,jsoncons::string_result<std::basic_string<char>>>& s, indenting line_indent)
+                 std::basic_string<char>& s, indenting line_indent)
 {
     if (line_indent == indenting::indent)
     {
