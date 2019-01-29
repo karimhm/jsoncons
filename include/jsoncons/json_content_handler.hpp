@@ -37,19 +37,15 @@ enum class semantic_tag_type : uint8_t
     big_float // unused
 };
 
-template <class CharT>
-class basic_json_content_handler
+class json_content_handler
 {
-#if !defined(JSONCONS_NO_DEPRECATED)
-    std::basic_string<char> buffer_;
-#endif
 public:
     typedef char char_type;
     typedef std::char_traits<char_type> char_traits_type;
 
     typedef basic_string_view<char_type,char_traits_type> string_view_type;
 
-    virtual ~basic_json_content_handler() {}
+    virtual ~json_content_handler() {}
 
     void flush()
     {
@@ -117,55 +113,6 @@ public:
     {
         return do_byte_string_value(byte_string(p, size), tag, context);
     }
-#if !defined(JSONCONS_NO_DEPRECATED)
-    bool byte_string_value(const byte_string_view& b, 
-                           byte_string_chars_format encoding_hint, 
-                           semantic_tag_type tag=semantic_tag_type::none, 
-                           const serializing_context& context=null_serializing_context())
-    {
-        switch (encoding_hint)
-        {
-            {
-                case byte_string_chars_format::base16:
-                    tag = semantic_tag_type::base16;
-                    break;
-                case byte_string_chars_format::base64:
-                    tag = semantic_tag_type::base64;
-                    break;
-                case byte_string_chars_format::base64url:
-                    tag = semantic_tag_type::base64url;
-                    break;
-                default:
-                    break;
-            }
-        }
-        return do_byte_string_value(b, tag, context);
-    }
-
-    bool byte_string_value(const uint8_t* p, size_t size, 
-                           byte_string_chars_format encoding_hint, 
-                           semantic_tag_type tag=semantic_tag_type::none, 
-                           const serializing_context& context=null_serializing_context())
-    {
-        switch (encoding_hint)
-        {
-            {
-                case byte_string_chars_format::base16:
-                    tag = semantic_tag_type::base16;
-                    break;
-                case byte_string_chars_format::base64:
-                    tag = semantic_tag_type::base64;
-                    break;
-                case byte_string_chars_format::base64url:
-                    tag = semantic_tag_type::base64url;
-                    break;
-                default:
-                    break;
-            }
-        }
-        return do_byte_string_value(byte_string(p, size), tag, context);
-    }
-#endif
 
     bool big_integer_value(const string_view_type& s, const serializing_context& context=null_serializing_context()) 
     {
@@ -221,70 +168,6 @@ public:
         return do_null_value(tag, context);
     }
 
-#if !defined(JSONCONS_NO_DEPRECATED)
-
-    bool begin_document()
-    {
-        return true;
-    }
-
-    bool end_document()
-    {
-        flush();
-        return true;
-    }
-
-    void begin_json()
-    {
-    }
-
-    void end_json()
-    {
-        end_document();
-    }
-
-    void name(const CharT* p, size_t length, const serializing_context& context) 
-    {
-        name(string_view_type(p, length), context);
-    }
-
-    void integer_value(int64_t value)
-    {
-        int64_value(value);
-    }
-
-    void integer_value(int64_t value, const serializing_context& context)
-    {
-        int64_value(value,context);
-    }
-
-    void uinteger_value(uint64_t value)
-    {
-        uint64_value(value);
-    }
-
-    void uinteger_value(uint64_t value, const serializing_context& context)
-    {
-        uint64_value(value,context);
-    }
-
-    bool bignum_value(const string_view_type& s, const serializing_context& context=null_serializing_context()) 
-    {
-        return do_string_value(s, semantic_tag_type::big_integer, context);
-    }
-
-    bool decimal_value(const string_view_type& s, const serializing_context& context=null_serializing_context()) 
-    {
-        return do_string_value(s, semantic_tag_type::big_decimal, context);
-    }
-
-    bool epoch_time_value(int64_t val, const serializing_context& context=null_serializing_context()) 
-    {
-        return do_int64_value(val, semantic_tag_type::timestamp, context);
-    }
-
-#endif
-
 private:
     virtual void do_flush() = 0;
 
@@ -331,11 +214,10 @@ private:
     virtual bool do_bool_value(bool value, semantic_tag_type tag, const serializing_context& context) = 0;
 };
 
-template <class CharT>
-class basic_null_json_content_handler final : public basic_json_content_handler<CharT>
+class null_json_content_handler final : public json_content_handler
 {
 public:
-    using typename basic_json_content_handler<CharT>::string_view_type;
+    using typename json_content_handler::string_view_type;
 private:
     void do_flush() override
     {
@@ -409,12 +291,6 @@ private:
         return true;
     }
 };
-
-typedef basic_json_content_handler<char> json_content_handler;
-typedef basic_json_content_handler<wchar_t> wjson_content_handler;
-
-typedef basic_null_json_content_handler<char> null_json_content_handler;
-typedef basic_null_json_content_handler<wchar_t> wnull_json_content_handler;
 
 }
 

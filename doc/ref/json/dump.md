@@ -25,7 +25,7 @@ void dump(std::ostream<CharT> os, const json_options& options) const; // (7)
 
 void dump(std::ostream<CharT> os, const json_options& options, indenting line_indent) const; // (8)
 
-void dump(basic_json_content_handler<char_type>& content_handler) const; // (9)
+void dump(json_content_handler& content_handler) const; // (9)
 ```
 
 (1) Dumps json value to string using default json_options.

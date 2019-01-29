@@ -5,7 +5,7 @@ template<
     class CharT,
     class Result
     class Allocator=std::allocator<char>=std::allocator<char>>
-> class basic_csv_serializer : public jsoncons::basic_json_content_handler<CharT>
+> class basic_csv_serializer : public jsoncons::json_content_handler
 ```
 
 `basic_csv_serializer` and `basic_json_compressed_serializer` are noncopyable and nonmoveable.

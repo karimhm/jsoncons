@@ -175,11 +175,11 @@ byte_string_chars_format resolve_byte_string_chars_format(byte_string_chars_form
 namespace jsoncons {
 
 template<class CharT,class Result=jsoncons::text_stream_result<CharT>>
-class basic_json_serializer final : public basic_json_content_handler<CharT>
+class basic_json_serializer final : public json_content_handler
 {
 public:
     typedef char char_type;
-    using typename basic_json_content_handler<CharT>::string_view_type;
+    using typename json_content_handler::string_view_type;
     typedef Result result_type;
     typedef typename json_options::string_type string_type;
 
@@ -916,9 +916,6 @@ private:
     {
         switch (big_integer_format_)
         {
-#if !defined(JSONCONS_NO_DEPRECATED)
-            case big_integer_chars_format::integer:
-#endif
             case big_integer_chars_format::number:
             {
                 result_.insert(sv.data(),sv.size());
@@ -1018,11 +1015,11 @@ private:
 };
 
 template<class CharT,class Result=jsoncons::text_stream_result<CharT>>
-class basic_json_compressed_serializer final : public basic_json_content_handler<CharT>
+class basic_json_compressed_serializer final : public json_content_handler
 {
 public:
     typedef char char_type;
-    using typename basic_json_content_handler<CharT>::string_view_type;
+    using typename json_content_handler::string_view_type;
     typedef Result result_type;
     typedef typename json_options::string_type string_type;
 

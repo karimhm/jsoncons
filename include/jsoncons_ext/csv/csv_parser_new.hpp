@@ -73,7 +73,7 @@ class basic_csv_parser : private serializing_context
     csv_state_type state_;
     int top_;
     std::vector<csv_mode_type,csv_mode_allocator_type> stack_;
-    basic_json_content_handler<CharT>& handler_;
+    json_content_handler& handler_;
     parse_error_handler& err_handler_;
     unsigned long column_;
     unsigned long line_;
@@ -97,24 +97,24 @@ class basic_csv_parser : private serializing_context
     bool continue_;
 
 public:
-    basic_csv_parser(basic_json_content_handler<CharT>& handler)
+    basic_csv_parser(json_content_handler& handler)
        : basic_csv_parser(handler, basic_csv_options<CharT>(), default_err_handler_)
     {
     }
 
-    basic_csv_parser(basic_json_content_handler<CharT>& handler,
+    basic_csv_parser(json_content_handler& handler,
                      const basic_csv_options<CharT>& options)
         : basic_csv_parser(handler, options, default_err_handler_)
     {
     }
 
-    basic_csv_parser(basic_json_content_handler<CharT>& handler,
+    basic_csv_parser(json_content_handler& handler,
                      parse_error_handler& err_handler)
         : basic_csv_parser(handler, basic_csv_options<CharT>(), err_handler)
     {
     }
 
-    basic_csv_parser(basic_json_content_handler<CharT>& handler,
+    basic_csv_parser(json_content_handler& handler,
                      const basic_csv_options<CharT>& options,
                      parse_error_handler& err_handler)
        : top_(-1),
@@ -866,7 +866,7 @@ private:
     void end_value(const string_view_type& value, 
                    size_t column_index, 
                    bool infer_types, 
-                   basic_json_content_handler<CharT>& handler)
+                   json_content_handler& handler)
     {
         if (column_index < column_types_.size() + offset_)
         {
@@ -1036,7 +1036,7 @@ private:
         done
     };
 
-    void end_value_with_numeric_check(const string_view_type& value, basic_json_content_handler<CharT>& handler)
+    void end_value_with_numeric_check(const string_view_type& value, json_content_handler& handler)
     {
         numeric_check_state state = numeric_check_state::initial;
         bool is_negative = false;

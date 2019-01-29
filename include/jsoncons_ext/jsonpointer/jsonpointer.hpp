@@ -221,6 +221,7 @@ public:
 private:
 };
 
+inline
 std::basic_string<char> escape_string(const std::basic_string<char>& s)
 {
     std::basic_string<char> result;

@@ -23,10 +23,10 @@
 namespace jsoncons {
 
 template <class CharT>
-class basic_staj_event_handler final : public basic_json_content_handler<CharT>
+class basic_staj_event_handler final : public json_content_handler
 {
 public:
-    using typename basic_json_content_handler<CharT>::string_view_type;
+    using typename json_content_handler::string_view_type;
 private:
     basic_staj_event<CharT> event_;
 public:
@@ -421,7 +421,7 @@ public:
         return event_handler_.event();
     }
 
-    void accept(basic_json_content_handler<CharT>& handler) override
+    void accept(json_content_handler& handler) override
     {
         std::error_code ec;
         accept(handler, ec);
@@ -431,7 +431,7 @@ public:
         }
     }
 
-    void accept(basic_json_content_handler<CharT>& handler,
+    void accept(json_content_handler& handler,
                 std::error_code& ec) override
     {
         switch (event_handler_.event().event_type())
@@ -564,7 +564,7 @@ public:
         read_next(event_handler_, ec);
     }
 
-    void read_next(basic_json_content_handler<CharT>& handler, std::error_code& ec)
+    void read_next(json_content_handler& handler, std::error_code& ec)
     {
         parser_.restart();
         while (!parser_.stopped())

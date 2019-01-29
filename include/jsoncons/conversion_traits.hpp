@@ -39,7 +39,7 @@ void decode_stream(basic_staj_reader<CharT>& reader, T& val)
 }
 
 template <class CharT, class T>
-void encode_stream(const T&val, basic_json_content_handler<CharT>& writer);
+void encode_stream(const T&val, json_content_handler& writer);
 
 } // namespace jsoncons
 
@@ -59,7 +59,7 @@ struct conversion_traits
     }
 
     template <class CharT>
-    static void encode(const T& val, basic_json_content_handler<CharT>& writer)
+    static void encode(const T& val, json_content_handler& writer)
     {
         auto j = json_type_traits<basic_json<CharT>, T>::to_json(val);
         j.dump(writer);
@@ -93,7 +93,7 @@ struct conversion_traits<T,
     }
 
     template <class CharT>
-    static void encode(const T& val, basic_json_content_handler<CharT>& writer)
+    static void encode(const T& val, json_content_handler& writer)
     {
         writer.begin_array();
         for (auto it = std::begin(val); it != std::end(val); ++it)
@@ -128,7 +128,7 @@ struct conversion_traits<std::array<T,N>>
     }
 
     template <class CharT>
-    static void encode(const std::array<T, N>& val, basic_json_content_handler<CharT>& writer)
+    static void encode(const std::array<T, N>& val, json_content_handler& writer)
     {
         writer.begin_array();
         for (auto it = std::begin(val); it != std::end(val); ++it)
@@ -168,7 +168,7 @@ struct conversion_traits<T,
     }
 
     template <class CharT>
-    static void encode(const T& val, basic_json_content_handler<CharT>& writer)
+    static void encode(const T& val, json_content_handler& writer)
     {
         writer.begin_object();
         for (auto it = std::begin(val); it != std::end(val); ++it)
@@ -188,7 +188,7 @@ void decode_stream(basic_staj_reader<CharT>& reader, T& val, std::error_code& ec
 }
 
 template <class CharT, class T>
-void encode_stream(const T&val, basic_json_content_handler<CharT>& writer)
+void encode_stream(const T&val, json_content_handler& writer)
 {
     conversion_traits<T>::encode(val, writer);
 }

@@ -25,14 +25,14 @@ namespace jsoncons { namespace cbor {
 enum class cbor_container_type {object, indefinite_length_object, array, indefinite_length_array};
 
 template<class CharT,class Result=jsoncons::binary_stream_result>
-class basic_cbor_serializer final : public basic_json_content_handler<CharT>
+class basic_cbor_serializer final : public json_content_handler
 {
 
     enum class decimal_parse_state { start, integer, exp1, exp2, fraction1 };
 public:
     typedef char char_type;
     typedef Result result_type;
-    using typename basic_json_content_handler<CharT>::string_view_type;
+    using typename json_content_handler::string_view_type;
 
 private:
     struct stack_item
@@ -819,10 +819,6 @@ typedef basic_cbor_serializer<char,jsoncons::buffer_result> cbor_buffer_serializ
 
 typedef basic_cbor_serializer<wchar_t,jsoncons::binary_stream_result> wcbor_serializer;
 typedef basic_cbor_serializer<wchar_t,jsoncons::buffer_result> wcbor_buffer_serializer;
-
-#if !defined(JSONCONS_NO_DEPRECATED)
-typedef basic_cbor_serializer<char,jsoncons::buffer_result> cbor_bytes_serializer;
-#endif
 
 }}
 #endif

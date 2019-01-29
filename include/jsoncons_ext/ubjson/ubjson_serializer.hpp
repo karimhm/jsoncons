@@ -26,12 +26,12 @@ namespace jsoncons { namespace ubjson {
 enum class ubjson_container_type {object, indefinite_length_object, array, indefinite_length_array};
 
 template<class CharT,class Result=jsoncons::binary_stream_result>
-class basic_ubjson_serializer final : public basic_json_content_handler<CharT>
+class basic_ubjson_serializer final : public json_content_handler
 {
 
     enum class decimal_parse_state { start, integer, exp1, exp2, fraction1 };
 public:
-    using typename basic_json_content_handler<CharT>::string_view_type;
+    using typename json_content_handler::string_view_type;
     typedef Result result_type;
 
 private:

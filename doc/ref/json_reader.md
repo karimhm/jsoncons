@@ -52,18 +52,18 @@ string_view_type           |
                       parse_error_handler& err_handler); // (4)
 
     basic_json_reader(source_type source, 
-                      basic_json_content_handler<CharT>& handler); // (5)
+                      json_content_handler& handler); // (5)
 
     basic_json_reader(source_type source, 
-                      basic_json_content_handler<CharT>& handler,
+                      json_content_handler& handler,
                       const json_read_options& options); // (6)
 
     basic_json_reader(source_type source,
-                      basic_json_content_handler<CharT>& handler,
+                      json_content_handler& handler,
                       parse_error_handler& err_handler); // (7)
 
     basic_json_reader(source_type source,
-                      basic_json_content_handler<CharT>& handler, 
+                      json_content_handler& handler, 
                       const json_read_options& options,
                       parse_error_handler& err_handler); // (8)
 

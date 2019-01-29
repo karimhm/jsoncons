@@ -24,11 +24,11 @@
 namespace jsoncons { namespace csv {
 
 template<class CharT,class Result=jsoncons::text_stream_result<CharT>,class Allocator=std::allocator<char>>
-class basic_csv_serializer final : public basic_json_content_handler<CharT>
+class basic_csv_serializer final : public json_content_handler
 {
 public:
     typedef char char_type;
-    using typename basic_json_content_handler<CharT>::string_view_type;
+    using typename json_content_handler::string_view_type;
     typedef Result result_type;
 
     typedef Allocator allocator_type;

@@ -66,10 +66,6 @@ std::error_code make_error_code(cbor_errc e)
     return std::error_code(static_cast<int>(e),cbor_error_category());
 }
 
-#if !defined(JSONCONS_NO_DEPRECATED)
-typedef cbor_errc cbor_reader_errc;
-#endif
-
 }}
 
 namespace std {

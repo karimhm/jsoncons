@@ -60,7 +60,7 @@ T decode_json(std::istream& is,
 // encode_json
 
 template <class T, class CharT>
-void encode_json(const T& val, basic_json_content_handler<CharT>& writer)
+void encode_json(const T& val, json_content_handler& writer)
 {
     encode_stream(val, writer);
     writer.flush();
@@ -68,7 +68,7 @@ void encode_json(const T& val, basic_json_content_handler<CharT>& writer)
 
 #if !defined(JSONCONS_NO_DEPRECATED)
 template <class T, class CharT>
-void encode_fragment(const T& val, basic_json_content_handler<CharT>& writer)
+void encode_fragment(const T& val, json_content_handler& writer)
 {
     encode_stream(val, writer);
 }

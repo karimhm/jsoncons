@@ -8,7 +8,7 @@ have [json_type_traits](https://github.com/danielaparker/jsoncons/blob/master/do
 #include <jsoncons/json.hpp>
 
 template <class T, class CharT>
-void encode_json(const T& val, basic_json_content_handler<CharT>& handler); // (1)
+void encode_json(const T& val, json_content_handler& handler); // (1)
 
 template <class T, class CharT>
 void encode_json(const T& val, std::ostream& os); // (2)

@@ -1963,7 +1963,7 @@ public:
             evaluate().dump(s,options,line_indent);
         }
 
-        void dump(basic_json_content_handler<char_type>& handler) const
+        void dump(json_content_handler& handler) const
         {
             evaluate().dump(handler);
         }
@@ -2467,7 +2467,7 @@ public:
         }
     }
 
-    void dump(basic_json_content_handler<char_type>& handler) const
+    void dump(json_content_handler& handler) const
     {
         dump_noflush(handler);
         handler.flush();
@@ -3668,7 +3668,7 @@ public:
 
 private:
 
-    void dump_noflush(basic_json_content_handler<char_type>& handler) const
+    void dump_noflush(json_content_handler& handler) const
     {
         switch (var_.structure_tag())
         {

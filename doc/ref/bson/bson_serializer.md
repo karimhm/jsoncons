@@ -4,7 +4,7 @@
 template<
     class CharT,
     class Result>
-> class basic_bson_serializer : public jsoncons::basic_json_content_handler<CharT>
+> class basic_bson_serializer : public jsoncons::json_content_handler
 ```
 
 `basic_bson_serializer` is noncopyable and nonmoveable.

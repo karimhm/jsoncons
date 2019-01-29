@@ -62,7 +62,7 @@ public:
     */
 
     basic_csv_reader(Source source,
-                     basic_json_content_handler<CharT>& handler)
+                     json_content_handler& handler)
 
        : basic_csv_reader(std::move(source), 
                           handler, 
@@ -72,7 +72,7 @@ public:
     }
 
     basic_csv_reader(Source source,
-                     basic_json_content_handler<CharT>& handler,
+                     json_content_handler& handler,
                      const basic_csv_options<CharT>& options)
 
         : basic_csv_reader(std::move(source), 
@@ -83,7 +83,7 @@ public:
     }
 
     basic_csv_reader(Source source,
-                     basic_json_content_handler<CharT>& handler,
+                     json_content_handler& handler,
                      parse_error_handler& err_handler)
         : basic_csv_reader(std::move(source), 
                            handler, 
@@ -93,7 +93,7 @@ public:
     }
 
     basic_csv_reader(Source source,
-                     basic_json_content_handler<CharT>& handler,
+                     json_content_handler& handler,
                      const basic_csv_options<CharT>& options,
                      parse_error_handler& err_handler)
        :

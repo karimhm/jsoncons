@@ -369,9 +369,9 @@ public:
 
     virtual const basic_staj_event<CharT>& current() const = 0;
 
-    virtual void accept(basic_json_content_handler<CharT>& handler) = 0;
+    virtual void accept(json_content_handler& handler) = 0;
 
-    virtual void accept(basic_json_content_handler<CharT>& handler,
+    virtual void accept(json_content_handler& handler,
                         std::error_code& ec) = 0;
 
     virtual void next() = 0;

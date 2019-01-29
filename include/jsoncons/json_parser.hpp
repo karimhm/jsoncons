@@ -33,7 +33,7 @@ namespace detail {
 template <class CharT>
 class replacement_filter : public basic_json_filter<CharT>
 {
-    typedef typename basic_json_content_handler<CharT>::string_view_type string_view_type;
+    typedef typename json_content_handler::string_view_type string_view_type;
     typedef typename json_options::string_type string_type;
 
     bool is_str_to_nan_;
@@ -46,7 +46,7 @@ class replacement_filter : public basic_json_filter<CharT>
 public:
     replacement_filter() = delete;
 
-    replacement_filter(basic_json_content_handler<CharT>& handler,     
+    replacement_filter(json_content_handler& handler,     
                        bool is_str_to_nan,
                        bool is_str_to_inf,
                        bool is_str_to_neginf,     
@@ -152,7 +152,7 @@ template <class CharT, class Allocator = std::allocator<char>>
 class basic_json_parser : private serializing_context
 {
     typedef std::basic_string<char> string_type;
-    typedef typename basic_json_content_handler<CharT>::string_view_type string_view_type;
+    typedef typename json_content_handler::string_view_type string_view_type;
     typedef Allocator allocator_type;
     typedef typename std::allocator_traits<allocator_type>:: template rebind_alloc<CharT> char_allocator_type;
     typedef typename std::allocator_traits<allocator_type>:: template rebind_alloc<char> numeral_allocator_type;
@@ -363,7 +363,7 @@ public:
         }
     }
 
-    void begin_object(basic_json_content_handler<CharT>& handler, std::error_code& ec)
+    void begin_object(json_content_handler& handler, std::error_code& ec)
     {
         if (++nesting_depth_ > max_nesting_depth_)
         {
@@ -379,7 +379,7 @@ public:
         continue_ = handler.begin_object(semantic_tag_type::none, *this);
     }
 
-    void end_object(basic_json_content_handler<CharT>& handler, std::error_code& ec)
+    void end_object(json_content_handler& handler, std::error_code& ec)
     {
         if (nesting_depth_ < 1)
         {
@@ -419,7 +419,7 @@ public:
         }
     }
 
-    void begin_array(basic_json_content_handler<CharT>& handler, std::error_code& ec)
+    void begin_array(json_content_handler& handler, std::error_code& ec)
     {
         if (++nesting_depth_ > max_nesting_depth_)
         {
@@ -435,7 +435,7 @@ public:
         continue_ = handler.begin_array(semantic_tag_type::none, *this);
     }
 
-    void end_array(basic_json_content_handler<CharT>& handler, std::error_code& ec)
+    void end_array(json_content_handler& handler, std::error_code& ec)
     {
         if (nesting_depth_ < 1)
         {
@@ -543,7 +543,7 @@ public:
         input_ptr_ = begin_input_;
     }
 
-    void parse_some(basic_json_content_handler<CharT>& handler)
+    void parse_some(json_content_handler& handler)
     {
         std::error_code ec;
         parse_some(handler, ec);
@@ -553,7 +553,7 @@ public:
         }
     }
 
-    void parse_some(basic_json_content_handler<CharT>& handler, std::error_code& ec)
+    void parse_some(json_content_handler& handler, std::error_code& ec)
     {
         if (is_str_to_nan_ || is_str_to_inf_ || is_str_to_neginf_)
         {
@@ -572,7 +572,7 @@ public:
         }
     }
 
-    void finish_parse(basic_json_content_handler<CharT>& handler)
+    void finish_parse(json_content_handler& handler)
     {
         std::error_code ec;
         finish_parse(handler, ec);
@@ -582,7 +582,7 @@ public:
         }
     }
 
-    void finish_parse(basic_json_content_handler<CharT>& handler, std::error_code& ec)
+    void finish_parse(json_content_handler& handler, std::error_code& ec)
     {
         while (!finished())
         {
@@ -590,7 +590,7 @@ public:
         }
     }
 
-    void parse_some_(basic_json_content_handler<CharT>& handler, std::error_code& ec)
+    void parse_some_(json_content_handler& handler, std::error_code& ec)
     {
         if (state_ == json_parse_state::before_done)
         {
@@ -1621,7 +1621,7 @@ public:
         }
     }
 
-    void parse_true(basic_json_content_handler<CharT>& handler, std::error_code& ec)
+    void parse_true(json_content_handler& handler, std::error_code& ec)
     {
         if (JSONCONS_LIKELY(input_end_ - input_ptr_ >= 4))
         {
@@ -1655,7 +1655,7 @@ public:
         }
     }
 
-    void parse_null(basic_json_content_handler<CharT>& handler, std::error_code& ec)
+    void parse_null(json_content_handler& handler, std::error_code& ec)
     {
         if (JSONCONS_LIKELY(input_end_ - input_ptr_ >= 4))
         {
@@ -1689,7 +1689,7 @@ public:
         }
     }
 
-    void parse_false(basic_json_content_handler<CharT>& handler, std::error_code& ec)
+    void parse_false(json_content_handler& handler, std::error_code& ec)
     {
         if (JSONCONS_LIKELY(input_end_ - input_ptr_ >= 5))
         {
@@ -1723,7 +1723,7 @@ public:
         }
     }
 
-    void parse_number(basic_json_content_handler<CharT>& handler, std::error_code& ec)
+    void parse_number(json_content_handler& handler, std::error_code& ec)
     {
         const CharT* local_input_end = input_end_;
 
@@ -2140,7 +2140,7 @@ exp3:
         JSONCONS_UNREACHABLE();               
     }
 
-    void parse_string(basic_json_content_handler<CharT>& handler, std::error_code& ec)
+    void parse_string(json_content_handler& handler, std::error_code& ec)
     {
         const CharT* local_input_end = input_end_;
         const CharT* sb = input_ptr_;
@@ -2601,7 +2601,7 @@ escape_u9:
 
 #if !defined(JSONCONS_NO_DEPRECATED)
 
-    void end_parse(basic_json_content_handler<CharT>& handler)
+    void end_parse(json_content_handler& handler)
     {
         std::error_code ec;
         finish_parse(handler, ec);
@@ -2611,7 +2611,7 @@ escape_u9:
         }
     }
 
-    void end_parse(basic_json_content_handler<CharT>& handler, std::error_code& ec)
+    void end_parse(json_content_handler& handler, std::error_code& ec)
     {
         while (!finished())
         {
@@ -2638,7 +2638,7 @@ escape_u9:
     }
 private:
 
-    void end_integer_value(basic_json_content_handler<CharT>& handler, std::error_code& ec)
+    void end_integer_value(json_content_handler& handler, std::error_code& ec)
     {
         if (string_buffer_[0] == '-')
         {
@@ -2650,7 +2650,7 @@ private:
         }
     }
 
-    void end_negative_value(basic_json_content_handler<CharT>& handler, std::error_code& ec)
+    void end_negative_value(json_content_handler& handler, std::error_code& ec)
     {
         auto result = jsoncons::detail::to_integer<int64_t>(string_buffer_.data(), string_buffer_.length());
         if (!result.overflow)
@@ -2664,7 +2664,7 @@ private:
         after_value(ec);
     }
 
-    void end_positive_value(basic_json_content_handler<CharT>& handler, std::error_code& ec)
+    void end_positive_value(json_content_handler& handler, std::error_code& ec)
     {
         auto result = jsoncons::detail::to_integer<uint64_t>(string_buffer_.data(), string_buffer_.length());
         if (!result.overflow)
@@ -2678,7 +2678,7 @@ private:
         after_value(ec);
     }
 
-    void end_fraction_value(basic_json_content_handler<CharT>& handler, std::error_code& ec)
+    void end_fraction_value(json_content_handler& handler, std::error_code& ec)
     {
         try
         {
@@ -2749,7 +2749,7 @@ private:
         }
     }
 
-    void end_string_value(const CharT* s, size_t length, basic_json_content_handler<CharT>& handler, std::error_code& ec) 
+    void end_string_value(const CharT* s, size_t length, json_content_handler& handler, std::error_code& ec) 
     {
         auto result = unicons::validate(s,s+length);
         if (result.ec != unicons::conv_errc())

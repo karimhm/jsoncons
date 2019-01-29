@@ -15,35 +15,35 @@
 namespace jsoncons {
 
 template <class CharT>
-class basic_json_filter : public basic_json_content_handler<CharT>
+class basic_json_filter : public json_content_handler
 {
 public:
-    using typename basic_json_content_handler<CharT>::string_view_type                      ;
+    using typename json_content_handler::string_view_type                      ;
 private:
-    basic_json_content_handler<CharT>& destination_handler_;
+    json_content_handler& destination_handler_;
 
     // noncopyable and nonmoveable
     basic_json_filter<CharT>(const basic_json_filter<CharT>&) = delete;
     basic_json_filter<CharT>& operator=(const basic_json_filter<CharT>&) = delete;
 public:
-    basic_json_filter(basic_json_content_handler<CharT>& handler)
+    basic_json_filter(json_content_handler& handler)
         : destination_handler_(handler)
     {
     }
 
 #if !defined(JSONCONS_NO_DEPRECATED)
-    basic_json_content_handler<CharT>& input_handler()
+    json_content_handler& input_handler()
     {
         return destination_handler_;
     }
 
-    basic_json_content_handler<CharT>& downstream_handler()
+    json_content_handler& downstream_handler()
     {
         return destination_handler_;
     }
 #endif
 
-    basic_json_content_handler<CharT>& destination_handler()
+    json_content_handler& destination_handler()
     {
         return destination_handler_;
     }
@@ -144,7 +144,7 @@ class basic_json_fragment_filter : public basic_json_filter<CharT>
 public:
     using typename basic_json_filter<CharT>::string_view_type;
 
-    basic_json_fragment_filter(basic_json_content_handler<CharT>& handler)
+    basic_json_fragment_filter(json_content_handler& handler)
         : basic_json_filter<CharT>(handler)
     {
     }
@@ -166,7 +166,7 @@ private:
 public:
     basic_rename_object_member_filter(const std::basic_string<char>& name,
                              const std::basic_string<char>& new_name,
-                             basic_json_content_handler<CharT>& handler)
+                             json_content_handler& handler)
         : basic_json_filter<CharT>(handler), 
           name_(name), new_name_(new_name)
     {
@@ -188,23 +188,23 @@ private:
 };
 
 template <class CharT>
-class basic_utf8_adaptor : public basic_json_content_handler<char>
+class basic_utf8_adaptor : public json_content_handler
 {
 public:
-    using typename basic_json_content_handler<char>::string_view_type;
+    using typename json_content_handler::string_view_type;
 private:
-    basic_json_content_handler<CharT>& destination_handler_;
+    json_content_handler& destination_handler_;
 
     // noncopyable and nonmoveable
     basic_utf8_adaptor<CharT>(const basic_utf8_adaptor<CharT>&) = delete;
     basic_utf8_adaptor<CharT>& operator=(const basic_utf8_adaptor<CharT>&) = delete;
 public:
-    basic_utf8_adaptor(basic_json_content_handler<CharT>& handler)
+    basic_utf8_adaptor(json_content_handler& handler)
         : destination_handler_(handler)
     {
     }
 
-    basic_json_content_handler<CharT>& destination_handler()
+    json_content_handler& destination_handler()
     {
         return destination_handler_;
     }

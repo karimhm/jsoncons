@@ -4,12 +4,12 @@
 template<
     class CharT,
     class Result>
-> basic_json_serializer : public jsoncons::basic_json_content_handler<CharT>
+> basic_json_serializer : public jsoncons::json_content_handler
 
 template<
     class CharT,
     class Result>
-> basic_json_compressed_serializer : public jsoncons::basic_json_content_handler<CharT>
+> basic_json_compressed_serializer : public jsoncons::json_content_handler
 ```
 
 `basic_json_serializer` and `basic_json_compressed_serializer` are noncopyable and nonmoveable.
