@@ -298,10 +298,6 @@ As the `jsoncons` library has evolved, names have sometimes changed. To ease tra
 
 - [ojson](ojson.md) constructs a json value that preserves the original name-value insertion order
 
-- [wjson](wjson.md) constructs a wide character json value that sorts name-value members alphabetically
-
-- [wojson](wojson.md) constructs a wide character json value that preserves the original name-value insertion order
-
 ### Examples
   
 #### Accessors and defaults

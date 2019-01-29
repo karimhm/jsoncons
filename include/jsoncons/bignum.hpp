@@ -144,7 +144,7 @@ public:
     }
 
     template <typename CharT, typename CharTraits, typename UserAllocator>
-    basic_bignum(const std::basic_string<char,CharTraits,UserAllocator>& s)
+    basic_bignum(const std::basic_string<CharT,CharTraits,UserAllocator>& s)
         : values_{0,0}
     {
         initialize(s.data(), s.length());

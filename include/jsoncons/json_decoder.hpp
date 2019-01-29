@@ -106,13 +106,6 @@ public:
         return std::move(result_);
     }
 
-#if !defined(JSONCONS_NO_DEPRECATED)
-    Json& root()
-    {
-        return result_;
-    }
-#endif
-
 private:
 
     void do_flush() override

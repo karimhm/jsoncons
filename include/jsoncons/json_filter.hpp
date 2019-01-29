@@ -31,18 +31,6 @@ public:
     {
     }
 
-#if !defined(JSONCONS_NO_DEPRECATED)
-    json_content_handler& input_handler()
-    {
-        return destination_handler_;
-    }
-
-    json_content_handler& downstream_handler()
-    {
-        return destination_handler_;
-    }
-#endif
-
     json_content_handler& destination_handler()
     {
         return destination_handler_;
@@ -320,11 +308,6 @@ typedef basic_utf8_adaptor<char> json_filter;
 typedef basic_utf8_adaptor<wchar_t> wjson_filter;
 typedef basic_rename_object_member_filter<char> rename_object_member_filter;
 typedef basic_rename_object_member_filter<wchar_t> wrename_object_member_filter;
-
-#if !defined(JSONCONS_NO_DEPRECATED)
-typedef basic_rename_object_member_filter<char> rename_name_filter;
-typedef basic_rename_object_member_filter<wchar_t> wrename_name_filter;
-#endif
 
 }
 

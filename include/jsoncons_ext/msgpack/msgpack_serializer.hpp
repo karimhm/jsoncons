@@ -452,9 +452,5 @@ typedef basic_msgpack_serializer<char,jsoncons::buffer_result> msgpack_buffer_se
 typedef basic_msgpack_serializer<wchar_t,jsoncons::binary_stream_result> wmsgpack_serializer;
 typedef basic_msgpack_serializer<wchar_t,jsoncons::buffer_result> wmsgpack_buffer_serializer;
 
-#if !defined(JSONCONS_NO_DEPRECATED)
-typedef basic_msgpack_serializer<char,jsoncons::buffer_result> msgpack_bytes_serializer;
-#endif
-
 }}
 #endif

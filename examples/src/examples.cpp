@@ -17,7 +17,6 @@ void basics_examples();
 void json_filter_examples();
 void array_examples();
 void container_examples();
-void wjson_examples();
 void serialization_examples();
 void type_extensibility_examples();
 void type_extensibility_examples2();
@@ -512,8 +511,6 @@ int main()
         csv_examples();
 
         mulitple_json_objects();
-
-        wjson_examples();
 
         unicode_examples();
 

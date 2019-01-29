@@ -32,9 +32,9 @@ Member type                         |Definition
 
     staj_object_iterator() noexcept; // (1)
 
-    staj_object_iterator(basic_staj_reader<char_type>& reader); // (2)
+    staj_object_iterator(staj_reader& reader); // (2)
 
-    staj_object_iterator(basic_staj_reader<char_type>& reader,
+    staj_object_iterator(staj_reader& reader,
                          std::error_code& ec);  // (3)
 
 (1) Constructs the end iterator

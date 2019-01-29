@@ -25,12 +25,8 @@ Type                       |Definition
 ---------------------------|------------------------------
 json_serializer            |basic_json_serializer<char,jsoncons::text_stream_result<char>>
 json_string_serializer     |basic_json_serializer<char,jsoncons::string_result<std::string>>
-wjson_serializer           |basic_json_serializer<wchar_t,jsoncons::text_stream_result<wchar_t>>
-wjson_string_serializer    |basic_json_serializer<wchar_t,jsoncons::string_result<std::wstring>>
 json_compressed_serializer            |basic_json_compressed_serializer<char,jsoncons::text_stream_result<char>>
 json_compressed_string_serializer     |basic_json_compressed_serializer<char,jsoncons::string_result<std::string>>
-wjson_compressed_serializer           |basic_json_compressed_serializer<wchar_t,jsoncons::text_stream_result<wchar_t>>
-wjson_compressed_string_serializer    |basic_json_compressed_serializer<wchar_t,jsoncons::string_result<std::wstring>>
 
 #### Member types
 

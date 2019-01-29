@@ -148,19 +148,6 @@ public:
         buffer_.reserve(buffer_length_);
     }
 
-#if !defined(JSONCONS_NO_DEPRECATED)
-
-    size_t buffer_capacity() const
-    {
-        return buffer_length_;
-    }
-
-    void buffer_capacity(size_t length)
-    {
-        buffer_length_ = length;
-        buffer_.reserve(buffer_length_);
-    }
-#endif
 private:
 
     void read_internal(std::error_code& ec)

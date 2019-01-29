@@ -78,10 +78,6 @@ private:
     std::string buffer_;
 };
 
-#if !defined(JSONCONS_NO_DEPRECATED)
-typedef cbor_error cbor_decode_error;
-#endif
-
 namespace detail {
 
 template <class Source>

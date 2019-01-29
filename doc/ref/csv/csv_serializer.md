@@ -20,8 +20,6 @@ Type                       |Definition
 ---------------------------|------------------------------
 csv_serializer            |basic_csv_serializer<char,jsoncons::text_stream_result<char>>
 json_string_serializer     |basic_csv_serializer<char,jsoncons::string_result<std::string>>
-wcsv_serializer           |basic_csv_serializer<wchar_t,jsoncons::text_stream_result<wchar_t>>
-wjson_string_serializer    |basic_csv_serializer<wchar_t,jsoncons::string_result<std::wstring>>
 
 #### Member types
 

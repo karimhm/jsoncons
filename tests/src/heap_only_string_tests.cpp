@@ -22,16 +22,3 @@ TEST_CASE("test_heap_only_string")
     jsoncons::detail::heap_only_string_factory<char,std::allocator<char>>::destroy(s);
 }
 
-TEST_CASE("test_heap_only_string_wchar_t")
-{
-    std::wstring input = L"Hello World";
-    auto s = jsoncons::detail::heap_only_string_factory<wchar_t, std::allocator<wchar_t>>::create(input.data(), input.size());
-
-    //std::wcout << s->c_str() << std::endl;
-
-    CHECK(input == std::wstring(s->c_str()));
-
-    jsoncons::detail::heap_only_string_factory<wchar_t,std::allocator<wchar_t>>::destroy(s);
-}
-
-

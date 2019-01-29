@@ -22,25 +22,25 @@
 
 namespace jsoncons {
 
-template <class CharT>
-class basic_staj_event_handler final : public json_content_handler
+class staj_event_handler final : public json_content_handler
 {
 public:
+    typedef char char_type;
     using typename json_content_handler::string_view_type;
 private:
-    basic_staj_event<CharT> event_;
+    staj_event event_;
 public:
-    basic_staj_event_handler()
+    staj_event_handler()
         : event_(staj_event_type::null_value)
     {
     }
 
-    basic_staj_event_handler(staj_event_type event_type)
+    staj_event_handler(staj_event_type event_type)
         : event_(event_type)
     {
     }
 
-    const basic_staj_event<CharT>& event() const
+    const staj_event& event() const
     {
         return event_;
     }
@@ -48,49 +48,49 @@ private:
 
     bool do_begin_object(semantic_tag_type, const serializing_context&) override
     {
-        event_ = basic_staj_event<CharT>(staj_event_type::begin_object);
+        event_ = staj_event(staj_event_type::begin_object);
         return false;
     }
 
     bool do_end_object(const serializing_context&) override
     {
-        event_ = basic_staj_event<CharT>(staj_event_type::end_object);
+        event_ = staj_event(staj_event_type::end_object);
         return false;
     }
 
     bool do_begin_array(semantic_tag_type, const serializing_context&) override
     {
-        event_ = basic_staj_event<CharT>(staj_event_type::begin_array);
+        event_ = staj_event(staj_event_type::begin_array);
         return false;
     }
 
     bool do_end_array(const serializing_context&) override
     {
-        event_ = basic_staj_event<CharT>(staj_event_type::end_array);
+        event_ = staj_event(staj_event_type::end_array);
         return false;
     }
 
     bool do_name(const string_view_type& name, const serializing_context&) override
     {
-        event_ = basic_staj_event<CharT>(name.data(), name.length(), staj_event_type::name);
+        event_ = staj_event(name.data(), name.length(), staj_event_type::name);
         return false;
     }
 
     bool do_null_value(semantic_tag_type, const serializing_context&) override
     {
-        event_ = basic_staj_event<CharT>(staj_event_type::null_value);
+        event_ = staj_event(staj_event_type::null_value);
         return false;
     }
 
     bool do_bool_value(bool value, semantic_tag_type, const serializing_context&) override
     {
-        event_ = basic_staj_event<CharT>(value);
+        event_ = staj_event(value);
         return false;
     }
 
     bool do_string_value(const string_view_type& s, semantic_tag_type tag, const serializing_context&) override
     {
-        event_ = basic_staj_event<CharT>(s.data(), s.length(), staj_event_type::string_value, tag);
+        event_ = staj_event(s.data(), s.length(), staj_event_type::string_value, tag);
         return false;
     }
 
@@ -105,7 +105,7 @@ private:
                         semantic_tag_type tag,
                         const serializing_context&) override
     {
-        event_ = basic_staj_event<CharT>(value, tag);
+        event_ = staj_event(value, tag);
         return false;
     }
 
@@ -113,7 +113,7 @@ private:
                          semantic_tag_type tag, 
                          const serializing_context&) override
     {
-        event_ = basic_staj_event<CharT>(value, tag);
+        event_ = staj_event(value, tag);
         return false;
     }
 
@@ -121,7 +121,7 @@ private:
                          semantic_tag_type tag, 
                          const serializing_context&) override
     {
-        event_ = basic_staj_event<CharT>(value, tag);
+        event_ = staj_event(value, tag);
         return false;
     }
 
@@ -130,26 +130,26 @@ private:
     }
 };
 
-template<class CharT,class Allocator=std::allocator<char>>
-class basic_json_staj_reader : public basic_staj_reader<CharT>, private virtual serializing_context
+template<class Allocator=std::allocator<char>>
+class basic_json_staj_reader : public staj_reader, private virtual serializing_context
 {
     static const size_t default_max_buffer_length = 16384;
 
-    basic_staj_event_handler<CharT> event_handler_;
+    staj_event_handler event_handler_;
     default_parse_error_handler default_err_handler_;
 
-    default_basic_staj_filter<CharT> default_filter_;
+    default_staj_filter default_filter_;
 
     typedef char char_type;
     typedef Allocator allocator_type;
-    typedef typename std::allocator_traits<allocator_type>:: template rebind_alloc<CharT> char_allocator_type;
+    typedef typename std::allocator_traits<allocator_type>:: template rebind_alloc<char_type> char_allocator_type;
 
-    basic_json_parser<CharT,Allocator> parser_;
-    basic_null_istream<CharT> null_is_;
-    std::basic_istream<CharT>& is_;
-    basic_staj_filter<CharT>& filter_;
+    basic_json_parser<char_type,Allocator> parser_;
+    basic_null_istream<char_type> null_is_;
+    std::basic_istream<char_type>& is_;
+    staj_filter& filter_;
     bool eof_;
-    std::vector<CharT,char_allocator_type> buffer_;
+    std::vector<char_type,char_allocator_type> buffer_;
     size_t buffer_length_;
     bool begin_;
 
@@ -158,48 +158,48 @@ class basic_json_staj_reader : public basic_staj_reader<CharT>, private virtual 
     basic_json_staj_reader& operator=(const basic_json_staj_reader&) = delete;
 
 public:
-    typedef basic_string_view<CharT> string_view_type;
+    typedef basic_string_view<char_type> string_view_type;
 
     // Constructors with stream input that throw parse exceptions
-    basic_json_staj_reader(std::basic_istream<CharT>& is)
+    basic_json_staj_reader(std::basic_istream<char_type>& is)
         : basic_json_staj_reader(is,default_filter_,json_options(),default_err_handler_)
     {
     }
 
-    basic_json_staj_reader(std::basic_istream<CharT>& is,
-                             basic_staj_filter<CharT>& filter)
+    basic_json_staj_reader(std::basic_istream<char_type>& is,
+                             staj_filter& filter)
         : basic_json_staj_reader(is,filter,json_options(),default_err_handler_)
     {
     }
 
-    basic_json_staj_reader(std::basic_istream<CharT>& is,
+    basic_json_staj_reader(std::basic_istream<char_type>& is,
                              parse_error_handler& err_handler)
         : basic_json_staj_reader(is,default_filter_,json_options(),err_handler)
     {
     }
 
-    basic_json_staj_reader(std::basic_istream<CharT>& is,
-                             basic_staj_filter<CharT>& filter,
+    basic_json_staj_reader(std::basic_istream<char_type>& is,
+                             staj_filter& filter,
                              parse_error_handler& err_handler)
         : basic_json_staj_reader(is,filter,json_options(),err_handler)
     {
     }
 
-    basic_json_staj_reader(std::basic_istream<CharT>& is, 
+    basic_json_staj_reader(std::basic_istream<char_type>& is, 
                              const json_read_options& options)
         : basic_json_staj_reader(is,default_filter_,options,default_err_handler_)
     {
     }
 
-    basic_json_staj_reader(std::basic_istream<CharT>& is,
-                             basic_staj_filter<CharT>& filter, 
+    basic_json_staj_reader(std::basic_istream<char_type>& is,
+                             staj_filter& filter, 
                              const json_read_options& options)
         : basic_json_staj_reader(is,filter,options,default_err_handler_)
     {
     }
 
-    basic_json_staj_reader(std::basic_istream<CharT>& is, 
-                             basic_staj_filter<CharT>& filter,
+    basic_json_staj_reader(std::basic_istream<char_type>& is, 
+                             staj_filter& filter,
                              const json_read_options& options,
                              parse_error_handler& err_handler)
        : parser_(options,err_handler),
@@ -217,51 +217,51 @@ public:
     }
 
     // Constructors with stream input that set parse error codes
-    basic_json_staj_reader(std::basic_istream<CharT>& is,
+    basic_json_staj_reader(std::basic_istream<char_type>& is,
                            std::error_code& ec)
         : basic_json_staj_reader(is,default_filter_,json_options(),default_err_handler_,ec)
     {
     }
 
-    basic_json_staj_reader(std::basic_istream<CharT>& is,
-                             basic_staj_filter<CharT>& filter,
+    basic_json_staj_reader(std::basic_istream<char_type>& is,
+                             staj_filter& filter,
                              std::error_code& ec)
         : basic_json_staj_reader(is,filter,json_options(),default_err_handler_,ec)
     {
     }
 
-    basic_json_staj_reader(std::basic_istream<CharT>& is,
+    basic_json_staj_reader(std::basic_istream<char_type>& is,
                              parse_error_handler& err_handler,
                              std::error_code& ec)
         : basic_json_staj_reader(is,default_filter_,json_options(),err_handler,ec)
     {
     }
 
-    basic_json_staj_reader(std::basic_istream<CharT>& is,
-                             basic_staj_filter<CharT>& filter,
+    basic_json_staj_reader(std::basic_istream<char_type>& is,
+                             staj_filter& filter,
                              parse_error_handler& err_handler,
                              std::error_code& ec)
         : basic_json_staj_reader(is,filter,json_options(),err_handler,ec)
     {
     }
 
-    basic_json_staj_reader(std::basic_istream<CharT>& is, 
+    basic_json_staj_reader(std::basic_istream<char_type>& is, 
                              const json_read_options& options,
                              std::error_code& ec)
         : basic_json_staj_reader(is,default_filter_,options,default_err_handler_,ec)
     {
     }
 
-    basic_json_staj_reader(std::basic_istream<CharT>& is,
-                             basic_staj_filter<CharT>& filter, 
+    basic_json_staj_reader(std::basic_istream<char_type>& is,
+                             staj_filter& filter, 
                              const json_read_options& options,
                              std::error_code& ec)
         : basic_json_staj_reader(is,filter,options,default_err_handler_,ec)
     {
     }
 
-    basic_json_staj_reader(std::basic_istream<CharT>& is, 
-                             basic_staj_filter<CharT>& filter,
+    basic_json_staj_reader(std::basic_istream<char_type>& is, 
+                             staj_filter& filter,
                              const json_read_options& options,
                              parse_error_handler& err_handler,
                              std::error_code& ec)
@@ -286,7 +286,7 @@ public:
     }
 
     basic_json_staj_reader(const string_view_type& s,
-                           basic_staj_filter<CharT>& filter)
+                           staj_filter& filter)
         : basic_json_staj_reader(s,filter,json_options(),default_err_handler_)
     {
     }
@@ -298,7 +298,7 @@ public:
     }
 
     basic_json_staj_reader(const string_view_type& s,
-                             basic_staj_filter<CharT>& filter,
+                             staj_filter& filter,
                              parse_error_handler& err_handler)
         : basic_json_staj_reader(s,filter,json_options(),err_handler)
     {
@@ -311,14 +311,14 @@ public:
     }
 
     basic_json_staj_reader(const string_view_type& s,
-                             basic_staj_filter<CharT>& filter, 
+                             staj_filter& filter, 
                              const json_read_options& options)
         : basic_json_staj_reader(s,filter,options,default_err_handler_)
     {
     }
 
     basic_json_staj_reader(const string_view_type& s, 
-                           basic_staj_filter<CharT>& filter,
+                           staj_filter& filter,
                            const json_read_options& options,
                            parse_error_handler& err_handler)
        : parser_(options,err_handler),
@@ -344,7 +344,7 @@ public:
     }
 
     basic_json_staj_reader(const string_view_type& s,
-                             basic_staj_filter<CharT>& filter,
+                             staj_filter& filter,
                              std::error_code& ec)
         : basic_json_staj_reader(s,filter,json_options(),default_err_handler_,ec)
     {
@@ -358,7 +358,7 @@ public:
     }
 
     basic_json_staj_reader(const string_view_type& s,
-                             basic_staj_filter<CharT>& filter,
+                             staj_filter& filter,
                              parse_error_handler& err_handler,
                              std::error_code& ec)
         : basic_json_staj_reader(s,filter,json_options(),err_handler,ec)
@@ -373,7 +373,7 @@ public:
     }
 
     basic_json_staj_reader(const string_view_type& s,
-                             basic_staj_filter<CharT>& filter, 
+                             staj_filter& filter, 
                              const json_read_options& options,
                              std::error_code& ec)
         : basic_json_staj_reader(s,filter,options,default_err_handler_,ec)
@@ -381,7 +381,7 @@ public:
     }
 
     basic_json_staj_reader(const string_view_type& s, 
-                             basic_staj_filter<CharT>& filter,
+                             staj_filter& filter,
                              const json_read_options& options,
                              parse_error_handler& err_handler,
                              std::error_code& ec)
@@ -416,7 +416,7 @@ public:
         return parser_.done();
     }
 
-    const basic_staj_event<CharT>& current() const override
+    const staj_event& current() const override
     {
         return event_handler_.event();
     }
@@ -461,13 +461,13 @@ public:
                 }
                 break;
             case staj_event_type::name:
-                if (!handler.name(event_handler_.event().template as<jsoncons::basic_string_view<CharT>>(), *this))
+                if (!handler.name(event_handler_.event().template as<jsoncons::basic_string_view<char_type>>(), *this))
                 {
                     return;
                 }
                 break;
             case staj_event_type::string_value:
-                if (!handler.string_value(event_handler_.event().template as<jsoncons::basic_string_view<CharT>>(), semantic_tag_type::none, *this))
+                if (!handler.string_value(event_handler_.event().template as<jsoncons::basic_string_view<char_type>>(), semantic_tag_type::none, *this))
                 {
                     return;
                 }
@@ -661,17 +661,7 @@ public:
 private:
 };
 
-typedef basic_json_staj_reader<char,std::allocator<char>> json_staj_reader;
-typedef basic_json_staj_reader<wchar_t, std::allocator<wchar_t>> wjson_staj_reader;
-
-#if !defined(JSONCONS_NO_DEPRECATED)
-template<class CharT,class Allocator=std::allocator<char>>
-using basic_json_stream_reader = basic_json_staj_reader<CharT,Allocator>;
-
-
-typedef basic_json_staj_reader<char,std::allocator<char>> json_stream_reader;
-typedef basic_json_staj_reader<wchar_t, std::allocator<wchar_t>> wjson_stream_reader;
-#endif
+typedef basic_json_staj_reader<std::allocator<char>> json_staj_reader;
 
 }
 

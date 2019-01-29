@@ -135,13 +135,6 @@ std::error_code make_error_code(json_errc result)
     return std::error_code(static_cast<int>(result),json_error_category());
 }
 
-#if !defined(JSONCONS_NO_DEPRECATED)
-typedef json_errc json_parser_errc;
-
-typedef json_errc json_parse_errc;
-#endif
-
-
 }
 
 namespace std {

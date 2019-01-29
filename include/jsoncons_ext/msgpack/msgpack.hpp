@@ -88,16 +88,6 @@ decode_msgpack(std::basic_istream<typename Json::char_type>& is)
     return decoder.get_result();
 }
   
-#if !defined(JSONCONS_NO_DEPRECATED)
-template<class Json>
-std::vector<uint8_t> encode_msgpack(const Json& j)
-{
-    std::vector<uint8_t> v;
-    encode_msgpack(j, v);
-    return v;
-}
-#endif
-
 }}
 
 #endif

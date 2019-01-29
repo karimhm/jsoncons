@@ -1476,16 +1476,9 @@ private:
 };
 
 typedef basic_json_serializer<char,jsoncons::text_stream_result<char>> json_serializer;
-typedef basic_json_serializer<wchar_t,jsoncons::text_stream_result<wchar_t>> wjson_serializer;
-
 typedef basic_json_compressed_serializer<char,jsoncons::text_stream_result<char>> json_compressed_serializer;
-typedef basic_json_compressed_serializer<wchar_t,jsoncons::text_stream_result<wchar_t>> wjson_compressed_serializer;
-
 typedef basic_json_serializer<char,jsoncons::string_result<std::string>> json_string_serializer;
-typedef basic_json_serializer<wchar_t,jsoncons::string_result<std::wstring>> wjson_string_serializer;
-
 typedef basic_json_compressed_serializer<char,jsoncons::string_result<std::string>> json_compressed_string_serializer;
-typedef basic_json_compressed_serializer<wchar_t,jsoncons::string_result<std::wstring>> wjson_compressed_string_serializer;
 
 }
 #endif

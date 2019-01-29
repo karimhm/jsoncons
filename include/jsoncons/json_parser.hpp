@@ -255,17 +255,6 @@ public:
     {
     }
 
-#if !defined(JSONCONS_NO_DEPRECATED)
-    size_t max_nesting_depth() const
-    {
-        return max_nesting_depth_;
-    }
-
-    void max_nesting_depth(size_t value)
-    {
-        max_nesting_depth_ = value;
-    }
-#endif
     json_parse_state parent() const
     {
         JSONCONS_ASSERT(state_stack_.size() >= 1);
@@ -2599,34 +2588,6 @@ escape_u9:
         }
     }
 
-#if !defined(JSONCONS_NO_DEPRECATED)
-
-    void end_parse(json_content_handler& handler)
-    {
-        std::error_code ec;
-        finish_parse(handler, ec);
-        if (ec)
-        {
-            throw serialization_error(ec,line_,column_);
-        }
-    }
-
-    void end_parse(json_content_handler& handler, std::error_code& ec)
-    {
-        while (!finished())
-        {
-            parse_some(handler, ec);
-        }
-    }
-
-    void set_source(const CharT* data, size_t length)
-    {
-        begin_input_ = data;
-        input_end_ = data + length;
-        input_ptr_ = begin_input_;
-    }
-#endif
-
     size_t line_number() const override
     {
         return line_;
@@ -2872,7 +2833,6 @@ private:
 };
 
 typedef basic_json_parser<char> json_parser;
-typedef basic_json_parser<wchar_t> wjson_parser;
 
 }
 

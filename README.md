@@ -172,15 +172,11 @@ of JSON-like string or binary formats formats, and defines an interface for acce
 typedef basic_json<ImplementationPolicy = sorted_policy,
                    Allocator = std::allocator<char>> json;
 ```
-The library includes four instantiations of `basic_json`:
+The library includes two instantiations of `basic_json`:
 
 - [json](doc/ref/json.md) constructs a utf8 character json value that sorts name-value members alphabetically
 
 - [ojson](doc/ref/ojson.md) constructs a utf8 character json value that preserves the original name-value insertion order
-
-- [wjson](doc/ref/wjson.md) constructs a wide character json value that sorts name-value members alphabetically
-
-- [wojson](doc/ref/wojson.md) constructs a wide character json value that preserves the original name-value insertion order
 
 ## More examples
 

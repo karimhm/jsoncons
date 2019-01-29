@@ -131,12 +131,6 @@ public:
         key_.shrink_to_fit();
         value_.shrink_to_fit();
     }
-#if !defined(JSONCONS_NO_DEPRECATED)
-    const key_type& name() const
-    {
-        return key_;
-    }
-#endif
 };
 
 template <class KeyT, class ValueT>
@@ -307,14 +301,6 @@ public:
 
     void resize(size_t n, const Json& val) {elements_.resize(n,val);}
 
-#if !defined(JSONCONS_NO_DEPRECATED)
-    void remove_range(size_t from_index, size_t to_index) 
-    {
-        JSONCONS_ASSERT(from_index <= to_index);
-        JSONCONS_ASSERT(to_index <= elements_.size());
-        elements_.erase(elements_.cbegin()+from_index,elements_.cbegin()+to_index);
-    }
-#endif
     void erase(const_iterator pos) 
     {
 #if defined(JSONCONS_NO_ERASE_TAKING_CONST_ITERATOR)

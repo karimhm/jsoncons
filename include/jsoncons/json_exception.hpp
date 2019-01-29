@@ -159,12 +159,6 @@ private:
     size_t column_number_;
 };
 
-#if !defined(JSONCONS_NO_DEPRECATED)
-typedef serialization_error json_parse_exception;
-typedef serialization_error parse_exception;
-typedef serialization_error parse_error;
-#endif
-
 #define JSONCONS_STR2(x)  #x
 #define JSONCONS_STR(x)  JSONCONS_STR2(x)
 

@@ -39,9 +39,9 @@ enum class staj_event_type
     double_value
 };
 
-template<class CharT>
-class basic_staj_event
+class staj_event
 {
+    typedef char char_type;
     staj_event_type event_type_;
     semantic_tag_type semantic_tag_;
     union
@@ -50,46 +50,46 @@ class basic_staj_event
         int64_t int64_value_;
         uint64_t uint64_value_;
         double double_value_;
-        const CharT* string_data_;
+        const char_type* string_data_;
         const uint8_t* byte_string_data_;
     } value_;
     size_t length_;
 public:
-    basic_staj_event(staj_event_type event_type, semantic_tag_type semantic_tag = semantic_tag_type::none)
+    staj_event(staj_event_type event_type, semantic_tag_type semantic_tag = semantic_tag_type::none)
         : event_type_(event_type), semantic_tag_(semantic_tag), length_(0)
     {
     }
 
-    basic_staj_event(null_type)
+    staj_event(null_type)
         : event_type_(staj_event_type::null_value), semantic_tag_(semantic_tag_type::none), length_(0)
     {
     }
 
-    basic_staj_event(bool value)
+    staj_event(bool value)
         : event_type_(staj_event_type::bool_value), semantic_tag_(semantic_tag_type::none), length_(0)
     {
         value_.bool_value_ = value;
     }
 
-    basic_staj_event(int64_t value, semantic_tag_type semantic_tag)
+    staj_event(int64_t value, semantic_tag_type semantic_tag)
         : event_type_(staj_event_type::int64_value), semantic_tag_(semantic_tag), length_(0)
     {
         value_.int64_value_ = value;
     }
 
-    basic_staj_event(uint64_t value, semantic_tag_type semantic_tag)
+    staj_event(uint64_t value, semantic_tag_type semantic_tag)
         : event_type_(staj_event_type::uint64_value), semantic_tag_(semantic_tag), length_(0)
     {
         value_.uint64_value_ = value;
     }
 
-    basic_staj_event(double value, semantic_tag_type semantic_tag)
+    staj_event(double value, semantic_tag_type semantic_tag)
         : event_type_(staj_event_type::double_value), semantic_tag_(semantic_tag), length_(0)
     {
         value_.double_value_ = value;
     }
 
-    basic_staj_event(const CharT* data, size_t length,
+    staj_event(const char_type* data, size_t length,
         staj_event_type event_type,
         semantic_tag_type semantic_tag = semantic_tag_type::none)
         : event_type_(event_type), semantic_tag_(semantic_tag), length_(length)
@@ -97,8 +97,8 @@ public:
         value_.string_data_ = data;
     }
 
-    template<class T, class CharT_ = CharT>
-    typename std::enable_if<jsoncons::detail::is_string_like<T>::value && std::is_same<typename T::value_type, CharT_>::value, T>::type
+    template<class T>
+    typename std::enable_if<jsoncons::detail::is_string_like<T>::value && std::is_same<typename T::value_type, char>::value, T>::type
         as() const
     {
         T s;
@@ -132,21 +132,21 @@ public:
             jsoncons::string_result<T> writer(s);
             if (value_.bool_value_)
             {
-                writer.insert(jsoncons::detail::true_literal<CharT>().data(),
-                    jsoncons::detail::true_literal<CharT>().length());
+                writer.insert(jsoncons::detail::true_literal<char_type>().data(),
+                    jsoncons::detail::true_literal<char_type>().length());
             }
             else
             {
-                writer.insert(jsoncons::detail::false_literal<CharT>().data(),
-                    jsoncons::detail::false_literal<CharT>().length());
+                writer.insert(jsoncons::detail::false_literal<char_type>().data(),
+                    jsoncons::detail::false_literal<char_type>().length());
             }
             break;
         }
         case staj_event_type::null_value:
         {
             jsoncons::string_result<T> writer(s);
-            writer.insert(jsoncons::detail::null_literal<CharT>().data(),
-                jsoncons::detail::null_literal<CharT>().size());
+            writer.insert(jsoncons::detail::null_literal<char_type>().data(),
+                jsoncons::detail::null_literal<char_type>().size());
             break;
         }
         default:
@@ -155,8 +155,8 @@ public:
         return s;
     }
 
-    template<class T, class CharT_ = CharT>
-    typename std::enable_if<jsoncons::detail::is_string_view_like<T>::value && std::is_same<typename T::value_type, CharT_>::value, T>::type
+    template<class T>
+    typename std::enable_if<jsoncons::detail::is_string_view_like<T>::value && std::is_same<typename T::value_type, char>::value, T>::type
         as() const
     {
         T s;
@@ -359,15 +359,14 @@ private:
 
 };
 
-template<class CharT>
-class basic_staj_reader
+class staj_reader
 {
 public:
-    virtual ~basic_staj_reader() = default;
+    virtual ~staj_reader() = default;
 
     virtual bool done() const = 0;
 
-    virtual const basic_staj_event<CharT>& current() const = 0;
+    virtual const staj_event& current() const = 0;
 
     virtual void accept(json_content_handler& handler) = 0;
 
@@ -381,58 +380,23 @@ public:
     virtual const serializing_context& context() const = 0;
 };
 
-template<class CharT>
-class basic_staj_filter
+class staj_filter
 {
 public:
 
-    virtual ~basic_staj_filter() = default;
+    virtual ~staj_filter() = default;
 
-    virtual bool accept(const basic_staj_event<CharT>& event, const serializing_context& context) = 0;
+    virtual bool accept(const staj_event& event, const serializing_context& context) = 0;
 };
 
-template<class CharT>
-class default_basic_staj_filter : public basic_staj_filter<CharT>
+class default_staj_filter : public staj_filter
 {
 public:
-    bool accept(const basic_staj_event<CharT>&, const serializing_context&) override
+    bool accept(const staj_event&, const serializing_context&) override
     {
         return true;
     }
 };
-
-typedef basic_staj_event<char> staj_event;
-typedef basic_staj_event<wchar_t> wstaj_event;
-
-typedef basic_staj_reader<char> staj_reader;
-typedef basic_staj_reader<wchar_t> wstaj_reader;
-
-typedef basic_staj_filter<char> staj_filter;
-typedef basic_staj_filter<wchar_t> wstaj_filter;
-
-#if !defined(JSONCONS_NO_DEPRECATED)
-
-typedef staj_event_type stream_event_type;
-
-template<class CharT>
-using basic_stream_event = basic_staj_event<CharT>;
-
-template<class CharT>
-using basic_stream_reader = basic_staj_reader<CharT>;
-
-template<class CharT>
-using basic_stream_filter = basic_staj_filter<CharT>;
-
-typedef basic_staj_event<char> stream_event;
-typedef basic_staj_event<wchar_t> wstream_event;
-
-typedef basic_staj_reader<char> stream_reader;
-typedef basic_staj_reader<wchar_t> wstream_reader;
-
-typedef basic_staj_filter<char> stream_filter;
-typedef basic_staj_filter<wchar_t> wstream_filter;
-
-#endif
 
 }
 

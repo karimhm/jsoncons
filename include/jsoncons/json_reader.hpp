@@ -256,17 +256,6 @@ public:
         buffer_length_ = length;
         buffer_.reserve(buffer_length_);
     }
-#if !defined(JSONCONS_NO_DEPRECATED)
-    size_t max_nesting_depth() const
-    {
-        return parser_.max_nesting_depth();
-    }
-
-    void max_nesting_depth(size_t depth)
-    {
-        parser_.max_nesting_depth(depth);
-    }
-#endif
     void read_next()
     {
         std::error_code ec;
@@ -416,29 +405,6 @@ public:
         }
     }
 
-#if !defined(JSONCONS_NO_DEPRECATED)
-
-    size_t buffer_capacity() const
-    {
-        return buffer_length_;
-    }
-
-    void buffer_capacity(size_t length)
-    {
-        buffer_length_ = length;
-        buffer_.reserve(buffer_length_);
-    }
-    size_t max_depth() const
-    {
-        return parser_.max_nesting_depth();
-    }
-
-    void max_depth(size_t depth)
-    {
-        parser_.max_nesting_depth(depth);
-    }
-#endif
-
 private:
 
     void read_buffer(std::error_code& ec)
@@ -472,8 +438,6 @@ private:
 
 typedef basic_json_reader<char,jsoncons::text_stream_source<char>> json_reader;
 typedef basic_json_reader<char,jsoncons::string_source<char>> json_string_reader;
-typedef basic_json_reader<wchar_t, jsoncons::text_stream_source<wchar_t>> wjson_reader;
-typedef basic_json_reader<wchar_t, jsoncons::string_source<wchar_t>> wjson_string_reader;
 
 }
 

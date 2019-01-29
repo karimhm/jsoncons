@@ -22,10 +22,6 @@ namespace jsoncons { namespace csv {
         invalid_state
     };
 
-#if !defined(JSONCONS_NO_DEPRECATED)
-typedef csv_errc csv_parser_errc;
-#endif
-
 class csv_error_category_impl
    : public std::error_category
 {

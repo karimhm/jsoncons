@@ -13,17 +13,6 @@
 
 using namespace jsoncons;
 
-TEST_CASE("test_1")
-{
-    basic_json<char32_t> j; 
-
-    std::basic_ostringstream<char32_t> os;
-
-    std::cout << sizeof(json) << std::endl;
-
-    //os << j << U"\n";
-}
-
 TEST_CASE("test_shrink_to_fit")
 {
     json val = json::make_array(3);

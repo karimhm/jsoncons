@@ -233,7 +233,7 @@ Maximum JSON depth exceeded at line 1 and column 21
 
 #### Prevent the alphabetic sort of the outputted JSON, retaining the original insertion order
 
-Use `ojson` instead of `json` (or `wojson` instead of `wjson`) to retain the original insertion order. 
+Use `ojson` instead of `json` to retain the original insertion order. 
 
 ```c++
 ojson j = ojson::parse(R"(

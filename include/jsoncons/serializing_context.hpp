@@ -27,10 +27,5 @@ private:
     size_t column_number() const override { return 0; }
 };
 
-#if !defined(JSONCONS_NO_DEPRECATED)
-typedef serializing_context serializing_context;
-typedef null_serializing_context null_serializing_context;
-#endif
-
 }
 #endif
