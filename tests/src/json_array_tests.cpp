@@ -229,7 +229,7 @@ TEST_CASE("test make_array()")
 
 TEST_CASE("test_one_dim_array")
 {
-    basic_json<char,sorted_policy,std::allocator<char>> a = basic_json<char,sorted_policy,std::allocator<char>>::make_array<1>(10,0);
+    basic_json<sorted_policy,std::allocator<char>> a = basic_json<sorted_policy,std::allocator<char>>::make_array<1>(10,0);
     CHECK(a.size() == 10);
     CHECK(a[0].as<int64_t>() == 0);
     a[1] = 1;

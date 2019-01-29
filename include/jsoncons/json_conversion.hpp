@@ -20,7 +20,7 @@ namespace jsoncons {
 // decode_json
 
 template <class T, class CharT>
-T decode_json(const std::basic_string<CharT>& s)
+T decode_json(const std::basic_string<char>& s)
 {
     basic_json_staj_reader<CharT> reader(s);
     T val;
@@ -29,8 +29,8 @@ T decode_json(const std::basic_string<CharT>& s)
 }
 
 template <class T, class CharT>
-T decode_json(const std::basic_string<CharT>& s,
-              const basic_json_options<CharT>& options)
+T decode_json(const std::basic_string<char>& s,
+              const json_options& options)
 {
     basic_json_staj_reader<CharT> reader(s, options);
     T val;
@@ -39,7 +39,7 @@ T decode_json(const std::basic_string<CharT>& s,
 }
 
 template <class T, class CharT>
-T decode_json(std::basic_istream<CharT>& is)
+T decode_json(std::istream& is)
 {
     basic_json_staj_reader<CharT> reader(is);
     T val;
@@ -48,8 +48,8 @@ T decode_json(std::basic_istream<CharT>& is)
 }
 
 template <class T, class CharT>
-T decode_json(std::basic_istream<CharT>& is,
-              const basic_json_options<CharT>& options)
+T decode_json(std::istream& is,
+              const json_options& options)
 {
     basic_json_staj_reader<CharT> reader(is, options);
     T val;
@@ -75,22 +75,22 @@ void encode_fragment(const T& val, basic_json_content_handler<CharT>& writer)
 #endif
 
 template <class T, class CharT>
-void encode_json(const T& val, std::basic_ostream<CharT>& os)
+void encode_json(const T& val, std::ostream& os)
 {
     basic_json_compressed_serializer<CharT> serializer(os);
     encode_json(val, serializer);
 }
 
 template <class T, class CharT>
-void encode_json(const T& val, const basic_json_options<CharT>& options,
-          std::basic_ostream<CharT>& os)
+void encode_json(const T& val, const json_options& options,
+          std::ostream& os)
 {
     basic_json_compressed_serializer<CharT> serializer(os, options);
     encode_json(val, serializer);
 }
 
 template <class T, class CharT>
-void encode_json(const T& val, std::basic_ostream<CharT>& os, indenting line_indent)
+void encode_json(const T& val, std::ostream& os, indenting line_indent)
 {
     if (line_indent == indenting::indent)
     {
@@ -105,8 +105,8 @@ void encode_json(const T& val, std::basic_ostream<CharT>& os, indenting line_ind
 }
 
 template <class T, class CharT>
-void encode_json(const T& val, const basic_json_options<CharT>& options,
-          std::basic_ostream<CharT>& os, indenting line_indent)
+void encode_json(const T& val, const json_options& options,
+          std::ostream& os, indenting line_indent)
 {
     if (line_indent == indenting::indent)
     {
@@ -121,38 +121,38 @@ void encode_json(const T& val, const basic_json_options<CharT>& options,
 }
 
 template <class T, class CharT>
-void encode_json(const T& val, std::basic_string<CharT>& s)
+void encode_json(const T& val, std::basic_string<char>& s)
 {
-    basic_json_compressed_serializer<CharT,jsoncons::string_result<std::basic_string<CharT>>> serializer(s);
+    basic_json_compressed_serializer<CharT,jsoncons::string_result<std::basic_string<char>>> serializer(s);
     encode_json(val, serializer);
 }
 
 template <class T, class CharT>
-void encode_json(const T& val, const basic_json_options<CharT>& options,
-          std::basic_string<CharT>& s)
+void encode_json(const T& val, const json_options& options,
+          std::basic_string<char>& s)
 {
-    basic_json_compressed_serializer<CharT,jsoncons::string_result<std::basic_string<CharT>>> serializer(s, options);
+    basic_json_compressed_serializer<CharT,jsoncons::string_result<std::basic_string<char>>> serializer(s, options);
     encode_json(val, serializer);
 }
 
 template <class T, class CharT>
-void encode_json(const T& val, std::basic_string<CharT>& s, indenting line_indent)
+void encode_json(const T& val, std::basic_string<char>& s, indenting line_indent)
 {
     if (line_indent == indenting::indent)
     {
-        basic_json_serializer<CharT,jsoncons::string_result<std::basic_string<CharT>>> serializer(s);
+        basic_json_serializer<CharT,jsoncons::string_result<std::basic_string<char>>> serializer(s);
         encode_json(val, serializer);
     }
     else
     {
-        basic_json_compressed_serializer<CharT,jsoncons::string_result<std::basic_string<CharT>>> serializer(s);
+        basic_json_compressed_serializer<CharT,jsoncons::string_result<std::basic_string<char>>> serializer(s);
         encode_json(val, serializer);
     }
 }
 
 template <class T, class CharT>
-void encode_json(const T& val, const basic_json_options<CharT>& options,
-                 std::basic_string<CharT,jsoncons::string_result<std::basic_string<CharT>>>& s, indenting line_indent)
+void encode_json(const T& val, const json_options& options,
+                 std::basic_string<char,jsoncons::string_result<std::basic_string<char>>>& s, indenting line_indent)
 {
     if (line_indent == indenting::indent)
     {

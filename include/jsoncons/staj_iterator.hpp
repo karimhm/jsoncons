@@ -22,7 +22,7 @@ namespace jsoncons {
 template<class CharT, class T>
 class basic_staj_array_iterator
 {
-    typedef CharT char_type;
+    typedef char char_type;
 
     basic_staj_reader<char_type>* reader_;
     T value_;
@@ -142,7 +142,7 @@ template<class CharT, class T>
 class basic_staj_object_iterator
 {
 public:
-    typedef CharT char_type;
+    typedef char char_type;
     typedef std::basic_string<char_type> key_type;
     typedef std::pair<key_type,T> value_type;
     typedef std::ptrdiff_t difference_type;

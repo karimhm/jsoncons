@@ -41,10 +41,10 @@ template <class CharT>
 class basic_json_content_handler
 {
 #if !defined(JSONCONS_NO_DEPRECATED)
-    std::basic_string<CharT> buffer_;
+    std::basic_string<char> buffer_;
 #endif
 public:
-    typedef CharT char_type;
+    typedef char char_type;
     typedef std::char_traits<char_type> char_traits_type;
 
     typedef basic_string_view<char_type,char_traits_type> string_view_type;

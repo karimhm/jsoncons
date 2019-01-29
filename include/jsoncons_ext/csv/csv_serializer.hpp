@@ -23,17 +23,17 @@
 
 namespace jsoncons { namespace csv {
 
-template<class CharT,class Result=jsoncons::text_stream_result<CharT>,class Allocator=std::allocator<CharT>>
+template<class CharT,class Result=jsoncons::text_stream_result<CharT>,class Allocator=std::allocator<char>>
 class basic_csv_serializer final : public basic_json_content_handler<CharT>
 {
 public:
-    typedef CharT char_type;
+    typedef char char_type;
     using typename basic_json_content_handler<CharT>::string_view_type;
     typedef Result result_type;
 
     typedef Allocator allocator_type;
     typedef typename std::allocator_traits<allocator_type>:: template rebind_alloc<CharT> char_allocator_type;
-    typedef std::basic_string<CharT, std::char_traits<CharT>, char_allocator_type> string_type;
+    typedef std::basic_string<char, std::char_traits<CharT>, char_allocator_type> string_type;
     typedef typename std::allocator_traits<allocator_type>:: template rebind_alloc<string_type> string_allocator_type;
 
 private:
@@ -212,7 +212,7 @@ private:
         if (stack_.size() == 2)
         {
             stack_.back().name_ = string_type(name);
-            buffered_line_[string_type(name)] = std::basic_string<CharT>();
+            buffered_line_[string_type(name)] = std::basic_string<char>();
             if (stack_[0].count_ == 0 && parameters_.column_names().size() == 0)
             {
                 column_names_.push_back(string_type(name));
@@ -250,8 +250,8 @@ private:
                 auto it = buffered_line_.find(stack_.back().name_);
                 if (it != buffered_line_.end())
                 {
-                    std::basic_string<CharT> s;
-                    jsoncons::string_result<std::basic_string<CharT>> bo(s);
+                    std::basic_string<char> s;
+                    jsoncons::string_result<std::basic_string<char>> bo(s);
                     accept_null_value(bo);
                     bo.flush();
                     it->second = s;
@@ -274,8 +274,8 @@ private:
                 auto it = buffered_line_.find(stack_.back().name_);
                 if (it != buffered_line_.end())
                 {
-                    std::basic_string<CharT> s;
-                    jsoncons::string_result<std::basic_string<CharT>> bo(s);
+                    std::basic_string<char> s;
+                    jsoncons::string_result<std::basic_string<char>> bo(s);
                     value(sv,bo);
                     bo.flush();
                     it->second = s;
@@ -311,7 +311,7 @@ private:
         }
         byte_string_chars_format format = jsoncons::detail::resolve_byte_string_chars_format(encoding_hint,byte_string_chars_format::none,byte_string_chars_format::base64url);
 
-        std::basic_string<CharT> s;
+        std::basic_string<char> s;
         switch (format)
         {
             case byte_string_chars_format::base16:
@@ -352,8 +352,8 @@ private:
                 auto it = buffered_line_.find(stack_.back().name_);
                 if (it != buffered_line_.end())
                 {
-                    std::basic_string<CharT> s;
-                    jsoncons::string_result<std::basic_string<CharT>> bo(s);
+                    std::basic_string<char> s;
+                    jsoncons::string_result<std::basic_string<char>> bo(s);
                     value(val, bo);
                     bo.flush();
                     it->second = s;
@@ -378,8 +378,8 @@ private:
                 auto it = buffered_line_.find(stack_.back().name_);
                 if (it != buffered_line_.end())
                 {
-                    std::basic_string<CharT> s;
-                    jsoncons::string_result<std::basic_string<CharT>> bo(s);
+                    std::basic_string<char> s;
+                    jsoncons::string_result<std::basic_string<char>> bo(s);
                     value(val,bo);
                     bo.flush();
                     it->second = s;
@@ -404,8 +404,8 @@ private:
                 auto it = buffered_line_.find(stack_.back().name_);
                 if (it != buffered_line_.end())
                 {
-                    std::basic_string<CharT> s;
-                    jsoncons::string_result<std::basic_string<CharT>> bo(s);
+                    std::basic_string<char> s;
+                    jsoncons::string_result<std::basic_string<char>> bo(s);
                     value(val,bo);
                     bo.flush();
                     it->second = s;
@@ -428,8 +428,8 @@ private:
                 auto it = buffered_line_.find(stack_.back().name_);
                 if (it != buffered_line_.end())
                 {
-                    std::basic_string<CharT> s;
-                    jsoncons::string_result<std::basic_string<CharT>> bo(s);
+                    std::basic_string<char> s;
+                    jsoncons::string_result<std::basic_string<char>> bo(s);
                     value(val,bo);
                     bo.flush();
                     it->second = s;

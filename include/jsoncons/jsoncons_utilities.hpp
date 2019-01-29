@@ -29,7 +29,7 @@ namespace jsoncons
 {
 
 template <class CharT>
-class basic_null_istream : public std::basic_istream<CharT>
+class basic_null_istream : public std::istream
 {
     class null_buffer : public std::basic_streambuf<CharT>
     {
@@ -43,7 +43,7 @@ class basic_null_istream : public std::basic_istream<CharT>
     } nb_;
 public:
     basic_null_istream()
-      : std::basic_istream<CharT>(&nb_)
+      : std::istream(&nb_)
     {
     }
 };
@@ -156,8 +156,8 @@ static bool is_base64url(uint8_t c)
     return isalnum(c) || c == '-' || c == '_';
 }
 
-template <class CharT, class F>
-std::vector<uint8_t> decode_base64_generic(const std::basic_string<CharT>& base64_string, 
+template <class F>
+std::vector<uint8_t> decode_base64_generic(const std::basic_string<char>& base64_string, 
                                            const char* alphabet, 
                                            const char* alphabet_end, 
                                            F f)
@@ -232,20 +232,20 @@ std::vector<uint8_t> decode_base64_generic(const std::basic_string<CharT>& base6
     return result;
 }
 
-template <class CharT>
-std::vector<uint8_t> decode_base64(const std::basic_string<CharT>& base64_string)
+inline
+std::vector<uint8_t> decode_base64(const std::basic_string<char>& base64_string)
 {
     return decode_base64_generic(base64_string, base64_alphabet, base64_alphabet+65, is_base64);
 }
 
-template <class CharT>
-std::vector<uint8_t> decode_base64url(const std::basic_string<CharT>& base64_string)
+inline
+std::vector<uint8_t> decode_base64url(const std::basic_string<char>& base64_string)
 {
     return decode_base64_generic(base64_string, base64url_alphabet, base64url_alphabet+64, is_base64url);
 }
 
-template <class CharT>
-std::vector<uint8_t> decode_base16(const std::basic_string<CharT>& input)
+inline
+std::vector<uint8_t> decode_base16(const std::basic_string<char>& input)
 {
     static const char* const alphabet = "0123456789ABCDEF";
     size_t len = input.length();

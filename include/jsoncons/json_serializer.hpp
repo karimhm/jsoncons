@@ -178,10 +178,10 @@ template<class CharT,class Result=jsoncons::text_stream_result<CharT>>
 class basic_json_serializer final : public basic_json_content_handler<CharT>
 {
 public:
-    typedef CharT char_type;
+    typedef char char_type;
     using typename basic_json_content_handler<CharT>::string_view_type;
     typedef Result result_type;
-    typedef typename basic_json_options<CharT>::string_type string_type;
+    typedef typename json_options::string_type string_type;
 
 private:
     enum class container_type {object, array};
@@ -279,12 +279,12 @@ private:
     bool is_inf_to_str_;
     bool is_neginf_to_str_;
 
-    std::basic_string<CharT> nan_to_num_;
-    std::basic_string<CharT> inf_to_num_;
-    std::basic_string<CharT> neginf_to_num_;
-    std::basic_string<CharT> nan_to_str_;
-    std::basic_string<CharT> inf_to_str_;
-    std::basic_string<CharT> neginf_to_str_;
+    std::basic_string<char> nan_to_num_;
+    std::basic_string<char> inf_to_num_;
+    std::basic_string<char> neginf_to_num_;
+    std::basic_string<char> nan_to_str_;
+    std::basic_string<char> inf_to_str_;
+    std::basic_string<char> neginf_to_str_;
 
     bool escape_all_non_ascii_;
     bool escape_solidus_;
@@ -296,30 +296,30 @@ private:
     line_split_kind array_object_line_splits_;
     jsoncons::detail::print_double fp_;
     size_t line_length_limit_;
-    std::basic_string<CharT> new_line_chars_;
+    std::basic_string<char> new_line_chars_;
     Result result_;
 
     std::vector<serialization_context> stack_;
     int indent_amount_;
     size_t column_;
-    std::basic_string<CharT> colon_str_;
-    std::basic_string<CharT> comma_str_;
-    std::basic_string<CharT> open_object_brace_str_;
-    std::basic_string<CharT> close_object_brace_str_;
-    std::basic_string<CharT> open_array_bracket_str_;
-    std::basic_string<CharT> close_array_bracket_str_;
+    std::basic_string<char> colon_str_;
+    std::basic_string<char> comma_str_;
+    std::basic_string<char> open_object_brace_str_;
+    std::basic_string<char> close_object_brace_str_;
+    std::basic_string<char> open_array_bracket_str_;
+    std::basic_string<char> close_array_bracket_str_;
 
     // Noncopyable and nonmoveable
     basic_json_serializer(const basic_json_serializer&) = delete;
     basic_json_serializer& operator=(const basic_json_serializer&) = delete;
 public:
     basic_json_serializer(result_type result)
-        : basic_json_serializer(std::move(result), basic_json_options<CharT>())
+        : basic_json_serializer(std::move(result), json_options())
     {
     }
 
     basic_json_serializer(result_type result, 
-                          const basic_json_write_options<CharT>& options)
+                          const json_write_options& options)
        : indent_size_(options.indent_size()),
          is_nan_to_num_(options.is_nan_to_num()),
          is_inf_to_num_(options.is_inf_to_num()),
@@ -353,13 +353,13 @@ public:
         switch (options.spaces_around_colon())
         {
             case spaces_option::space_after:
-                colon_str_ = std::basic_string<CharT>({':',' '});
+                colon_str_ = std::basic_string<char>({':',' '});
                 break;
             case spaces_option::space_before:
-                colon_str_ = std::basic_string<CharT>({' ',':'});
+                colon_str_ = std::basic_string<char>({' ',':'});
                 break;
             case spaces_option::space_before_and_after:
-                colon_str_ = std::basic_string<CharT>({' ',':',' '});
+                colon_str_ = std::basic_string<char>({' ',':',' '});
                 break;
             default:
                 colon_str_.push_back(':');
@@ -368,13 +368,13 @@ public:
         switch (options.spaces_around_comma())
         {
             case spaces_option::space_after:
-                comma_str_ = std::basic_string<CharT>({',',' '});
+                comma_str_ = std::basic_string<char>({',',' '});
                 break;
             case spaces_option::space_before:
-                comma_str_ = std::basic_string<CharT>({' ',','});
+                comma_str_ = std::basic_string<char>({' ',','});
                 break;
             case spaces_option::space_before_and_after:
-                comma_str_ = std::basic_string<CharT>({' ',',',' '});
+                comma_str_ = std::basic_string<char>({' ',',',' '});
                 break;
             default:
                 comma_str_.push_back(',');
@@ -382,8 +382,8 @@ public:
         }
         if (options.pad_inside_object_braces())
         {
-            open_object_brace_str_ = std::basic_string<CharT>('{', ' ');
-            close_object_brace_str_ = std::basic_string<CharT>(' ', '}');
+            open_object_brace_str_ = std::basic_string<char>('{', ' ');
+            close_object_brace_str_ = std::basic_string<char>(' ', '}');
         }
         else
         {
@@ -392,8 +392,8 @@ public:
         }
         if (options.pad_inside_array_brackets())
         {
-            open_array_bracket_str_ = std::basic_string<CharT>('[', ' ');
-            close_array_bracket_str_ = std::basic_string<CharT>(' ', ']');
+            open_array_bracket_str_ = std::basic_string<char>('[', ' ');
+            close_array_bracket_str_ = std::basic_string<char>(' ', ']');
         }
         else
         {
@@ -1021,10 +1021,10 @@ template<class CharT,class Result=jsoncons::text_stream_result<CharT>>
 class basic_json_compressed_serializer final : public basic_json_content_handler<CharT>
 {
 public:
-    typedef CharT char_type;
+    typedef char char_type;
     using typename basic_json_content_handler<CharT>::string_view_type;
     typedef Result result_type;
-    typedef typename basic_json_options<CharT>::string_type string_type;
+    typedef typename json_options::string_type string_type;
 
 private:
     enum class container_type {object, array};
@@ -1062,12 +1062,12 @@ private:
     bool is_inf_to_str_;
     bool is_neginf_to_str_;
 
-    std::basic_string<CharT> nan_to_num_;
-    std::basic_string<CharT> inf_to_num_;
-    std::basic_string<CharT> neginf_to_num_;
-    std::basic_string<CharT> nan_to_str_;
-    std::basic_string<CharT> inf_to_str_;
-    std::basic_string<CharT> neginf_to_str_;
+    std::basic_string<char> nan_to_num_;
+    std::basic_string<char> inf_to_num_;
+    std::basic_string<char> neginf_to_num_;
+    std::basic_string<char> nan_to_str_;
+    std::basic_string<char> inf_to_str_;
+    std::basic_string<char> neginf_to_str_;
     bool escape_all_non_ascii_;
     bool escape_solidus_;
     byte_string_chars_format byte_string_format_;
@@ -1082,12 +1082,12 @@ private:
     basic_json_compressed_serializer& operator=(const basic_json_compressed_serializer&) = delete;
 public:
     basic_json_compressed_serializer(result_type result)
-        : basic_json_compressed_serializer(std::move(result), basic_json_options<CharT>())
+        : basic_json_compressed_serializer(std::move(result), json_options())
     {
     }
 
     basic_json_compressed_serializer(result_type result, 
-                                     const basic_json_write_options<CharT>& options)
+                                     const json_write_options& options)
        : is_nan_to_num_(options.is_nan_to_num()),
          is_inf_to_num_(options.is_inf_to_num()),
          is_neginf_to_num_(options.is_neginf_to_num()),

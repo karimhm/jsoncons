@@ -53,19 +53,19 @@ enum class csv_state_type
     done
 };
 
-template<class CharT,class Allocator=std::allocator<CharT>>
+template<class CharT,class Allocator=std::allocator<char>>
 class basic_csv_parser : private serializing_context
 {
     typedef basic_string_view<CharT> string_view_type;
-    typedef CharT char_type;
+    typedef char char_type;
     typedef Allocator allocator_type;
     typedef typename std::allocator_traits<allocator_type>:: template rebind_alloc<CharT> char_allocator_type;
-    typedef std::basic_string<CharT,std::char_traits<CharT>,char_allocator_type> string_type;
+    typedef std::basic_string<char,std::char_traits<CharT>,char_allocator_type> string_type;
     typedef typename std::allocator_traits<allocator_type>:: template rebind_alloc<string_type> string_allocator_type;
     typedef typename std::allocator_traits<allocator_type>:: template rebind_alloc<csv_mode_type> csv_mode_allocator_type;
     typedef typename std::allocator_traits<allocator_type>:: template rebind_alloc<csv_type_info> csv_type_info_allocator_type;
     typedef typename std::allocator_traits<allocator_type>:: template rebind_alloc<std::vector<string_type,string_allocator_type>> string_vector_allocator_type;
-    typedef basic_json<CharT,preserve_order_policy,Allocator> json_type;
+    typedef basic_json<preserve_order_policy,Allocator> json_type;
 
     static const int default_depth = 3;
 
@@ -157,7 +157,7 @@ public:
         return input_ptr_ == input_end_;
     }
 
-    const std::vector<std::basic_string<CharT>>& column_labels() const
+    const std::vector<std::basic_string<char>>& column_labels() const
     {
         return column_names_;
     }

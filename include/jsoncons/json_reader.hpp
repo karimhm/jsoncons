@@ -80,7 +80,7 @@ private:
 
     bool do_name(const string_view_type& name, const serializing_context& context) override
     {
-        std::basic_string<CharT> target;
+        std::basic_string<char> target;
         auto result = unicons::convert(
             name.begin(), name.end(), std::back_inserter(target), 
             unicons::conv_flags::strict);
@@ -93,7 +93,7 @@ private:
 
     bool do_string_value(const string_view_type& value, semantic_tag_type tag, const serializing_context& context) override
     {
-        std::basic_string<CharT> target;
+        std::basic_string<char> target;
         auto result = unicons::convert(
             value.begin(), value.end(), std::back_inserter(target), 
             unicons::conv_flags::strict);
@@ -140,7 +140,7 @@ template<class CharT,class Source,class Allocator=std::allocator<char>>
 class basic_json_reader 
 {
 public:
-    typedef CharT char_type;
+    typedef char char_type;
     typedef Source source_type;
     typedef basic_string_view<CharT> string_view_type;
     typedef Allocator allocator_type;
@@ -170,13 +170,13 @@ public:
     explicit basic_json_reader(source_type source)
         : basic_json_reader(std::move(source),
                             default_content_handler_,
-                            basic_json_options<CharT>(),
+                            json_options(),
                             default_err_handler_)
     {
     }
 
     basic_json_reader(source_type source, 
-                      const basic_json_read_options<CharT>& options)
+                      const json_read_options& options)
         : basic_json_reader(std::move(source),
                             default_content_handler_,
                             options,
@@ -188,13 +188,13 @@ public:
                       parse_error_handler& err_handler)
         : basic_json_reader(std::move(source),
                             default_content_handler_,
-                            basic_json_options<CharT>(),
+                            json_options(),
                             err_handler)
     {
     }
 
     basic_json_reader(source_type source, 
-                      const basic_json_read_options<CharT>& options,
+                      const json_read_options& options,
                       parse_error_handler& err_handler)
         : basic_json_reader(std::move(source),
                             default_content_handler_,
@@ -207,14 +207,14 @@ public:
                       basic_json_content_handler<CharT>& handler)
         : basic_json_reader(std::move(source),
                             handler,
-                            basic_json_options<CharT>(),
+                            json_options(),
                             default_err_handler_)
     {
     }
 
     basic_json_reader(source_type source, 
                       basic_json_content_handler<CharT>& handler,
-                      const basic_json_read_options<CharT>& options)
+                      const json_read_options& options)
         : basic_json_reader(std::move(source),
                             handler,
                             options,
@@ -227,14 +227,14 @@ public:
                       parse_error_handler& err_handler)
         : basic_json_reader(std::move(source),
                             handler,
-                            basic_json_options<CharT>(),
+                            json_options(),
                             err_handler)
     {
     }
 
     basic_json_reader(source_type source,
                       basic_json_content_handler<CharT>& handler, 
-                      const basic_json_read_options<CharT>& options,
+                      const json_read_options& options,
                       parse_error_handler& err_handler)
        : handler_(handler),
          parser_(options,err_handler),

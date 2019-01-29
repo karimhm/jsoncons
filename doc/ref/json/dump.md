@@ -14,7 +14,7 @@ void dump(std::basic_string<char_type,char_traits_type,SAllocator>& s,
 
 template <class SAllocator>
 void dump(std::basic_string<char_type,char_traits_type,SAllocator>& s,
-          const basic_json_options<char_type>& options, 
+          const json_options& options, 
           indenting line_indent) const; // (4)
 
 void dump(std::ostream& os) const; // (5)

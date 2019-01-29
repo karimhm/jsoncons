@@ -102,7 +102,7 @@ at(key)        |`reference` or `value_type`|
 
 ### See also
 
-[basic_path](path.md)
+[path](path.md)
 
 ### Examples
 

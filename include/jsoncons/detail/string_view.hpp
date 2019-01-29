@@ -52,15 +52,15 @@ public:
     basic_string_view(const basic_string_view& other) = default;
 
     template <class Allocator>
-    basic_string_view(const std::basic_string<CharT,Traits,Allocator>& s)
+    basic_string_view(const std::basic_string<char,Traits,Allocator>& s)
         : data_(s.data()), length_(s.length())
     {
     }
 
     template <class Allocator>
-    explicit operator std::basic_string<CharT,Traits,Allocator>() const
+    explicit operator std::basic_string<char,Traits,Allocator>() const
     { 
-        return std::basic_string<CharT,Traits>(data_,length_); 
+        return std::basic_string<char,Traits>(data_,length_); 
     }
 
     // iterator support 
@@ -176,7 +176,7 @@ public:
     }
 
     template <class Allocator>
-    int compare(const std::basic_string<CharT,Traits,Allocator>& s) const 
+    int compare(const std::basic_string<char,Traits,Allocator>& s) const 
     {
         const int rc = Traits::compare(data_, s.data(), (std::min)(length_, s.length()));
         return rc != 0 ? rc : (length_ == s.length() ? 0 : length_ < s.length() ? -1 : 1);
@@ -369,7 +369,7 @@ public:
         return find_last_not_of(basic_string_view(s), pos); 
     }
 
-    friend std::basic_ostream<CharT>& operator<<(std::basic_ostream<CharT>& os, const basic_string_view& sv)
+    friend std::ostream& operator<<(std::ostream& os, const basic_string_view& sv)
     {
         os.write(sv.data_,sv.length_);
         return os;
@@ -385,12 +385,12 @@ bool operator==(const basic_string_view<CharT,Traits>& lhs,
 }
 template<class CharT,class Traits,class Allocator>
 bool operator==(const basic_string_view<CharT,Traits>& lhs, 
-                const std::basic_string<CharT,Traits,Allocator>& rhs)
+                const std::basic_string<char,Traits,Allocator>& rhs)
 {
     return lhs.compare(rhs) == 0;
 }
 template<class CharT,class Traits,class Allocator>
-bool operator==(const std::basic_string<CharT,Traits,Allocator>& lhs, 
+bool operator==(const std::basic_string<char,Traits,Allocator>& lhs, 
                 const basic_string_view<CharT,Traits>& rhs)
 {
     return rhs.compare(lhs) == 0;
@@ -417,12 +417,12 @@ bool operator!=(const basic_string_view<CharT,Traits>& lhs,
 }
 template<class CharT,class Traits,class Allocator>
 bool operator!=(const basic_string_view<CharT,Traits>& lhs, 
-                const std::basic_string<CharT,Traits,Allocator>& rhs)
+                const std::basic_string<char,Traits,Allocator>& rhs)
 {
     return lhs.compare(rhs) != 0;
 }
 template<class CharT,class Traits,class Allocator>
-bool operator!=(const std::basic_string<CharT,Traits,Allocator>& lhs, 
+bool operator!=(const std::basic_string<char,Traits,Allocator>& lhs, 
                 const basic_string_view<CharT,Traits>& rhs)
 {
     return rhs.compare(lhs) != 0;
@@ -449,12 +449,12 @@ bool operator<=(const basic_string_view<CharT,Traits>& lhs,
 }
 template<class CharT,class Traits,class Allocator>
 bool operator<=(const basic_string_view<CharT,Traits>& lhs, 
-                const std::basic_string<CharT,Traits,Allocator>& rhs)
+                const std::basic_string<char,Traits,Allocator>& rhs)
 {
     return lhs.compare(rhs) <= 0;
 }
 template<class CharT,class Traits,class Allocator>
-bool operator<=(const std::basic_string<CharT,Traits,Allocator>& lhs, 
+bool operator<=(const std::basic_string<char,Traits,Allocator>& lhs, 
                 const basic_string_view<CharT,Traits>& rhs)
 {
     return rhs.compare(lhs) >= 0;
@@ -469,12 +469,12 @@ bool operator<(const basic_string_view<CharT,Traits>& lhs,
 }
 template<class CharT,class Traits,class Allocator>
 bool operator<(const basic_string_view<CharT,Traits>& lhs, 
-                const std::basic_string<CharT,Traits,Allocator>& rhs)
+                const std::basic_string<char,Traits,Allocator>& rhs)
 {
     return lhs.compare(rhs) < 0;
 }
 template<class CharT,class Traits,class Allocator>
-bool operator<(const std::basic_string<CharT,Traits,Allocator>& lhs, 
+bool operator<(const std::basic_string<char,Traits,Allocator>& lhs, 
                 const basic_string_view<CharT,Traits>& rhs)
 {
     return rhs.compare(lhs) > 0;
@@ -489,12 +489,12 @@ bool operator>=(const basic_string_view<CharT,Traits>& lhs,
 }
 template<class CharT,class Traits,class Allocator>
 bool operator>=(const basic_string_view<CharT,Traits>& lhs, 
-                const std::basic_string<CharT,Traits,Allocator>& rhs)
+                const std::basic_string<char,Traits,Allocator>& rhs)
 {
     return lhs.compare(rhs) >= 0;
 }
 template<class CharT,class Traits,class Allocator>
-bool operator>=(const std::basic_string<CharT,Traits,Allocator>& lhs, 
+bool operator>=(const std::basic_string<char,Traits,Allocator>& lhs, 
                 const basic_string_view<CharT,Traits>& rhs)
 {
     return rhs.compare(lhs) <= 0;
@@ -509,12 +509,12 @@ bool operator>(const basic_string_view<CharT,Traits>& lhs,
 }
 template<class CharT,class Traits,class Allocator>
 bool operator>(const basic_string_view<CharT,Traits>& lhs, 
-                const std::basic_string<CharT,Traits,Allocator>& rhs)
+                const std::basic_string<char,Traits,Allocator>& rhs)
 {
     return lhs.compare(rhs) > 0;
 }
 template<class CharT,class Traits,class Allocator>
-bool operator>(const std::basic_string<CharT,Traits,Allocator>& lhs, 
+bool operator>(const std::basic_string<char,Traits,Allocator>& lhs, 
                 const basic_string_view<CharT,Traits>& rhs)
 {
     return rhs.compare(lhs) < 0;

@@ -5,7 +5,7 @@
 #include <boost/pool/pool_alloc.hpp>
 #include "jsoncons/json.hpp"
 
-typedef jsoncons::basic_json<char, boost::fast_pool_allocator<void>> bfp_json;
+typedef jsoncons::basic_json< boost::fast_pool_allocator<void>> bfp_json;
 
 bfp_json j;
 
@@ -40,7 +40,7 @@ struct boost_sorted_policy : public sorted_policy
     using string_storage = boost::interprocess::basic_string<CharT, CharTraits, Allocator>;
 };
 
-typedef basic_json<char,boost_sorted_policy,shmem_allocator> shm_json;
+typedef basic_json<boost_sorted_policy,shmem_allocator> shm_json;
 
 int main(int argc, char *argv[])
 {

@@ -34,7 +34,7 @@ template <class CharT>
 class replacement_filter : public basic_json_filter<CharT>
 {
     typedef typename basic_json_content_handler<CharT>::string_view_type string_view_type;
-    typedef typename basic_json_options<CharT>::string_type string_type;
+    typedef typename json_options::string_type string_type;
 
     bool is_str_to_nan_;
     bool is_str_to_inf_;
@@ -151,7 +151,7 @@ enum class json_parse_state : uint8_t
 template <class CharT, class Allocator = std::allocator<char>>
 class basic_json_parser : private serializing_context
 {
-    typedef std::basic_string<CharT> string_type;
+    typedef std::basic_string<char> string_type;
     typedef typename basic_json_content_handler<CharT>::string_view_type string_view_type;
     typedef Allocator allocator_type;
     typedef typename std::allocator_traits<allocator_type>:: template rebind_alloc<CharT> char_allocator_type;
@@ -185,7 +185,7 @@ class basic_json_parser : private serializing_context
     bool continue_;
     bool done_;
 
-    std::basic_string<CharT,std::char_traits<CharT>,char_allocator_type> string_buffer_;
+    std::basic_string<char,std::char_traits<CharT>,char_allocator_type> string_buffer_;
     jsoncons::detail::string_to_double to_double_;
 
     typedef typename std::allocator_traits<allocator_type>:: template rebind_alloc<json_parse_state> parse_state_allocator_type;
@@ -197,21 +197,21 @@ class basic_json_parser : private serializing_context
 
 public:
     basic_json_parser()
-        : basic_json_parser(basic_json_options<CharT>(), default_err_handler_)
+        : basic_json_parser(json_options(), default_err_handler_)
     {
     }
 
     basic_json_parser(parse_error_handler& err_handler)
-        : basic_json_parser(basic_json_options<CharT>(), err_handler)
+        : basic_json_parser(json_options(), err_handler)
     {
     }
 
-    basic_json_parser(const basic_json_read_options<CharT>& options)
+    basic_json_parser(const json_read_options& options)
         : basic_json_parser(options, default_err_handler_)
     {
     }
 
-    basic_json_parser(const basic_json_read_options<CharT>& options,
+    basic_json_parser(const json_read_options& options,
                       parse_error_handler& err_handler)
        : err_handler_(err_handler),
          is_str_to_nan_(options.is_str_to_nan()),

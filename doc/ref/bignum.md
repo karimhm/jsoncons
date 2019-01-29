@@ -106,7 +106,7 @@ An empty list means a zero value.
     bool operator!=(const bignum& lhs, const bignum& rhs);
 
     template <class CharT>
-    friend std::basic_ostream<CharT>& operator<<(std::basic_ostream<CharT>& os, const bignum& o);
+    friend std::ostream& operator<<(std::ostream& os, const bignum& o);
 
 #### Global arithmetic operators
 

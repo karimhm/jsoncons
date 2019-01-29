@@ -1,7 +1,7 @@
 ### jsoncons::json
 
 ```c++
-typedef basic_json<char,
+typedef basic_json<
                    ImplementationPolicy = sorted_policy,
                    Allocator = std::allocator<char>> json
 ```

@@ -1,7 +1,7 @@
 ### jsoncons::ojson
 
 ```c++
-typedef basic_json<char,
+typedef basic_json<
                    ImplementationPolicy = original_order_policy,
                    Allocator = std::allocator<char>> ojson
 ```

@@ -29,7 +29,7 @@ public:
     typedef CharT value_type;
     typedef std::char_traits<CharT> traits_type;
 private:
-    std::basic_istream<CharT>* is_;
+    std::istream* is_;
     std::basic_streambuf<CharT>* sbuf_;
     size_t position_;
 
@@ -39,7 +39,7 @@ private:
 public:
     text_stream_source(text_stream_source&&) = default;
 
-    text_stream_source(std::basic_istream<CharT>& is)
+    text_stream_source(std::istream& is)
         : is_(std::addressof(is)), sbuf_(is.rdbuf()), position_(0)
     {
     }

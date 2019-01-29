@@ -161,11 +161,11 @@ public:
     using typename basic_json_filter<CharT>::string_view_type;
 
 private:
-    std::basic_string<CharT> name_;
-    std::basic_string<CharT> new_name_;
+    std::basic_string<char> name_;
+    std::basic_string<char> new_name_;
 public:
-    basic_rename_object_member_filter(const std::basic_string<CharT>& name,
-                             const std::basic_string<CharT>& new_name,
+    basic_rename_object_member_filter(const std::basic_string<char>& name,
+                             const std::basic_string<char>& new_name,
                              basic_json_content_handler<CharT>& handler)
         : basic_json_filter<CharT>(handler), 
           name_(name), new_name_(new_name)
@@ -254,7 +254,7 @@ private:
     bool do_name(const string_view_type& name,
                  const serializing_context& context) override
     {
-        std::basic_string<CharT> target;
+        std::basic_string<char> target;
         auto result = unicons::convert(name.begin(),name.end(),std::back_inserter(target),unicons::conv_flags::strict);
         if (result.ec != unicons::conv_errc())
         {
@@ -267,7 +267,7 @@ private:
                          semantic_tag_type tag,
                          const serializing_context& context) override
     {
-        std::basic_string<CharT> target;
+        std::basic_string<char> target;
         auto result = unicons::convert(value.begin(),value.end(),std::back_inserter(target),unicons::conv_flags::strict);
         if (result.ec != unicons::conv_errc())
         {

@@ -4,7 +4,7 @@
 template<
     class CharT,
     class Result
-    class Allocator=std::allocator<CharT>=std::allocator<CharT>>
+    class Allocator=std::allocator<char>=std::allocator<char>>
 > class basic_csv_serializer : public jsoncons::basic_json_content_handler<CharT>
 ```
 

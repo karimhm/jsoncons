@@ -9,18 +9,18 @@ work for all C++ classes that have [json_type_traits](https://github.com/daniela
 #include <jsoncons/json.hpp>
 
 template <class T, class CharT>
-T decode_json(const std::basic_string<CharT>& s);  // (1)
+T decode_json(const std::basic_string<char>& s);  // (1)
 
 template <class T, class CharT>
-T decode_json(const std::basic_string<CharT>& s,
-              const basic_json_options<CharT>& options); // (2)
+T decode_json(const std::basic_string<char>& s,
+              const json_options& options); // (2)
 
 template <class T, class CharT>
-T decode_json(std::basic_istream<CharT>& is); // (3)
+T decode_json(std::istream& is); // (3)
 
 template <class T, class CharT>
-T decode_json(std::basic_istream<CharT>& is,
-              const basic_json_options<CharT>& options); // (4)
+T decode_json(std::istream& is,
+              const json_options& options); // (4)
 ```
 
 ### Examples

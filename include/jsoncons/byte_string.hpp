@@ -105,7 +105,7 @@ public:
     }
 
     template <class CharT>
-    friend std::basic_ostream<CharT>& operator<<(std::basic_ostream<CharT>& os, const byte_string_view& o)
+    friend std::ostream& operator<<(std::ostream& os, const byte_string_view& o)
     {
         std::basic_ostringstream<CharT> ss;
         ss.flags(std::ios::hex | std::ios::showbase);
@@ -249,7 +249,7 @@ public:
     }
 
     template <class CharT>
-    friend std::basic_ostream<CharT>& operator<<(std::basic_ostream<CharT>& os, const basic_byte_string& o)
+    friend std::ostream& operator<<(std::ostream& os, const basic_byte_string& o)
     {
         os << byte_string_view(o);
         return os;

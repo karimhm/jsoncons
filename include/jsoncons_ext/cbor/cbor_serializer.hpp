@@ -30,7 +30,7 @@ class basic_cbor_serializer final : public basic_json_content_handler<CharT>
 
     enum class decimal_parse_state { start, integer, exp1, exp2, fraction1 };
 public:
-    typedef CharT char_type;
+    typedef char char_type;
     typedef Result result_type;
     using typename basic_json_content_handler<CharT>::string_view_type;
 
@@ -383,8 +383,8 @@ private:
     void write_decimal_value(const string_view_type& sv, const serializing_context& context)
     {
         decimal_parse_state state = decimal_parse_state::start;
-        std::basic_string<CharT> s;
-        std::basic_string<CharT> exponent;
+        std::basic_string<char> s;
+        std::basic_string<char> exponent;
         int64_t scale = 0;
         for (auto c : sv)
         {

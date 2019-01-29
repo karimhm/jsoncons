@@ -130,7 +130,7 @@ private:
     }
 };
 
-template<class CharT,class Allocator=std::allocator<CharT>>
+template<class CharT,class Allocator=std::allocator<char>>
 class basic_json_staj_reader : public basic_staj_reader<CharT>, private virtual serializing_context
 {
     static const size_t default_max_buffer_length = 16384;
@@ -140,7 +140,7 @@ class basic_json_staj_reader : public basic_staj_reader<CharT>, private virtual 
 
     default_basic_staj_filter<CharT> default_filter_;
 
-    typedef CharT char_type;
+    typedef char char_type;
     typedef Allocator allocator_type;
     typedef typename std::allocator_traits<allocator_type>:: template rebind_alloc<CharT> char_allocator_type;
 
@@ -162,45 +162,45 @@ public:
 
     // Constructors with stream input that throw parse exceptions
     basic_json_staj_reader(std::basic_istream<CharT>& is)
-        : basic_json_staj_reader(is,default_filter_,basic_json_options<CharT>(),default_err_handler_)
+        : basic_json_staj_reader(is,default_filter_,json_options(),default_err_handler_)
     {
     }
 
     basic_json_staj_reader(std::basic_istream<CharT>& is,
                              basic_staj_filter<CharT>& filter)
-        : basic_json_staj_reader(is,filter,basic_json_options<CharT>(),default_err_handler_)
+        : basic_json_staj_reader(is,filter,json_options(),default_err_handler_)
     {
     }
 
     basic_json_staj_reader(std::basic_istream<CharT>& is,
                              parse_error_handler& err_handler)
-        : basic_json_staj_reader(is,default_filter_,basic_json_options<CharT>(),err_handler)
+        : basic_json_staj_reader(is,default_filter_,json_options(),err_handler)
     {
     }
 
     basic_json_staj_reader(std::basic_istream<CharT>& is,
                              basic_staj_filter<CharT>& filter,
                              parse_error_handler& err_handler)
-        : basic_json_staj_reader(is,filter,basic_json_options<CharT>(),err_handler)
+        : basic_json_staj_reader(is,filter,json_options(),err_handler)
     {
     }
 
     basic_json_staj_reader(std::basic_istream<CharT>& is, 
-                             const basic_json_read_options<CharT>& options)
+                             const json_read_options& options)
         : basic_json_staj_reader(is,default_filter_,options,default_err_handler_)
     {
     }
 
     basic_json_staj_reader(std::basic_istream<CharT>& is,
                              basic_staj_filter<CharT>& filter, 
-                             const basic_json_read_options<CharT>& options)
+                             const json_read_options& options)
         : basic_json_staj_reader(is,filter,options,default_err_handler_)
     {
     }
 
     basic_json_staj_reader(std::basic_istream<CharT>& is, 
                              basic_staj_filter<CharT>& filter,
-                             const basic_json_read_options<CharT>& options,
+                             const json_read_options& options,
                              parse_error_handler& err_handler)
        : parser_(options,err_handler),
          is_(is),
@@ -219,21 +219,21 @@ public:
     // Constructors with stream input that set parse error codes
     basic_json_staj_reader(std::basic_istream<CharT>& is,
                            std::error_code& ec)
-        : basic_json_staj_reader(is,default_filter_,basic_json_options<CharT>(),default_err_handler_,ec)
+        : basic_json_staj_reader(is,default_filter_,json_options(),default_err_handler_,ec)
     {
     }
 
     basic_json_staj_reader(std::basic_istream<CharT>& is,
                              basic_staj_filter<CharT>& filter,
                              std::error_code& ec)
-        : basic_json_staj_reader(is,filter,basic_json_options<CharT>(),default_err_handler_,ec)
+        : basic_json_staj_reader(is,filter,json_options(),default_err_handler_,ec)
     {
     }
 
     basic_json_staj_reader(std::basic_istream<CharT>& is,
                              parse_error_handler& err_handler,
                              std::error_code& ec)
-        : basic_json_staj_reader(is,default_filter_,basic_json_options<CharT>(),err_handler,ec)
+        : basic_json_staj_reader(is,default_filter_,json_options(),err_handler,ec)
     {
     }
 
@@ -241,12 +241,12 @@ public:
                              basic_staj_filter<CharT>& filter,
                              parse_error_handler& err_handler,
                              std::error_code& ec)
-        : basic_json_staj_reader(is,filter,basic_json_options<CharT>(),err_handler,ec)
+        : basic_json_staj_reader(is,filter,json_options(),err_handler,ec)
     {
     }
 
     basic_json_staj_reader(std::basic_istream<CharT>& is, 
-                             const basic_json_read_options<CharT>& options,
+                             const json_read_options& options,
                              std::error_code& ec)
         : basic_json_staj_reader(is,default_filter_,options,default_err_handler_,ec)
     {
@@ -254,7 +254,7 @@ public:
 
     basic_json_staj_reader(std::basic_istream<CharT>& is,
                              basic_staj_filter<CharT>& filter, 
-                             const basic_json_read_options<CharT>& options,
+                             const json_read_options& options,
                              std::error_code& ec)
         : basic_json_staj_reader(is,filter,options,default_err_handler_,ec)
     {
@@ -262,7 +262,7 @@ public:
 
     basic_json_staj_reader(std::basic_istream<CharT>& is, 
                              basic_staj_filter<CharT>& filter,
-                             const basic_json_read_options<CharT>& options,
+                             const json_read_options& options,
                              parse_error_handler& err_handler,
                              std::error_code& ec)
        : parser_(options,err_handler),
@@ -281,45 +281,45 @@ public:
 
     // Constructors with string view input that throw parse exceptions
     basic_json_staj_reader(const string_view_type& s)
-        : basic_json_staj_reader(s,default_filter_,basic_json_options<CharT>(),default_err_handler_)
+        : basic_json_staj_reader(s,default_filter_,json_options(),default_err_handler_)
     {
     }
 
     basic_json_staj_reader(const string_view_type& s,
                            basic_staj_filter<CharT>& filter)
-        : basic_json_staj_reader(s,filter,basic_json_options<CharT>(),default_err_handler_)
+        : basic_json_staj_reader(s,filter,json_options(),default_err_handler_)
     {
     }
 
     basic_json_staj_reader(const string_view_type& s,
                            parse_error_handler& err_handler)
-        : basic_json_staj_reader(s,default_filter_,basic_json_options<CharT>(),err_handler)
+        : basic_json_staj_reader(s,default_filter_,json_options(),err_handler)
     {
     }
 
     basic_json_staj_reader(const string_view_type& s,
                              basic_staj_filter<CharT>& filter,
                              parse_error_handler& err_handler)
-        : basic_json_staj_reader(s,filter,basic_json_options<CharT>(),err_handler)
+        : basic_json_staj_reader(s,filter,json_options(),err_handler)
     {
     }
 
     basic_json_staj_reader(const string_view_type& s, 
-                             const basic_json_read_options<CharT>& options)
+                             const json_read_options& options)
         : basic_json_staj_reader(s,default_filter_,options,default_err_handler_)
     {
     }
 
     basic_json_staj_reader(const string_view_type& s,
                              basic_staj_filter<CharT>& filter, 
-                             const basic_json_read_options<CharT>& options)
+                             const json_read_options& options)
         : basic_json_staj_reader(s,filter,options,default_err_handler_)
     {
     }
 
     basic_json_staj_reader(const string_view_type& s, 
                            basic_staj_filter<CharT>& filter,
-                           const basic_json_read_options<CharT>& options,
+                           const json_read_options& options,
                            parse_error_handler& err_handler)
        : parser_(options,err_handler),
          is_(null_is_),
@@ -339,21 +339,21 @@ public:
     // Constructors with string view input that set parse error codes
     basic_json_staj_reader(const string_view_type& s,
                              std::error_code& ec)
-        : basic_json_staj_reader(s,default_filter_,basic_json_options<CharT>(),default_err_handler_,ec)
+        : basic_json_staj_reader(s,default_filter_,json_options(),default_err_handler_,ec)
     {
     }
 
     basic_json_staj_reader(const string_view_type& s,
                              basic_staj_filter<CharT>& filter,
                              std::error_code& ec)
-        : basic_json_staj_reader(s,filter,basic_json_options<CharT>(),default_err_handler_,ec)
+        : basic_json_staj_reader(s,filter,json_options(),default_err_handler_,ec)
     {
     }
 
     basic_json_staj_reader(const string_view_type& s,
                              parse_error_handler& err_handler,
                              std::error_code& ec)
-        : basic_json_staj_reader(s,default_filter_,basic_json_options<CharT>(),err_handler,ec)
+        : basic_json_staj_reader(s,default_filter_,json_options(),err_handler,ec)
     {
     }
 
@@ -361,12 +361,12 @@ public:
                              basic_staj_filter<CharT>& filter,
                              parse_error_handler& err_handler,
                              std::error_code& ec)
-        : basic_json_staj_reader(s,filter,basic_json_options<CharT>(),err_handler,ec)
+        : basic_json_staj_reader(s,filter,json_options(),err_handler,ec)
     {
     }
 
     basic_json_staj_reader(const string_view_type& s, 
-                             const basic_json_read_options<CharT>& options,
+                             const json_read_options& options,
                              std::error_code& ec)
         : basic_json_staj_reader(s,default_filter_,options,default_err_handler_,ec)
     {
@@ -374,7 +374,7 @@ public:
 
     basic_json_staj_reader(const string_view_type& s,
                              basic_staj_filter<CharT>& filter, 
-                             const basic_json_read_options<CharT>& options,
+                             const json_read_options& options,
                              std::error_code& ec)
         : basic_json_staj_reader(s,filter,options,default_err_handler_,ec)
     {
@@ -382,7 +382,7 @@ public:
 
     basic_json_staj_reader(const string_view_type& s, 
                              basic_staj_filter<CharT>& filter,
-                             const basic_json_read_options<CharT>& options,
+                             const json_read_options& options,
                              parse_error_handler& err_handler,
                              std::error_code& ec)
        : parser_(options,err_handler),
@@ -665,7 +665,7 @@ typedef basic_json_staj_reader<char,std::allocator<char>> json_staj_reader;
 typedef basic_json_staj_reader<wchar_t, std::allocator<wchar_t>> wjson_staj_reader;
 
 #if !defined(JSONCONS_NO_DEPRECATED)
-template<class CharT,class Allocator=std::allocator<CharT>>
+template<class CharT,class Allocator=std::allocator<char>>
 using basic_json_stream_reader = basic_json_staj_reader<CharT,Allocator>;
 
 

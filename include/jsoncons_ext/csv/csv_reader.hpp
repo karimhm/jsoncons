@@ -38,7 +38,7 @@ class basic_csv_reader
 
         bool array_begun_;
     };
-    typedef CharT char_type;
+    typedef char char_type;
     typedef Allocator allocator_type;
     typedef typename std::allocator_traits<allocator_type>:: template rebind_alloc<CharT> char_allocator_type;
 

@@ -64,8 +64,8 @@ struct csv_type_info
 template <class CharT>
 class basic_csv_options
 {
-    typedef CharT char_type;
-    typedef std::basic_string<CharT> string_type;
+    typedef char char_type;
+    typedef std::basic_string<char> string_type;
 
     chars_format floating_point_format_;
     int precision_;

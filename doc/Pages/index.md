@@ -643,8 +643,7 @@ Output:
 The [json](https://github.com/danielaparker/jsoncons/blob/master/doc/ref/json.md) class is an instantiation of the `basic_json` class template that uses `char` as the character type
 and sorts object members in alphabetically order.
 ```c++
-typedef basic_json<char,
-                   ImplementationPolicy = sorted_policy,
+typedef basic_json<ImplementationPolicy = sorted_policy,
                    Allocator = std::allocator<char>> json;
 ```
 If you prefer to retain the original insertion order, use [ojson](https://github.com/danielaparker/jsoncons/blob/master/doc/ref/ojson.md) instead.
@@ -662,7 +661,7 @@ Note that the allocator type allows you to supply a custom allocator. For exampl
 #include <boost/pool/pool_alloc.hpp>
 #include <jsoncons/json.hpp>
 
-typedef jsoncons::basic_json<char, boost::fast_pool_allocator<char>> myjson;
+typedef jsoncons::basic_json< boost::fast_pool_allocator<char>> myjson;
 
 myjson o;
 

@@ -11,20 +11,20 @@ template <class T, class CharT>
 void encode_json(const T& val, basic_json_content_handler<CharT>& handler); // (1)
 
 template <class T, class CharT>
-void encode_json(const T& val, std::basic_ostream<CharT>& os); // (2)
+void encode_json(const T& val, std::ostream& os); // (2)
 
 template <class T, class CharT>
 void encode_json(const T& val, 
-                 const basic_json_options<CharT>& options,
-                 std::basic_ostream<CharT>& os); // (3)
+                 const json_options& options,
+                 std::ostream& os); // (3)
 
 template <class T, class CharT>
-void encode_json(const T& val, std::basic_ostream<CharT>& os, indenting line_indent); // (4)
+void encode_json(const T& val, std::ostream& os, indenting line_indent); // (4)
 
 template <class T, class CharT>
 void encode_json(const T& val, 
-                 const basic_json_options<CharT>& options,
-                 std::basic_ostream<CharT>& os, indenting line_indent); // (5)
+                 const json_options& options,
+                 std::ostream& os, indenting line_indent); // (5)
 ```
 
 (1) Applies `conversion_traits` to serialize `val` to JSON output stream.

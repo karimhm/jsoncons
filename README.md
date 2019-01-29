@@ -169,8 +169,7 @@ character types, different policies for ordering name-value pairs, etc. A `basic
 of JSON-like string or binary formats formats, and defines an interface for accessing and modifying that data.
 
 ```c++
-typedef basic_json<char,
-                   ImplementationPolicy = sorted_policy,
+typedef basic_json<ImplementationPolicy = sorted_policy,
                    Allocator = std::allocator<char>> json;
 ```
 The library includes four instantiations of `basic_json`:

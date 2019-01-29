@@ -172,7 +172,7 @@ TEST_CASE("test_string_allocation")
     pool a_pool(1024);
     pool_allocator<json> allocator(&a_pool); 
 
-    typedef basic_json<char,sorted_policy,pool_allocator<json>> myjson;
+    typedef basic_json<sorted_policy,pool_allocator<json>> myjson;
 
     {
         myjson j("String too long for short string", allocator);

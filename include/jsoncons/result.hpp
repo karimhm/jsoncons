@@ -27,12 +27,12 @@ class text_stream_result
 {
 public:
     typedef CharT value_type;
-    typedef std::basic_ostream<CharT> output_type;
+    typedef std::ostream output_type;
 
 private:
     static const size_t default_buffer_length = 16384;
 
-    std::basic_ostream<CharT>* os_;
+    std::ostream* os_;
     std::vector<CharT> buffer_;
     CharT * begin_buffer_;
     const CharT* end_buffer_;
@@ -45,11 +45,11 @@ private:
 public:
     text_stream_result(text_stream_result&&) = default;
 
-    text_stream_result(std::basic_ostream<CharT>& os)
+    text_stream_result(std::ostream& os)
         : os_(std::addressof(os)), buffer_(default_buffer_length), begin_buffer_(buffer_.data()), end_buffer_(begin_buffer_+buffer_.size()), p_(begin_buffer_)
     {
     }
-    text_stream_result(std::basic_ostream<CharT>& os, size_t buflen)
+    text_stream_result(std::ostream& os, size_t buflen)
     : os_(std::addressof(os)), buffer_(buflen), begin_buffer_(buffer_.data()), end_buffer_(begin_buffer_+buffer_.size()), p_(begin_buffer_)
     {
     }

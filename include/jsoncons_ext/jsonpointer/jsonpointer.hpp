@@ -221,10 +221,9 @@ public:
 private:
 };
 
-template <class CharT>
-std::basic_string<CharT> escape_string(const std::basic_string<CharT>& s)
+std::basic_string<char> escape_string(const std::basic_string<char>& s)
 {
-    std::basic_string<CharT> result;
+    std::basic_string<char> result;
     for (auto c : s)
     {
         switch (c)
@@ -247,44 +246,43 @@ std::basic_string<CharT> escape_string(const std::basic_string<CharT>& s)
 
 // path
 
-template <class CharT>
-class basic_path
+class path
 {
 public:
-    std::basic_string<CharT> path_;
+    std::basic_string<char> path_;
 public:
     // Member types
-    typedef CharT char_type;
+    typedef char char_type;
     typedef std::basic_string<char_type> string_type;
     typedef basic_string_view<char_type> string_view_type;
     typedef path_iterator<typename string_type::const_iterator> const_iterator;
     typedef const_iterator iterator;
 
     // Constructors
-    basic_path()
+    path()
     {
     }
-    explicit basic_path(const string_type& s)
+    explicit path(const string_type& s)
         : path_(s)
     {
     }
-    explicit basic_path(string_type&& s)
+    explicit path(string_type&& s)
         : path_(std::move(s))
     {
     }
-    explicit basic_path(const CharT* s)
+    explicit path(const char_type* s)
         : path_(s)
     {
     }
 
-    basic_path(const basic_path&) = default;
+    path(const path&) = default;
 
-    basic_path(basic_path&&) = default;
+    path(path&&) = default;
 
     // operator=
-    basic_path& operator=(const basic_path&) = default;
+    path& operator=(const path&) = default;
 
-    basic_path& operator=(basic_path&&) = default;
+    path& operator=(path&&) = default;
 
     // Modifiers
 
@@ -293,7 +291,7 @@ public:
         path_.clear();
     }
 
-    basic_path& operator/=(const string_type& s)
+    path& operator/=(const string_type& s)
     {
         path_.push_back('/');
         path_.append(escape_string(s));
@@ -301,7 +299,7 @@ public:
         return *this;
     }
 
-    basic_path& operator+=(const basic_path& p)
+    path& operator+=(const path& p)
     {
         path_.append(p.path_);
         return *this;
@@ -334,39 +332,37 @@ public:
     }
 
     // Non-member functions
-    friend basic_path<CharT> operator/(const basic_path<CharT>& lhs, const string_type& rhs)
+    friend path operator/(const path& lhs, const string_type& rhs)
     {
-        basic_path<CharT> p(lhs);
+        path p(lhs);
         p /= rhs;
         return p;
     }
 
-    friend basic_path<CharT> operator+( const basic_path<CharT>& lhs, const basic_path<CharT>& rhs )
+    friend path operator+( const path& lhs, const path& rhs )
     {
-        basic_path<CharT> p(lhs);
+        path p(lhs);
         p += rhs;
         return p;
     }
 
-    friend bool operator==( const basic_path& lhs, const basic_path& rhs )
+    friend bool operator==( const path& lhs, const path& rhs )
     {
         return lhs.path_ == rhs.path_;
     }
 
-    friend bool operator!=( const basic_path& lhs, const basic_path& rhs )
+    friend bool operator!=( const path& lhs, const path& rhs )
     {
         return lhs.path_ != rhs.path_;
     }
 
-    friend std::basic_ostream<CharT>&
-    operator<<( std::basic_ostream<CharT>& os, const basic_path<CharT>& p )
+    friend std::ostream&
+    operator<<( std::ostream& os, const path& p )
     {
         os << p.path_;
         return os;
     }
 };
-
-typedef basic_path<char> path;
 
 namespace detail {
 

@@ -27,7 +27,7 @@ class basic_bson_serializer final : public basic_json_content_handler<CharT>
 {
     enum class decimal_parse_state { start, integer, exp1, exp2, fraction1 };
 public:
-    typedef CharT char_type;
+    typedef char char_type;
     using typename basic_json_content_handler<CharT>::string_view_type;
     typedef Result result_type;
 

@@ -52,7 +52,7 @@ class heap_only_string : public heap_only_string_base<Allocator>
 
     friend class heap_only_string_factory<CharT, Allocator>;
 public:
-    typedef CharT char_type;
+    typedef char char_type;
     typedef heap_only_string<CharT,Allocator> value_type;
 
     ~heap_only_string() {}
@@ -64,7 +64,7 @@ public:
     using heap_only_string_base<Allocator>::get_allocator;
 
 
-    friend std::basic_ostream<CharT>& operator<<(std::basic_ostream<CharT>& os, const heap_only_string& s)
+    friend std::ostream& operator<<(std::ostream& os, const heap_only_string& s)
     {
         os.write(s.data(),s.length());
         return os;
@@ -92,7 +92,7 @@ private:
 template <class CharT, class Allocator>
 class heap_only_string_factory
 {
-    typedef CharT char_type;
+    typedef char char_type;
     typedef typename std::allocator_traits<Allocator>::template rebind_alloc<char> byte_allocator_type;  
     typedef std::allocator_traits<byte_allocator_type> byte_allocator_traits_type;
     typedef typename byte_allocator_traits_type::pointer byte_pointer;

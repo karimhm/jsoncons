@@ -42,13 +42,13 @@ string_view_type           |
     explicit basic_json_reader(source_type source); // (1)
 
     basic_json_reader(source_type source, 
-                      const basic_json_read_options<CharT>& options); // (2)
+                      const json_read_options& options); // (2)
 
     basic_json_reader(source_type source,
                       parse_error_handler& err_handler); // (3)
 
     basic_json_reader(source_type source, 
-                      const basic_json_read_options<CharT>& options,
+                      const json_read_options& options,
                       parse_error_handler& err_handler); // (4)
 
     basic_json_reader(source_type source, 
@@ -56,7 +56,7 @@ string_view_type           |
 
     basic_json_reader(source_type source, 
                       basic_json_content_handler<CharT>& handler,
-                      const basic_json_read_options<CharT>& options); // (6)
+                      const json_read_options& options); // (6)
 
     basic_json_reader(source_type source,
                       basic_json_content_handler<CharT>& handler,
@@ -64,7 +64,7 @@ string_view_type           |
 
     basic_json_reader(source_type source,
                       basic_json_content_handler<CharT>& handler, 
-                      const basic_json_read_options<CharT>& options,
+                      const json_read_options& options,
                       parse_error_handler& err_handler); // (8)
 
 Constructors (1)-(4) use a default [json_content_handler](json_content_handler.md) that discards the JSON parse events, and are for validation only.

@@ -144,7 +144,7 @@ public:
     }
 
     template <typename CharT, typename CharTraits, typename UserAllocator>
-    basic_bignum(const std::basic_string<CharT,CharTraits,UserAllocator>& s)
+    basic_bignum(const std::basic_string<char,CharTraits,UserAllocator>& s)
         : values_{0,0}
     {
         initialize(s.data(), s.length());
@@ -1052,9 +1052,9 @@ public:
     }
 
     template <class CharT>
-    friend std::basic_ostream<CharT>& operator<<(std::basic_ostream<CharT>& os, const basic_bignum<Allocator>& v)
+    friend std::ostream& operator<<(std::ostream& os, const basic_bignum<Allocator>& v)
     {
-        std::basic_string<CharT> s; 
+        std::basic_string<char> s; 
         v.dump(s);
         os << s;
 
