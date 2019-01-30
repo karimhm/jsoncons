@@ -698,6 +698,30 @@ public:
             }
         }
 
+        variant(const string_view_type& sv, semantic_tag_type tag)
+        {
+            if (sv.length() <= short_string_data::max_length)
+            {
+                new(reinterpret_cast<void*>(&data_))short_string_data(tag, sv.data(), static_cast<uint8_t>(sv.length()));
+            }
+            else
+            {
+                new(reinterpret_cast<void*>(&data_))long_string_data(tag, sv.data(), sv.length(), char_allocator_type());
+            }
+        }
+
+        variant(const string_view_type& sv, semantic_tag_type tag, const Allocator& alloc)
+        {
+            if (sv.length() <= short_string_data::max_length)
+            {
+                new(reinterpret_cast<void*>(&data_))short_string_data(tag, sv.data(), static_cast<uint8_t>(sv.length()));
+            }
+            else
+            {
+                new(reinterpret_cast<void*>(&data_))long_string_data(tag, sv.data(), sv.length(), alloc);
+            }
+        }
+
         variant(const byte_string_view& bs, semantic_tag_type tag)
         {
             new(reinterpret_cast<void*>(&data_))byte_string_data(tag, bs.data(), bs.length(), byte_allocator_type());
@@ -1432,34 +1456,38 @@ public:
     private:
 
         ParentT& parent_;
-        const char_type* data_;
-        size_t length_;
+        string_viewable sv_;
 
         json_proxy() = delete;
         json_proxy& operator = (const json_proxy& other) = delete; 
 
-        json_proxy(ParentT& parent, const char_type* data, size_t length)
-            : parent_(parent), data_(data), length_(length)
+        json_proxy(ParentT& parent, const string_viewable& sv)
+            : parent_(parent), sv_(sv)
+        {
+        }
+
+        json_proxy(ParentT& parent, string_viewable&& sv)
+            : parent_(parent), sv_(std::move(sv))
         {
         }
 
         basic_json& evaluate() 
         {
-            return parent_.evaluate(string_view_type(data_,length_));
+            return parent_.evaluate(sv_.string_view());
         }
 
         const basic_json& evaluate() const
         {
-            return parent_.evaluate(string_view_type(data_,length_));
+            return parent_.evaluate(sv_.string_view());
         }
 
         basic_json& evaluate_with_default()
         {
             basic_json& val = parent_.evaluate_with_default();
-            auto it = val.find(string_view_type(data_,length_));
+            auto it = val.find(sv_.string_view());
             if (it == val.object_range().end())
             {
-                it = val.insert_or_assign(val.object_range().begin(),string_view_type(data_,length_),object(val.object_value().get_allocator()));            
+                it = val.insert_or_assign(val.object_range().begin(),sv_.string_view(),object(val.object_value().get_allocator()));            
             }
             return it->value();
         }
@@ -1474,14 +1502,14 @@ public:
             return evaluate().at(index);
         }
 
-        basic_json& evaluate(const string_view_type& index)
+        basic_json& evaluate(const string_viewable& key)
         {
-            return evaluate().at(index);
+            return evaluate().at(key);
         }
 
-        const basic_json& evaluate(const string_view_type& index) const
+        const basic_json& evaluate(const string_viewable& key) const
         {
-            return evaluate().at(index);
+            return evaluate().at(key);
         }
     public:
 
@@ -1523,12 +1551,12 @@ public:
             return evaluate().semantic_tag();
         }
 
-        size_t count(const string_view_type& name) const
+        size_t count(const string_viewable& name) const
         {
             return evaluate().count(name);
         }
 
-        bool contains(const string_view_type& name) const
+        bool contains(const string_viewable& name) const
         {
             return evaluate().contains(name);
         }
@@ -1707,7 +1735,7 @@ public:
         template <class T>
         json_proxy& operator=(T&& val) 
         {
-            parent_.evaluate_with_default().insert_or_assign(string_view_type(data_,length_), std::forward<T>(val));
+            parent_.evaluate_with_default().insert_or_assign(sv_.string_view(), std::forward<T>(val));
             return *this;
         }
 
@@ -1731,22 +1759,22 @@ public:
             return evaluate().at(i);
         }
 
-        json_proxy<proxy_type> operator[](const string_view_type& key)
+        json_proxy<proxy_type> operator[](const string_viewable& key)
         {
-            return json_proxy<proxy_type>(*this,key.data(),key.length());
+            return json_proxy<proxy_type>(*this,key);
         }
 
-        const basic_json& operator[](const string_view_type& name) const
+        const basic_json& operator[](const string_viewable& name) const
         {
             return at(name);
         }
 
-        basic_json& at(const string_view_type& name)
+        basic_json& at(const string_viewable& name)
         {
             return evaluate().at(name);
         }
 
-        const basic_json& at(const string_view_type& name) const
+        const basic_json& at(const string_viewable& name) const
         {
             return evaluate().at(name);
         }
@@ -1761,24 +1789,24 @@ public:
             return evaluate().at(index);
         }
 
-        object_iterator find(const string_view_type& name)
+        object_iterator find(const string_viewable& name)
         {
             return evaluate().find(name);
         }
 
-        const_object_iterator find(const string_view_type& name) const
+        const_object_iterator find(const string_viewable& name) const
         {
             return evaluate().find(name);
         }
 
         template <class T>
-        T get_with_default(const string_view_type& name, const T& default_val) const
+        T get_with_default(const string_viewable& name, const T& default_val) const
         {
             return evaluate().template get_with_default<T>(name,default_val);
         }
 
         template <class T = std::basic_string<char>>
-        T get_with_default(const string_view_type& name, const char* default_val) const
+        T get_with_default(const string_viewable& name, const char* default_val) const
         {
             return evaluate().template get_with_default<T>(name,default_val);
         }
@@ -1806,7 +1834,7 @@ public:
         }
         // Remove a range of elements from an object 
 
-        void erase(const string_view_type& name)
+        void erase(const string_viewable& name)
         {
             evaluate().erase(name);
         }
@@ -1868,7 +1896,7 @@ public:
         }
 
         template <class T>
-        std::pair<object_iterator,bool> insert_or_assign(const string_view_type& name, T&& val)
+        std::pair<object_iterator,bool> insert_or_assign(const string_viewable& name, T&& val)
         {
             return evaluate().insert_or_assign(name,std::forward<T>(val));
         }
@@ -1876,19 +1904,19 @@ public:
        // emplace
 
         template <class ... Args>
-        std::pair<object_iterator,bool> try_emplace(const string_view_type& name, Args&&... args)
+        std::pair<object_iterator,bool> try_emplace(const string_viewable& name, Args&&... args)
         {
             return evaluate().try_emplace(name,std::forward<Args>(args)...);
         }
 
         template <class T>
-        object_iterator insert_or_assign(object_iterator hint, const string_view_type& name, T&& val)
+        object_iterator insert_or_assign(object_iterator hint, const string_viewable& name, T&& val)
         {
             return evaluate().insert_or_assign(hint, name, std::forward<T>(val));
         }
 
         template <class ... Args>
-        object_iterator try_emplace(object_iterator hint, const string_view_type& name, Args&&... args)
+        object_iterator try_emplace(object_iterator hint, const string_viewable& name, Args&&... args)
         {
             return evaluate().try_emplace(hint, name, std::forward<Args>(args)...);
         }
@@ -2019,25 +2047,26 @@ public:
         return handler.get_result();
     }
 
-    static basic_json parse(const string_view_type& s)
+    static basic_json parse(const string_viewable& s)
     {
         parse_error_handler_type err_handler;
         return parse(s,err_handler);
     }
 
 
-    static basic_json parse(const string_view_type& s, parse_error_handler& err_handler)
+    static basic_json parse(const string_viewable& s, parse_error_handler& err_handler)
     {
         json_decoder<basic_json> decoder;
         basic_json_parser<char_type> parser(err_handler);
 
-        auto result = unicons::skip_bom(s.begin(), s.end());
+        auto result = unicons::skip_bom(s.string_view().begin(), s.string_view().end());
         if (result.ec != unicons::encoding_errc())
         {
             throw serialization_error(result.ec);
         }
-        size_t offset = result.it - s.begin();
-        parser.update(s.data()+offset,s.size()-offset);
+        auto sv = s.string_view();
+        size_t offset = result.it - sv.begin();
+        parser.update(sv.data()+offset,sv.size()-offset);
         parser.parse_some(decoder);
         parser.finish_parse(decoder);
         parser.check_done();
@@ -2067,24 +2096,26 @@ public:
         return handler.get_result();
     }
 
-    static basic_json parse(const string_view_type& s, const json_options& options)
+    static basic_json parse(const string_viewable& s, const json_options& options)
     {
         parse_error_handler_type err_handler;
         return parse(s,options,err_handler);
     }
 
-    static basic_json parse(const string_view_type& s, const json_options& options, parse_error_handler& err_handler)
+    static basic_json parse(const string_viewable& s, const json_options& options, parse_error_handler& err_handler)
     {
         json_decoder<basic_json> decoder;
         basic_json_parser<char_type> parser(options,err_handler);
 
-        auto result = unicons::skip_bom(s.begin(), s.end());
+        auto sv = s.string_view();
+        auto result = unicons::skip_bom(sv.string_view().begin(), sv.string_view().end());
         if (result.ec != unicons::encoding_errc())
         {
             throw serialization_error(result.ec);
         }
-        size_t offset = result.it - s.begin();
-        parser.update(s.data()+offset,s.size()-offset);
+        size_t offset = result.it - sv.begin();
+        auto sv = s.string_view();
+        parser.update(sv.data()+offset,sv.size()-offset);
         parser.parse_some(decoder);
         parser.finish_parse(decoder);
         parser.check_done();
@@ -2276,8 +2307,8 @@ public:
     {
     }
 
-    basic_json(const string_view_type sv, semantic_tag_type tag)
-        : var_(sv.data(), sv.length(), tag)
+    basic_json(const string_viewable& sv, semantic_tag_type tag)
+        : var_(sv, tag)
     {
     }
 
@@ -2291,8 +2322,8 @@ public:
     {
     }
 
-    basic_json(const string_view_type sv, semantic_tag_type tag, const Allocator& allocator)
-        : var_(sv.data(), sv.length(), tag, allocator)
+    basic_json(const string_viewable& sv, semantic_tag_type tag, const Allocator& allocator)
+        : var_(sv, tag, allocator)
     {
     }
 
@@ -2395,7 +2426,7 @@ public:
         return at(i);
     }
 
-    json_proxy<basic_json> operator[](const string_view_type& name)
+    json_proxy<basic_json> operator[](const string_viewable& name)
     {
         switch (var_.structure_tag())
         {
@@ -2403,15 +2434,15 @@ public:
             create_object_implicitly();
             JSONCONS_FALLTHROUGH;
         case structure_tag_type::object_tag:
-            return json_proxy<basic_json>(*this, name.data(),name.length());
+            return json_proxy<basic_json>(*this, name);
             break;
         default:
-            JSONCONS_THROW(not_an_object(name.data(),name.length()));
+            JSONCONS_THROW(not_an_object(name.string_view().data(),name.string_view().length()));
             break;
         }
     }
 
-    const basic_json& operator[](const string_view_type& name) const
+    const basic_json& operator[](const string_viewable& name) const
     {
         return at(name);
     }
@@ -2535,7 +2566,7 @@ public:
         return var_.structure_tag() == structure_tag_type::null_tag;
     }
 
-    bool contains(const string_view_type& name) const
+    bool contains(const string_viewable& name) const
     {
         switch (var_.structure_tag())
         {
@@ -2550,7 +2581,7 @@ public:
         }
     }
 
-    size_t count(const string_view_type& name) const
+    size_t count(const string_viewable& name) const
     {
         switch (var_.structure_tag())
         {
@@ -2562,7 +2593,7 @@ public:
                     return 0;
                 }
                 size_t count = 0;
-                while (it != object_range().end()&& it->key() == name)
+                while (it != object_range().end()&& it->key() == name.string_view())
                 {
                     ++count;
                     ++it;
@@ -2940,25 +2971,25 @@ public:
         }
     }
 
-    basic_json& at(const string_view_type& name)
+    basic_json& at(const string_viewable& name)
     {
         switch (var_.structure_tag())
         {
         case structure_tag_type::empty_object_tag:
-            JSONCONS_THROW(key_not_found(name.data(),name.length()));
+            JSONCONS_THROW(key_not_found(name.string_view().data(),name.string_view().length()));
         case structure_tag_type::object_tag:
             {
                 auto it = object_value().find(name);
                 if (it == object_range().end())
                 {
-                    JSONCONS_THROW(key_not_found(name.data(),name.length()));
+                    JSONCONS_THROW(key_not_found(name.string_view().data(),name.string_view().length()));
                 }
                 return it->value();
             }
             break;
         default:
             {
-                JSONCONS_THROW(not_an_object(name.data(),name.length()));
+                JSONCONS_THROW(not_an_object(name.string_view().data(),name.string_view().length()));
             }
         }
     }
@@ -2977,35 +3008,35 @@ public:
     {
         return *this;
     }
-    basic_json& evaluate(const string_view_type& name) 
+    basic_json& evaluate(const string_viewable& name) 
     {
         return at(name);
     }
 
-    const basic_json& evaluate(const string_view_type& name) const
+    const basic_json& evaluate(const string_viewable& name) const
     {
         return at(name);
     }
 
-    const basic_json& at(const string_view_type& name) const
+    const basic_json& at(const string_viewable& name) const
     {
         switch (var_.structure_tag())
         {
         case structure_tag_type::empty_object_tag:
-            JSONCONS_THROW(key_not_found(name.data(),name.length()));
+            JSONCONS_THROW(key_not_found(name.string_view().data(),name.string_view().length()));
         case structure_tag_type::object_tag:
             {
                 auto it = object_value().find(name);
                 if (it == object_range().end())
                 {
-                    JSONCONS_THROW(key_not_found(name.data(),name.length()));
+                    JSONCONS_THROW(key_not_found(name.string_view().data(),name.string_view().length()));
                 }
                 return it->value();
             }
             break;
         default:
             {
-                JSONCONS_THROW(not_an_object(name.data(),name.length()));
+                JSONCONS_THROW(not_an_object(name.string_view().data(),name.string_view().length()));
             }
         }
     }
@@ -3044,7 +3075,7 @@ public:
         }
     }
 
-    object_iterator find(const string_view_type& name)
+    object_iterator find(const string_viewable& name)
     {
         switch (var_.structure_tag())
         {
@@ -3054,12 +3085,12 @@ public:
             return object_value().find(name);
         default:
             {
-                JSONCONS_THROW(not_an_object(name.data(),name.length()));
+                JSONCONS_THROW(not_an_object(name.string_view().data(),name.string_view().length()));
             }
         }
     }
 
-    const_object_iterator find(const string_view_type& name) const
+    const_object_iterator find(const string_viewable& name) const
     {
         switch (var_.structure_tag())
         {
@@ -3069,13 +3100,13 @@ public:
             return object_value().find(name);
         default:
             {
-                JSONCONS_THROW(not_an_object(name.data(),name.length()));
+                JSONCONS_THROW(not_an_object(name.string_view().data(),name.string_view().length()));
             }
         }
     }
 
     template<class T>
-    T get_with_default(const string_view_type& name, const T& default_val) const
+    T get_with_default(const string_viewable& name, const T& default_val) const
     {
         switch (var_.structure_tag())
         {
@@ -3097,13 +3128,13 @@ public:
             }
         default:
             {
-                JSONCONS_THROW(not_an_object(name.data(),name.length()));
+                JSONCONS_THROW(not_an_object(name.string_view().data(),name.string_view().length()));
             }
         }
     }
 
     template<class T = std::basic_string<char>>
-    T get_with_default(const string_view_type& name, const char* default_val) const
+    T get_with_default(const string_viewable& name, const char* default_val) const
     {
         switch (var_.structure_tag())
         {
@@ -3125,7 +3156,7 @@ public:
             }
         default:
             {
-                JSONCONS_THROW(not_an_object(name.data(),name.length()));
+                JSONCONS_THROW(not_an_object(name.string_view().data(),name.string_view().length()));
             }
         }
     }
@@ -3220,7 +3251,7 @@ public:
 
     // Removes all elements from an array value whose index is between from_index, inclusive, and to_index, exclusive.
 
-    void erase(const string_view_type& name)
+    void erase(const string_viewable& name)
     {
         switch (var_.structure_tag())
         {
@@ -3230,13 +3261,13 @@ public:
             object_value().erase(name);
             break;
         default:
-            JSONCONS_THROW(not_an_object(name.data(),name.length()));
+            JSONCONS_THROW(not_an_object(name.string_view().data(),name.string_view().length()));
             break;
         }
     }
 
     template <class T>
-    std::pair<object_iterator,bool> insert_or_assign(const string_view_type& name, T&& val)
+    std::pair<object_iterator,bool> insert_or_assign(const string_viewable& name, T&& val)
     {
         switch (var_.structure_tag())
         {
@@ -3247,13 +3278,13 @@ public:
             return object_value().insert_or_assign(name, std::forward<T>(val));
         default:
             {
-                JSONCONS_THROW(not_an_object(name.data(),name.length()));
+                JSONCONS_THROW(not_an_object(name.string_view().data(),name.string_view().length()));
             }
         }
     }
 
     template <class ... Args>
-    std::pair<object_iterator,bool> try_emplace(const string_view_type& name, Args&&... args)
+    std::pair<object_iterator,bool> try_emplace(const string_viewable& name, Args&&... args)
     {
         switch (var_.structure_tag())
         {
@@ -3264,7 +3295,7 @@ public:
             return object_value().try_emplace(name, std::forward<Args>(args)...);
         default:
             {
-                JSONCONS_THROW(not_an_object(name.data(),name.length()));
+                JSONCONS_THROW(not_an_object(name.string_view().data(),name.string_view().length()));
             }
         }
     }
@@ -3402,7 +3433,7 @@ public:
     }
 
     template <class T>
-    object_iterator insert_or_assign(object_iterator hint, const string_view_type& name, T&& val)
+    object_iterator insert_or_assign(object_iterator hint, const string_viewable& name, T&& val)
     {
         switch (var_.structure_tag())
         {
@@ -3413,13 +3444,13 @@ public:
             return object_value().insert_or_assign(hint, name, std::forward<T>(val));
         default:
             {
-                JSONCONS_THROW(not_an_object(name.data(),name.length()));
+                JSONCONS_THROW(not_an_object(name.string_view().data(),name.string_view().length()));
             }
         }
     }
 
     template <class ... Args>
-    object_iterator try_emplace(object_iterator hint, const string_view_type& name, Args&&... args)
+    object_iterator try_emplace(object_iterator hint, const string_viewable& name, Args&&... args)
     {
         switch (var_.structure_tag())
         {
@@ -3430,7 +3461,7 @@ public:
             return object_value().try_emplace(hint, name, std::forward<Args>(args)...);
         default:
             {
-                JSONCONS_THROW(not_an_object(name.data(),name.length()));
+                JSONCONS_THROW(not_an_object(name.string_view().data(),name.string_view().length()));
             }
         }
     }

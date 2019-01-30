@@ -18,6 +18,10 @@
 #include <exception>
 #include <stdexcept>
 #include <istream> // std::basic_istream
+#ifdef JSONCONS_HAS_VARIANT
+#include <variant> // std::variant
+#endif
+#include <type_traits> // std::enable_if, std::true_type
 #include <jsoncons/config/jsoncons_config.hpp>
 #include <jsoncons/byte_string.hpp>
 #include <jsoncons/json_exception.hpp>
@@ -27,6 +31,100 @@
 
 namespace jsoncons
 {
+
+// has_member_type_char_traits
+
+template <class T, class CharT, class Enable=void>
+struct has_member_type_char_traits : std::false_type {};
+
+template <class T, class CharT>
+struct has_member_type_char_traits<T, CharT, typename std::enable_if<std::is_same<typename T::traits_type::char_type, CharT>::value
+>::type> : std::true_type {};
+
+class string_viewable
+{
+#ifdef JSONCONS_HAS_VARIANT
+    std::variant<std::string,jsoncons::string_view> v_;
+#else
+    jsoncons::string_view v_;
+    std::string s_;
+#endif
+public:
+    string_viewable() = default;
+
+    string_viewable(const string_viewable&) = default;
+
+    string_viewable(string_viewable&&) = default;
+
+    string_viewable& operator=(const string_viewable&) = default;
+
+    string_viewable& operator=(string_viewable&&) = default;
+
+    template <class Source>
+    string_viewable(const Source& source, typename std::enable_if<
+                            std::is_same<typename std::decay<Source>::type,char*>::value ||
+                            std::is_same<typename std::decay<Source>::type,const char*>::value>::type* = 0)
+        : v_(jsoncons::string_view(source))
+    {
+    }
+    template <class Source>
+    string_viewable(const Source& source, typename std::enable_if<
+                            std::is_same<typename std::decay<Source>::type,wchar_t*>::value ||
+                            std::is_same<typename std::decay<Source>::type,const wchar_t*>::value 
+                        >::type* = 0)
+    {
+    #ifdef JSONCONS_HAS_VARIANT
+        std::string s_;
+    #endif
+        auto result = unicons::convert(
+            source, source+std::wcslen(source), std::back_inserter(s_), unicons::conv_flags::strict);
+        if (result.ec != unicons::conv_errc())
+        {
+            JSONCONS_THROW(json_exception_impl<std::runtime_error>("Encoding error"));
+        }
+    #ifdef JSONCONS_HAS_VARIANT
+        v_ = s_;
+    #endif
+    }
+    template <class Source>
+    string_viewable(const Source& source, typename std::enable_if<
+                            has_member_type_char_traits<typename std::decay<Source>::type,char>::value>::type* = 0)
+        : v_(jsoncons::string_view(source.data(),source.length()))
+    {
+    }
+    template <class Source>
+    string_viewable(const Source& source, typename std::enable_if<
+                            has_member_type_char_traits<typename std::decay<Source>::type,wchar_t>::value>::type* = 0)
+    {
+    #ifdef JSONCONS_HAS_VARIANT
+        std::string s_;
+    #endif
+        auto result = unicons::convert(
+            source.begin(), source.end(), std::back_inserter(s_), unicons::conv_flags::strict);
+        if (result.ec != unicons::conv_errc())
+        {
+            JSONCONS_THROW(json_exception_impl<std::runtime_error>("Encoding error"));
+        }
+    #ifdef JSONCONS_HAS_VARIANT
+        v_ = s_;
+    #endif
+    }
+
+    jsoncons::string_view string_view() const
+    {
+    #ifdef JSONCONS_HAS_VARIANT
+        return std::holds_alternative<std::string>(v_) ? std::get<0>(v_) : std::get<1>(v_);
+    #else
+        return v_.length() > 0 ? v_ : s_;
+    #endif
+    }
+
+    operator jsoncons::string_view() const
+    {
+        return string_view();
+    }
+private:
+};
 
 template <class CharT>
 class basic_null_istream : public std::istream

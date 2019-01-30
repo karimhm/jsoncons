@@ -70,6 +70,28 @@
 #  endif // defined(_MSC_VER)
 #endif // !defined(JSONCONS_HAS_STRING_VIEW)
 
+#if !defined(JSONCONS_HAS_VARIANT)
+#  if defined(__clang__)
+#   if (__cplusplus >= 201703)
+#    if __has_include(<variant>)
+#     define JSONCONS_HAS_VARIANT 1
+#    endif // __has_include(<string_view>)
+#   endif // (__cplusplus >= 201703)
+#  endif // defined(__clang__)
+#  if defined(__GNUC__)
+#   if (__GNUC__ >= 7)
+#    if (__cplusplus >= 201703) || (defined(_HAS_CXX17) && _HAS_CXX17 == 1)
+#     define JSONCONS_HAS_VARIANT 1
+#    endif // (__cplusplus >= 201703)
+#   endif // (__GNUC__ >= 7)
+#  endif // defined(__GNUC__)
+#  if defined(_MSC_VER)
+#   if (_MSC_VER >= 1910 && _HAS_CXX17)
+#    define JSONCONS_HAS_VARIANT
+#   endif // (_MSC_VER >= 1910 && _HAS_CXX17)
+#  endif // defined(_MSC_VER)
+#endif // !defined(JSONCONS_HAS_VARIANT)
+
 #define JSONCONS_NO_TO_CHARS
 
 #if defined(ANDROID) || defined(__ANDROID__)
