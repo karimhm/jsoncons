@@ -2108,13 +2108,12 @@ public:
         basic_json_parser<char_type> parser(options,err_handler);
 
         auto sv = s.string_view();
-        auto result = unicons::skip_bom(sv.string_view().begin(), sv.string_view().end());
+        auto result = unicons::skip_bom(sv.begin(), sv.end());
         if (result.ec != unicons::encoding_errc())
         {
             throw serialization_error(result.ec);
         }
         size_t offset = result.it - sv.begin();
-        auto sv = s.string_view();
         parser.update(sv.data()+offset,sv.size()-offset);
         parser.parse_some(decoder);
         parser.finish_parse(decoder);
