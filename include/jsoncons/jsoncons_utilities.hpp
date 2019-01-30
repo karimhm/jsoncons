@@ -88,13 +88,15 @@ public:
     }
     template <class Source>
     string_viewable(const Source& source, typename std::enable_if<
-                            has_member_type_char_traits<typename std::decay<Source>::type,char>::value>::type* = 0)
+                            has_member_type_char_traits<typename std::decay<Source>::type,char>::value
+                    >::type* = 0)
         : v_(jsoncons::string_view(source.data(),source.length()))
     {
     }
     template <class Source>
     string_viewable(const Source& source, typename std::enable_if<
-                            has_member_type_char_traits<typename std::decay<Source>::type,wchar_t>::value>::type* = 0)
+                            has_member_type_char_traits<typename std::decay<Source>::type,wchar_t>::value
+                    >::type* = 0)
     {
     #ifdef JSONCONS_HAS_VARIANT
         std::string s_;
