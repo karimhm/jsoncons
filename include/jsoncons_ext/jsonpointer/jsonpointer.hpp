@@ -79,9 +79,9 @@ enum class pointer_state
 
 } // detail
 
-// path_iterator
+// address_iterator
 template <class InputIt>
-class path_iterator
+class address_iterator
 {
     typedef typename std::iterator_traits<InputIt>::value_type char_type;
     typedef std::basic_string<char_type> string_type;
@@ -102,27 +102,27 @@ public:
     typedef const value_type& reference;
     typedef std::input_iterator_tag iterator_category;
 
-    path_iterator(base_iterator first, base_iterator last)
-        : path_iterator(first, last, first)
+    address_iterator(base_iterator first, base_iterator last)
+        : address_iterator(first, last, first)
     {
         std::error_code ec;
         increment(ec);
     }
 
-    path_iterator(base_iterator first, base_iterator last, base_iterator current)
+    address_iterator(base_iterator first, base_iterator last, base_iterator current)
         : path_ptr_(first), end_input_(last), p_(current), q_(current), state_(jsonpointer::detail::pointer_state::start)
     {
     }
 
-    path_iterator(const path_iterator&) = default;
+    address_iterator(const address_iterator&) = default;
 
-    path_iterator(path_iterator&&) = default;
+    address_iterator(address_iterator&&) = default;
 
-    path_iterator& operator=(const path_iterator&) = default;
+    address_iterator& operator=(const address_iterator&) = default;
 
-    path_iterator& operator=(path_iterator&&) = default;
+    address_iterator& operator=(address_iterator&&) = default;
 
-    path_iterator& operator++()
+    address_iterator& operator++()
     {
         std::error_code ec;
         increment(ec);
@@ -133,7 +133,7 @@ public:
         return *this;
     }
 
-    path_iterator& increment(std::error_code& ec)
+    address_iterator& increment(std::error_code& ec)
     {
         q_ = p_;
         buffer_.clear();
@@ -197,9 +197,9 @@ public:
         return *this;
     }
 
-    path_iterator operator++(int) // postfix increment
+    address_iterator operator++(int) // postfix increment
     {
-        path_iterator temp(*this);
+        address_iterator temp(*this);
         ++(*this);
         return temp;
     }
@@ -209,11 +209,11 @@ public:
         return buffer_;
     }
 
-    friend bool operator==(const path_iterator& it1, const path_iterator& it2)
+    friend bool operator==(const address_iterator& it1, const address_iterator& it2)
     {
         return it1.q_ == it2.q_;
     }
-    friend bool operator!=(const path_iterator& it1, const path_iterator& it2)
+    friend bool operator!=(const address_iterator& it1, const address_iterator& it2)
     {
         return !(it1 == it2);
     }
@@ -245,9 +245,9 @@ std::basic_string<char> escape_string(const std::basic_string<char>& s)
     return result;
 }
 
-// path
+// address
 
-class path
+class address
 {
 public:
     std::basic_string<char> path_;
@@ -256,34 +256,34 @@ public:
     typedef char char_type;
     typedef std::basic_string<char_type> string_type;
     typedef basic_string_view<char_type> string_view_type;
-    typedef path_iterator<typename string_type::const_iterator> const_iterator;
+    typedef address_iterator<typename string_type::const_iterator> const_iterator;
     typedef const_iterator iterator;
 
     // Constructors
-    path()
+    address()
     {
     }
-    explicit path(const string_type& s)
+    explicit address(const string_type& s)
         : path_(s)
     {
     }
-    explicit path(string_type&& s)
+    explicit address(string_type&& s)
         : path_(std::move(s))
     {
     }
-    explicit path(const char_type* s)
+    explicit address(const char_type* s)
         : path_(s)
     {
     }
 
-    path(const path&) = default;
+    address(const address&) = default;
 
-    path(path&&) = default;
+    address(address&&) = default;
 
     // operator=
-    path& operator=(const path&) = default;
+    address& operator=(const address&) = default;
 
-    path& operator=(path&&) = default;
+    address& operator=(address&&) = default;
 
     // Modifiers
 
@@ -292,7 +292,7 @@ public:
         path_.clear();
     }
 
-    path& operator/=(const string_type& s)
+    address& operator/=(const string_type& s)
     {
         path_.push_back('/');
         path_.append(escape_string(s));
@@ -300,7 +300,7 @@ public:
         return *this;
     }
 
-    path& operator+=(const path& p)
+    address& operator+=(const address& p)
     {
         path_.append(p.path_);
         return *this;
@@ -333,32 +333,32 @@ public:
     }
 
     // Non-member functions
-    friend path operator/(const path& lhs, const string_type& rhs)
+    friend address operator/(const address& lhs, const string_type& rhs)
     {
-        path p(lhs);
+        address p(lhs);
         p /= rhs;
         return p;
     }
 
-    friend path operator+( const path& lhs, const path& rhs )
+    friend address operator+( const address& lhs, const address& rhs )
     {
-        path p(lhs);
+        address p(lhs);
         p += rhs;
         return p;
     }
 
-    friend bool operator==( const path& lhs, const path& rhs )
+    friend bool operator==( const address& lhs, const address& rhs )
     {
         return lhs.path_ == rhs.path_;
     }
 
-    friend bool operator!=( const path& lhs, const path& rhs )
+    friend bool operator!=( const address& lhs, const address& rhs )
     {
         return lhs.path_ != rhs.path_;
     }
 
     friend std::ostream&
-    operator<<( std::ostream& os, const path& p )
+    operator<<( std::ostream& os, const address& p )
     {
         os << p.path_;
         return os;
@@ -711,8 +711,8 @@ public:
     {
         current_.push_back(root);
 
-        path_iterator<typename string_view_type::iterator> it(path.begin(), path.end());
-        path_iterator<typename string_view_type::iterator> end(path.begin(), path.end(), path.end());
+        address_iterator<typename string_view_type::iterator> it(path.begin(), path.end());
+        address_iterator<typename string_view_type::iterator> end(path.begin(), path.end(), path.end());
         while (it != end)
         {
             buffer_ = *it;
