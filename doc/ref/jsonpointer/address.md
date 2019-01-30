@@ -2,21 +2,14 @@
 
 ```
 template <class CharT>
-class path
+class address
 ```
 #### Header
 ```c++
 #include <jsoncons_ext/jsonpointer/jsonpointer.hpp>
 ```
 
-Two specializations for common character types are defined:
-
-Type      |Definition
-----------|------------------------------
-path      |`path<char>`
-wpath     |`path<wchar_t>`
-
-Objects of type `path` represent JSON Pointer strings.
+Objects of type `address` represent JSON Pointer addresses.
 
 #### Member types
 Type        |Definition
@@ -34,31 +27,31 @@ iterator    | An alias to `const_iterator`
 
 #### Constructors
 
-    path();
+    address();
 
-    explicit path(const string_type& s);
+    explicit address(const string_type& s);
 
-    explicit path(string_type&& s);
+    explicit address(string_type&& s);
 
-    explicit path(const CharT* s);
+    explicit address(const CharT* s);
 
-    path(const path&);
+    address(const address&);
 
-    path(path&&);
+    address(address&&);
 
 #### operator=
 
-    path& operator=(const path&);
+    address& operator=(const address&);
 
-    path& operator=(path&&);
+    address& operator=(address&&);
 
 #### Modifiers
 
-    path& operator/=(const string_type& s)
+    address& operator/=(const string_type& s)
 First, appends the JSON Pointer separator `/` to the path. Then appends the string token s, escaping any `/` or `~` characters.
 
-    path& operator+=(const path& p)
-Concatenates the current path and the specified path `p`. 
+    address& operator+=(const address& p)
+Concatenates the current address and the specified address `p`. 
 
 #### Iterators
 
@@ -69,7 +62,7 @@ Iterator access to the tokens in the path.
 #### Accessors
 
     bool empty() const
-Checks if the path is empty
+Checks if the address is empty
 
     const string_type& string() const
 Returns the string representation of the JSON Pointer by reference.
@@ -78,18 +71,18 @@ Returns the string representation of the JSON Pointer by reference.
 Returns a string view representation of the JSON Pointer.
 
 #### Non-member functions
-    path operator/(const path& lhs, const string_type& rhs);
-Concatenates a JSON Pointer path and a token. Effectively returns path(lhs) /= rhs.
+    address operator/(const address& lhs, const string_type& rhs);
+Concatenates a JSON Pointer address and a token. Effectively returns address(lhs) /= rhs.
 
-    path operator+( const path& lhs, const path& rhs );
-Concatenates two JSON Pointer paths. Effectively returns path(lhs) += rhs.
+    address operator+( const address& lhs, const address& rhs );
+Concatenates two JSON Pointer paths. Effectively returns address(lhs) += rhs.
 
-    bool operator==(const path& lhs, const path& rhs);
+    bool operator==(const address& lhs, const address& rhs);
 
-    bool operator!=(const path& lhs, const path& rhs);
+    bool operator!=(const address& lhs, const address& rhs);
 
     std::ostream&
-    operator<<(std::ostream& os, const path& p);
+    operator<<(std::ostream& os, const address& p);
 Performs stream output
 
 ### Examples
