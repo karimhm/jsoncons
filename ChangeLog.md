@@ -1,16 +1,17 @@
-Master
+master
 ------
 
 Tests
 
 - Changed from catch to doctest
 
+
+Name change:
+
+- The name `json_staj_reader` has been deprecated and renamed to `json_pull_reader`
+
 v0.118.0
 --------
-
-Name change
-
-- The `json_options` name `dec_to_str` has been deprecated and renamed to `lossless_number`.
 
 New features
 
@@ -18,6 +19,10 @@ New features
   semantic tagging `semantic_tag_type::big_decimal` (instead of double.) Defaults to `false`.
 
 - A class `jsonpointer::address` has been introduced to make it simpler to construct JSON Pointer addresses
+
+Name change
+
+- The `json_options` name `dec_to_str` has been deprecated and renamed to `lossless_number`.
 
 v0.117.0
 --------
