@@ -3,7 +3,7 @@
 
 #include <jsoncons/json.hpp>
 #include <jsoncons/json_serializer.hpp>
-#include <catch/catch.hpp>
+#include <doctest/doctest.h>
 #include <sstream>
 #include <vector>
 #include <utility>
@@ -59,7 +59,7 @@ TEST_CASE("test_assignment")
 
     json double_1 = root["double_1"];
 
-    CHECK(double_1.as<double>() == Approx(10.0).epsilon(0.000001));
+    CHECK(double_1.as<double>() == doctest::Approx(10.0).epsilon(0.000001));
 
     root["myobject"] = json();
     root["myobject"]["double_2"] = 7.0;
@@ -70,7 +70,7 @@ TEST_CASE("test_assignment")
 
     json double_2 = root["myobject"]["double_2"];
 
-    CHECK(double_2.as<double>() == Approx(7.0).epsilon(0.000001));
+    CHECK(double_2.as<double>() == doctest::Approx(7.0).epsilon(0.000001));
     CHECK(double_2.as<int>() == 7);
     CHECK(root["myobject"]["bool_2"].as<bool>());
     CHECK(root["myobject"]["int_2"].as<int64_t>() == 0);
@@ -147,7 +147,7 @@ TEST_CASE("test_to_string")
     CHECK(root["integer"].as<int>() == 12345678);
     CHECK(root["integer"].as<unsigned int>() == 12345678);
     CHECK(root["neg-integer"].as<int>() == -87654321);
-    CHECK(root["double"].as<double>() == Approx(123456.01).epsilon(0.0000001));
+    CHECK(root["double"].as<double>() == doctest::Approx(123456.01).epsilon(0.0000001));
     CHECK(root["escaped-string"].as<std::string>() == std::string("\\\n"));
 
     CHECK_FALSE(root["bool1"].as<bool>());
@@ -155,7 +155,7 @@ TEST_CASE("test_to_string")
     CHECK(root["integer"].as<int>() == 12345678);
     CHECK(root["integer"].as<unsigned int>() == 12345678);
     CHECK(root["neg-integer"].as<int>() == -87654321);
-    CHECK(root["double"].as<double>() == Approx(123456.01).epsilon(0.0000001));
+    CHECK(root["double"].as<double>() == doctest::Approx(123456.01).epsilon(0.0000001));
     CHECK(root["escaped-string"].as<std::string>() == std::string("\\\n"));
 }
 

@@ -6,7 +6,7 @@
 #endif
 #include <jsoncons/json.hpp>
 #include <jsoncons_ext/jsonpath/json_query.hpp>
-#include <catch/catch.hpp>
+#include <doctest/doctest.h>
 #include <sstream>
 #include <vector>
 #include <utility>
@@ -71,7 +71,7 @@ TEST_CASE("test_div")
     std::string s4 = "(@.length/3)";
     auto expr4 = parser.parse(context,s4.c_str(), s4.c_str()+ s4.length(), &pend);
     auto result4 = expr4.eval(context);
-    CHECK(0.333333 == Approx(result4.as<double>()).epsilon(0.001));
+    CHECK(0.333333 == doctest::Approx(result4.as<double>()).epsilon(0.001));
 
     std::string s5 = "(@.0/@.length)";
     auto expr5 = parser.parse(context,s5.c_str(), s5.c_str()+ s5.length(), &pend);

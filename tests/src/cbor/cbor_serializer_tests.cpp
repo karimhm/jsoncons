@@ -13,7 +13,7 @@
 #include <ctime>
 #include <limits>
 #include <fstream>
-#include <catch/catch.hpp>
+#include <doctest/doctest.h>
 
 using namespace jsoncons;
 using namespace jsoncons::cbor;
@@ -208,7 +208,7 @@ TEST_CASE("test_serialize_negative_bignum3")
 
 TEST_CASE("serialize big_decimal to cbor")
 {
-    SECTION("-1 184467440737095516160")
+    SUBCASE("-1 184467440737095516160")
     {
         std::vector<uint8_t> v;
         cbor_buffer_serializer serializer(v);
@@ -224,7 +224,7 @@ TEST_CASE("serialize big_decimal to cbor")
             std::cout << e.what() << std::endl;
         }
     }
-    SECTION("18446744073709551616e-5")
+    SUBCASE("18446744073709551616e-5")
     {
         std::vector<uint8_t> v;
         cbor_buffer_serializer serializer(v);
@@ -240,7 +240,7 @@ TEST_CASE("serialize big_decimal to cbor")
             std::cout << e.what() << std::endl;
         }
     }
-    SECTION("-18446744073709551616e-5")
+    SUBCASE("-18446744073709551616e-5")
     {
         std::vector<uint8_t> v;
         cbor_buffer_serializer serializer(v);
@@ -256,7 +256,7 @@ TEST_CASE("serialize big_decimal to cbor")
             std::cout << e.what() << std::endl;
         }
     }
-    SECTION("-18446744073709551616e5")
+    SUBCASE("-18446744073709551616e5")
     {
         std::vector<uint8_t> v;
         cbor_buffer_serializer serializer(v);
@@ -280,7 +280,7 @@ TEST_CASE("Too many and too few items in CBOR map or array")
     std::vector<uint8_t> v;
     cbor_buffer_serializer serializer(v);
 
-    SECTION("Too many items in array")
+    SUBCASE("Too many items in array")
     {
         CHECK(serializer.begin_array(3));
         CHECK(serializer.bool_value(true));
@@ -293,7 +293,7 @@ TEST_CASE("Too many and too few items in CBOR map or array")
         REQUIRE_THROWS_WITH(serializer.end_array(), cbor_error_category_impl().message((int)cbor_errc::too_many_items).c_str());
         serializer.flush();
     }
-    SECTION("Too few items in array")
+    SUBCASE("Too few items in array")
     {
         CHECK(serializer.begin_array(5));
         CHECK(serializer.bool_value(true));
@@ -306,7 +306,7 @@ TEST_CASE("Too many and too few items in CBOR map or array")
         REQUIRE_THROWS_WITH(serializer.end_array(), cbor_error_category_impl().message((int)cbor_errc::too_few_items).c_str());
         serializer.flush();
     }
-    SECTION("Too many items in map")
+    SUBCASE("Too many items in map")
     {
         CHECK(serializer.begin_object(3));
         CHECK(serializer.name("a"));
@@ -323,7 +323,7 @@ TEST_CASE("Too many and too few items in CBOR map or array")
         REQUIRE_THROWS_WITH(serializer.end_object(), cbor_error_category_impl().message((int)cbor_errc::too_many_items).c_str());
         serializer.flush();
     }
-    SECTION("Too few items in map")
+    SUBCASE("Too few items in map")
     {
         CHECK(serializer.begin_object(5));
         CHECK(serializer.name("a"));
@@ -340,7 +340,7 @@ TEST_CASE("Too many and too few items in CBOR map or array")
         REQUIRE_THROWS_WITH(serializer.end_object(), cbor_error_category_impl().message((int)cbor_errc::too_few_items).c_str());
         serializer.flush();
     }
-    SECTION("Just enough items")
+    SUBCASE("Just enough items")
     {
         CHECK(serializer.begin_array(4)); // a fixed length array
         CHECK(serializer.string_value("foo"));

@@ -11,7 +11,7 @@
 #include <utility>
 #include <ctime>
 #include <limits>
-#include <catch/catch.hpp>
+#include <doctest/doctest.h>
 
 using namespace jsoncons;
 using namespace jsoncons::cbor;
@@ -81,7 +81,7 @@ TEST_CASE("cbor_encoder_test")
     check_encode_cbor({0xfa,0,0,0,0},json(0.0));
     check_encode_cbor({0xfa,0xbf,0x80,0,0},json(-1.0));
 
-    SECTION("-16777215.0")
+    SUBCASE("-16777215.0")
     {
         double val = -16777215.0;
         float valf = (float)val;
@@ -89,7 +89,7 @@ TEST_CASE("cbor_encoder_test")
         check_encode_cbor({0xfa,0xcb,0x7f,0xff,0xff},json(val));
     }
     // From https://en.wikipedia.org/wiki/Double-precision_floating-point_format
-    SECTION("0.333333333333333314829616256247390992939472198486328125")
+    SUBCASE("0.333333333333333314829616256247390992939472198486328125")
     {
         double val = 0.333333333333333314829616256247390992939472198486328125;
         float valf = (float)val;

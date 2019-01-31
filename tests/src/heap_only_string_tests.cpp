@@ -3,7 +3,7 @@
 
 #include <jsoncons/json.hpp>
 #include <jsoncons/detail/heap_only_string.hpp>
-#include <catch/catch.hpp>
+#include <doctest/doctest.h>
 #include <sstream>
 #include <vector>
 #include <utility>

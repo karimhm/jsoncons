@@ -2,7 +2,7 @@
 // Distributed under Boost license
 
 #include <jsoncons/json.hpp>
-#include <catch/catch.hpp>
+#include <doctest/doctest.h>
 #include <sstream>
 #include <vector>
 #include <map>

@@ -4,7 +4,7 @@
 #include <jsoncons/json_reader.hpp>
 #include <jsoncons/json.hpp>
 #include <jsoncons/json_decoder.hpp>
-#include <catch/catch.hpp>
+#include <doctest/doctest.h>
 #include <sstream>
 #include <vector>
 #include <utility>

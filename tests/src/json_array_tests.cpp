@@ -3,7 +3,7 @@
 
 #include <jsoncons/json.hpp>
 #include <jsoncons/json_serializer.hpp>
-#include <catch/catch.hpp>
+#include <doctest/doctest.h>
 #include <sstream>
 #include <vector>
 #include <utility>
@@ -115,7 +115,7 @@ TEST_CASE("test_array_constructor")
     arr.resize(10,10.0);
     CHECK(arr.is_array());
     CHECK(arr.size() == 10);
-    CHECK(arr[0].as<double>() == Approx(10.0).epsilon(0.0000001));
+    CHECK(arr[0].as<double>() == doctest::Approx(10.0).epsilon(0.0000001));
 }
 
 TEST_CASE("test_make_array")
@@ -125,7 +125,7 @@ TEST_CASE("test_make_array")
     arr.resize(10,10.0);
     CHECK(arr.is_array());
     CHECK(arr.size() == 10);
-    CHECK(arr[0].as<double>() == Approx(10.0).epsilon(0.0000001));
+    CHECK(arr[0].as<double>() == doctest::Approx(10.0).epsilon(0.0000001));
 
 }
 
@@ -261,10 +261,10 @@ TEST_CASE("test_two_dim_array")
     a[2][3] = -0.005;
 
     CHECK(a[0][0].as<std::string>() ==std::string("Tenor"));
-    CHECK(a[2][3].as<double>() == Approx(-0.005).epsilon(0.00000001));
+    CHECK(a[2][3].as<double>() == doctest::Approx(-0.005).epsilon(0.00000001));
 
     CHECK(a[0][0].as<std::string>() ==std::string("Tenor"));
-    CHECK(a[2][3].as<double>() == Approx(-0.005).epsilon(0.00000001));
+    CHECK(a[2][3].as<double>() == doctest::Approx(-0.005).epsilon(0.00000001));
 }
 
 TEST_CASE("test_three_dim_array")
@@ -346,9 +346,9 @@ TEST_CASE("test_array_from_container")
 
     json val2 = list;
     REQUIRE(val2.size() == 3);
-    CHECK(val2[0].as<double>() == Approx(10.5).epsilon(0.000001));
-    CHECK(val2[1].as<double>() == Approx(20.5).epsilon(0.000001));
-    CHECK(val2[2].as<double>() == Approx(30.5).epsilon(0.000001));
+    CHECK(val2[0].as<double>() == doctest::Approx(10.5).epsilon(0.000001));
+    CHECK(val2[1].as<double>() == doctest::Approx(20.5).epsilon(0.000001));
+    CHECK(val2[2].as<double>() == doctest::Approx(30.5).epsilon(0.000001));
 }
 
 TEST_CASE("test_array_as_vector_of_double")
@@ -358,10 +358,10 @@ TEST_CASE("test_array_as_vector_of_double")
 
     std::vector<double> v = val.as<std::vector<double>>(); 
     CHECK(v.size() == 4);
-    CHECK(v[0] == Approx(0.0).epsilon(0.0000000001));
-    CHECK(v[1] == Approx(1.1).epsilon(0.0000000001));
-    CHECK(v[2] == Approx(2.0).epsilon(0.0000000001));
-    CHECK(v[3] == Approx(3.1).epsilon(0.0000000001));
+    CHECK(v[0] == doctest::Approx(0.0).epsilon(0.0000000001));
+    CHECK(v[1] == doctest::Approx(1.1).epsilon(0.0000000001));
+    CHECK(v[2] == doctest::Approx(2.0).epsilon(0.0000000001));
+    CHECK(v[3] == doctest::Approx(3.1).epsilon(0.0000000001));
 }
 
 TEST_CASE("test_array_as_vector_of_bool")

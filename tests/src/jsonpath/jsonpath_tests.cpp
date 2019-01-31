@@ -6,7 +6,7 @@
 #endif
 #include <jsoncons/json.hpp>
 #include <jsoncons_ext/jsonpath/json_query.hpp>
-#include <catch/catch.hpp>
+#include <doctest/doctest.h>
 #include <iostream>
 #include <sstream>
 #include <vector>
@@ -1119,11 +1119,11 @@ TEST_CASE("test_replace")
     //std::cout << "!!!test_replace" << std::endl;
     //std::cout << ("1\n") << pretty_print(j) << std::endl;
 
-    CHECK(31.96 == Approx(j["store"]["book"][0]["price"].as<double>()).epsilon(0.001));
+    CHECK(31.96 == doctest::Approx(j["store"]["book"][0]["price"].as<double>()).epsilon(0.001));
 
     json_replace(j,"$..book[?(@.price==31.96)].price", 30.9);
 
-    CHECK(30.9 == Approx(j["store"]["book"][0]["price"].as<double>()).epsilon(0.001));
+    CHECK(30.9 == doctest::Approx(j["store"]["book"][0]["price"].as<double>()).epsilon(0.001));
 
     //std::cout << ("2\n") << pretty_print(j) << std::endl;
 }

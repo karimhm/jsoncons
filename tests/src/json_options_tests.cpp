@@ -3,7 +3,7 @@
 
 #include <jsoncons/json.hpp>
 #include <jsoncons/json_serializer.hpp>
-#include <catch/catch.hpp>
+#include <doctest/doctest.h>
 #include <sstream>
 #include <vector>
 #include <utility>
@@ -76,7 +76,7 @@ TEST_CASE("object_array empty array")
 }
     )";
 
-    SECTION("same_line")
+    SUBCASE("same_line")
     {
         json j = json::parse(s);
 
@@ -92,7 +92,7 @@ TEST_CASE("object_array empty array")
         CHECK(os.str() == expected);
     }
 
-    SECTION("new_line")
+    SUBCASE("new_line")
     {
         json j = json::parse(s);
 
@@ -108,7 +108,7 @@ TEST_CASE("object_array empty array")
         CHECK(os.str() == expected);
     }
 
-    SECTION("multi_line")
+    SUBCASE("multi_line")
     {
         json j = json::parse(s);
 
@@ -135,7 +135,7 @@ TEST_CASE("object_array with/without line_length_limit")
 }
     )";
 
-    SECTION("same_line")
+    SUBCASE("same_line")
     {
     std::string expected = R"({
     "foo": ["bar","baz",
@@ -157,7 +157,7 @@ TEST_CASE("object_array with/without line_length_limit")
         CHECK(os.str() == expected);
     }
 
-    SECTION("new_line")
+    SUBCASE("new_line")
     {
     std::string expected = R"({
     "foo": [
@@ -183,7 +183,7 @@ TEST_CASE("object_array with/without line_length_limit")
         CHECK(os.str() == expected);
     }
 
-    SECTION("multi_line")
+    SUBCASE("multi_line")
     {
     std::string expected = R"({
     "foo": [
@@ -216,7 +216,7 @@ TEST_CASE("object_array with/without line_length_limit")
         CHECK(os.str() == expected);
     }
 
-    SECTION("same_line with line length limit")
+    SUBCASE("same_line with line length limit")
     {
     std::string expected = R"({
     "foo": ["bar","baz",
@@ -242,7 +242,7 @@ TEST_CASE("object_array with/without line_length_limit")
         CHECK(os.str() == expected);
     }
 
-    SECTION("new_line with line length limit") // Revisit 234
+    SUBCASE("new_line with line length limit") // Revisit 234
     {
     std::string expected = R"({
     "foo": [
@@ -288,7 +288,7 @@ TEST_CASE("array_object with/without line_length_limit")
    }
 ]
     )";
-    SECTION("same_line")
+    SUBCASE("same_line")
     {
     std::string expected = R"([{"author": "Graham Greene","title": "The Comedians"},{"author": "Koji Suzuki","title": "ring"},{"author": "Haruki Murakami",
                                                                                                  "title": "A Wild Sheep Chase"}])";
@@ -307,7 +307,7 @@ TEST_CASE("array_object with/without line_length_limit")
         CHECK(os.str() == expected);
     }
 
-    SECTION("new_line")
+    SUBCASE("new_line")
     {
     std::string expected = R"([
     {"author": "Graham Greene","title": "The Comedians"},
@@ -329,7 +329,7 @@ TEST_CASE("array_object with/without line_length_limit")
         CHECK(os.str() == expected);
     }
 
-    SECTION("multi_line (default)")
+    SUBCASE("multi_line (default)")
     {
     std::string expected = R"([
     {
@@ -357,7 +357,7 @@ TEST_CASE("array_object with/without line_length_limit")
         //std::cout << pretty_print(j, options) << "\n";
         CHECK(os.str() == expected);
     }
-    SECTION("same_line with line length limit")
+    SUBCASE("same_line with line length limit")
     {
     std::string expected = R"([{"author": "Graham Greene",
   "title": "The Comedians"},
@@ -379,7 +379,7 @@ TEST_CASE("array_object with/without line_length_limit")
         //std::cout << pretty_print(j, options) << "\n";
         CHECK(os.str() == expected);
     }
-    SECTION("new_line with line length limit")
+    SUBCASE("new_line with line length limit")
     {
     std::string expected = R"([
     {"author": "Graham Greene",

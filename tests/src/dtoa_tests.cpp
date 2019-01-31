@@ -3,7 +3,7 @@
 
 #include <jsoncons/json_exception.hpp>
 #include <jsoncons/detail/print_number.hpp>
-#include <catch/catch.hpp>
+#include <doctest/doctest.h>
 #include <iostream>
 #include <cstdio>
 

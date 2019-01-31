@@ -9,7 +9,7 @@
 #include <vector>
 #include <utility>
 #include <ctime>
-#include <catch/catch.hpp>
+#include <doctest/doctest.h>
 
 using namespace jsoncons;
 

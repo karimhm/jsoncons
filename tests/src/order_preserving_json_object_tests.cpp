@@ -3,7 +3,7 @@
 
 #include <jsoncons/json.hpp>
 #include <jsoncons/json_serializer.hpp>
-#include <catch/catch.hpp>
+#include <doctest/doctest.h>
 #include <sstream>
 #include <vector>
 #include <utility>
@@ -28,7 +28,7 @@ TEST_CASE("json sorted_unique_range_tag")
     json j;
     j.insert(sorted_unique_range_tag(), items.begin(), items.end());
 
-    SECTION("iterate")
+    SUBCASE("iterate")
     {
         REQUIRE(j.size() == 7);
 
@@ -49,7 +49,7 @@ TEST_CASE("json sorted_unique_range_tag")
         CHECK(it->value().as<int>() == 7);
     }
 
-    SECTION("find")
+    SUBCASE("find")
     {
         auto it1 = j.find("a");
         REQUIRE(bool(it1 != j.object_range().end()));
@@ -84,7 +84,7 @@ TEST_CASE("ojson sorted_unique_range_tag")
     ojson j;
     j.insert(sorted_unique_range_tag(), items.begin(), items.end());
 
-    SECTION("iterate")
+    SUBCASE("iterate")
     {
         REQUIRE(j.size() == 7);
 
@@ -105,7 +105,7 @@ TEST_CASE("ojson sorted_unique_range_tag")
         CHECK(it->value().as<int>() == 7);
     }
 
-    SECTION("find")
+    SUBCASE("find")
     {
         auto it1 = j.find("a");
         REQUIRE(bool(it1 != j.object_range().end()));
@@ -142,7 +142,7 @@ TEST_CASE("order preserving insert")
     o.insert(std::make_move_iterator(items.begin()), std::make_move_iterator(items.end()), 
              [](item_type&& item){return ojson::key_value_type(std::forward<ojson::string_type>(item.first),std::forward<ojson>(item.second));});
 
-    SECTION("iterate")
+    SUBCASE("iterate")
     {
         REQUIRE(o.size() == 4);
 
@@ -157,7 +157,7 @@ TEST_CASE("order preserving insert")
         CHECK(it->value().as<int>() == 6);
     }
 
-    SECTION("find")
+    SUBCASE("find")
     {
         auto it1 = o.find("a");
         REQUIRE(bool(it1 != o.end()));
@@ -187,7 +187,7 @@ TEST_CASE("order preserving insert_or_assign")
     o.insert_or_assign("a", 4);
     o.insert_or_assign("a", 5);
 
-    SECTION("insert_or_assign")
+    SUBCASE("insert_or_assign")
     {
         REQUIRE(o.size() == 3);
 
@@ -204,7 +204,7 @@ TEST_CASE("order preserving insert_or_assign")
         CHECK(it2->value().as<int>() == 3);
     }
 
-    SECTION("insert_or_assign at pos")
+    SUBCASE("insert_or_assign at pos")
     {
         auto it = o.find("a");
         auto it2 = o.insert_or_assign(it,"d",3);
@@ -225,7 +225,7 @@ TEST_CASE("order preserving insert_or_assign")
         //}
     }
 
-    SECTION("try_emplace")
+    SUBCASE("try_emplace")
     {
         REQUIRE(o.size() == 3);
 
@@ -244,7 +244,7 @@ TEST_CASE("order preserving insert_or_assign")
         CHECK(it3->value().as<int>() == 7);
     }
 
-    SECTION("try_emplace at pos")
+    SUBCASE("try_emplace at pos")
     {
         auto it = o.find("a");
         auto it2 = o.try_emplace(it,"d",7);
@@ -261,7 +261,7 @@ TEST_CASE("order preserving insert_or_assign")
         CHECK(it3->value().as<int>() == 3);
     }
 
-    SECTION("erase")
+    SUBCASE("erase")
     {
         REQUIRE(o.size() == 3);
 
@@ -275,7 +275,7 @@ TEST_CASE("order preserving insert_or_assign")
         CHECK(it2->value().as<int>() == 3);
     }
 
-    SECTION("erase range")
+    SUBCASE("erase range")
     {
         REQUIRE(o.size() == 3);
 

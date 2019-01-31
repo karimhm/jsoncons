@@ -1,3 +1,10 @@
+Master
+------
+
+Tests
+
+- Changed from catch to doctest
+
 v0.118.0
 --------
 

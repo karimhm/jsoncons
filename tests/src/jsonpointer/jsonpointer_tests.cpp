@@ -6,7 +6,7 @@
 #endif
 #include <jsoncons/json.hpp>
 #include <jsoncons_ext/jsonpointer/jsonpointer.hpp>
-#include <catch/catch.hpp>
+#include <doctest/doctest.h>
 #include <iostream>
 #include <sstream>
 #include <vector>
@@ -233,7 +233,7 @@ TEST_CASE("test_replace_array_value")
 
 TEST_CASE("jsonpointer path tests")
 {
-    SECTION("/a~1b")
+    SUBCASE("/a~1b")
     {
         jsonpointer::address p("/a~1b");
 
@@ -243,7 +243,7 @@ TEST_CASE("jsonpointer path tests")
         CHECK((*it++ == "a/b"));
         CHECK(it == end);
     }
-    SECTION("/a~1b")
+    SUBCASE("/a~1b")
     {
         jsonpointer::address p("/m~0n");
 
@@ -253,7 +253,7 @@ TEST_CASE("jsonpointer path tests")
         CHECK((*it++ == "m~n"));
         CHECK(it == end);
     }
-    SECTION("/0/1")
+    SUBCASE("/0/1")
     {
         jsonpointer::address p("/0/1");
 
@@ -276,7 +276,7 @@ TEST_CASE("jsonpointer concatenation")
        }
     )");
 
-    SECTION("path append a/b")
+    SUBCASE("path append a/b")
     {
         jsonpointer::address p;
         p /= "a/b";
@@ -294,7 +294,7 @@ TEST_CASE("jsonpointer concatenation")
         std::cout << j << "\n";
     }
 
-    SECTION("concatenate two paths")
+    SUBCASE("concatenate two paths")
     {
         jsonpointer::address p1;
         p1 /= "m~n";

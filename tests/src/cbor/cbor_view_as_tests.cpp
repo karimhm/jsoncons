@@ -12,7 +12,7 @@
 #include <utility>
 #include <ctime>
 #include <limits>
-#include <catch/catch.hpp>
+#include <doctest/doctest.h>
 
 using namespace jsoncons;
 using namespace jsoncons::cbor;
@@ -75,7 +75,7 @@ TEST_CASE("cbor_view array as<> test")
 
     CHECK(v.size() == 8);
 
-    SECTION("v[0].is<T>()")
+    SUBCASE("v[0].is<T>()")
     {
         CHECK(v[0].is<std::string>());
         CHECK(v[1].is<byte_string>());
@@ -91,7 +91,7 @@ TEST_CASE("cbor_view array as<> test")
         CHECK(v[7].is<double>());
     }
 
-    SECTION("v[0].as<T>()")
+    SUBCASE("v[0].as<T>()")
     {
         CHECK(v[0].as<std::string>() == std::string("foo"));
         CHECK(v[1].as<jsoncons::byte_string>() == jsoncons::byte_string({'b','a','r'}));
@@ -105,7 +105,7 @@ TEST_CASE("cbor_view array as<> test")
         CHECK(v[7].as<double>() == 1431027667.5);
     }
 
-    SECTION("array_iterator is<T> test")
+    SUBCASE("array_iterator is<T> test")
     {
         auto it = v.array_range().begin();
         CHECK(it++->is<std::string>());

@@ -11,7 +11,7 @@
 #include <utility>
 #include <ctime>
 #include <limits>
-#include <catch/catch.hpp>
+#include <doctest/doctest.h>
 
 using namespace jsoncons;
 using namespace jsoncons::msgpack;
@@ -46,7 +46,7 @@ TEST_CASE("Too many and too few items in MessagePack object or array")
     std::vector<uint8_t> v;
     msgpack_buffer_serializer serializer(v);
 
-    SECTION("Too many items in array")
+    SUBCASE("Too many items in array")
     {
         CHECK(serializer.begin_array(3));
         CHECK(serializer.bool_value(true));
@@ -59,7 +59,7 @@ TEST_CASE("Too many and too few items in MessagePack object or array")
         REQUIRE_THROWS_WITH(serializer.end_array(), msgpack_error_category_impl().message((int)msgpack_errc::too_many_items).c_str());
         serializer.flush();
     }
-    SECTION("Too few items in array")
+    SUBCASE("Too few items in array")
     {
         CHECK(serializer.begin_array(5));
         CHECK(serializer.bool_value(true));
@@ -72,7 +72,7 @@ TEST_CASE("Too many and too few items in MessagePack object or array")
         REQUIRE_THROWS_WITH(serializer.end_array(), msgpack_error_category_impl().message((int)msgpack_errc::too_few_items).c_str());
         serializer.flush();
     }
-    SECTION("Too many items in object")
+    SUBCASE("Too many items in object")
     {
         CHECK(serializer.begin_object(3));
         CHECK(serializer.name("a"));
@@ -89,7 +89,7 @@ TEST_CASE("Too many and too few items in MessagePack object or array")
         REQUIRE_THROWS_WITH(serializer.end_object(), msgpack_error_category_impl().message((int)msgpack_errc::too_many_items).c_str());
         serializer.flush();
     }
-    SECTION("Too few items in object")
+    SUBCASE("Too few items in object")
     {
         CHECK(serializer.begin_object(5));
         CHECK(serializer.name("a"));

@@ -11,7 +11,7 @@
 #include <utility>
 #include <ctime>
 #include <limits>
-#include <catch/catch.hpp>
+#include <doctest/doctest.h>
 
 using namespace jsoncons;
 using namespace jsoncons::ubjson;
@@ -139,7 +139,7 @@ TEST_CASE("encode indefinite length ubjson arrays and maps")
     std::vector<uint8_t> v;
     ubjson_buffer_serializer serializer(v);
 
-    SECTION("[\"Hello\"]")
+    SUBCASE("[\"Hello\"]")
     {
         serializer.begin_array();
         serializer.string_value("Hello");
@@ -148,7 +148,7 @@ TEST_CASE("encode indefinite length ubjson arrays and maps")
         check_encode_ubjson({'[','S','U',0x05,'H','e','l','l','o',']'}, v);
     }
 
-    SECTION("{\"oc\": [0]}")
+    SUBCASE("{\"oc\": [0]}")
     {
         serializer.begin_object();
         serializer.name("oc");
@@ -160,7 +160,7 @@ TEST_CASE("encode indefinite length ubjson arrays and maps")
         check_encode_ubjson({'{','U',0x02,'o','c','[','U',0x00,']','}'}, v);
     }
 
-    SECTION("{\"oc\": [0,1,2,3]}")
+    SUBCASE("{\"oc\": [0,1,2,3]}")
     {
         serializer.begin_object();
         serializer.name("oc");

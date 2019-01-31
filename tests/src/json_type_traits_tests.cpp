@@ -6,7 +6,7 @@
 #endif
 #include <jsoncons/json.hpp>
 #include <jsoncons/json_serializer.hpp>
-#include <catch/catch.hpp>
+#include <doctest/doctest.h>
 #include <sstream>
 #include <vector>
 #include <utility>
@@ -78,7 +78,7 @@ TEST_CASE("test_float_assignment")
 
     float y = o["float"].as<float>();
 
-    CHECK(10.5 == Approx(y).epsilon(0.00001));
+    CHECK(10.5 == doctest::Approx(y).epsilon(0.00001));
 }
 
 TEST_CASE("test_float")
@@ -91,7 +91,7 @@ TEST_CASE("test_float")
 
     float y = o.as<float>();
 
-    CHECK(10.5 == Approx(y).epsilon(0.00001));
+    CHECK(10.5 == doctest::Approx(y).epsilon(0.00001));
 }
 
 TEST_CASE("test_unsupported_type")

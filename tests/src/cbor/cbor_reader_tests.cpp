@@ -7,7 +7,7 @@
 #include <jsoncons/json.hpp>
 #include <jsoncons_ext/cbor/cbor.hpp>
 #include <jsoncons_ext/cbor/cbor_reader.hpp>
-#include <catch/catch.hpp>
+#include <doctest/doctest.h>
 #include <sstream>
 #include <vector>
 #include <utility>
@@ -152,7 +152,7 @@ TEST_CASE("test_cbor_parsing")
     check_parse_cbor({0x7f,0x61,'H',0x61,'e',0x61,'l',0x61,'l',0x61,'o',0xff}, json("Hello"));
     check_parse_cbor({0x7f,0x61,'H',0x61,'e',0x61,'l',0x60,0x61,'l',0x61,'o',0xff}, json("Hello"));
 
-    SECTION ("arrays with definite length")
+    SUBCASE ("arrays with definite length")
     {
         check_parse_cbor({0x80},json::array());
         check_parse_cbor({0x81,'\0'},json::parse("[0]"));
@@ -172,7 +172,7 @@ TEST_CASE("test_cbor_parsing")
                        0x5f,0xff},
                       json::array{json(byte_string()),json(byte_string())});
     }
-    SECTION("arrays with indefinite length")
+    SUBCASE("arrays with indefinite length")
     {
         //check_parse_cbor({0x9f,0xff},json::array());
         check_parse_cbor({0x9f,0x9f,0xff,0xff},json::parse("[[]]"));
@@ -201,13 +201,13 @@ TEST_CASE("test_cbor_parsing")
                          0x19, 0x6a, 0xb3 // 27315 
                   },json(json::array({-2,27315}),semantic_tag_type::big_float));
 
-    SECTION("maps with definite length")
+    SUBCASE("maps with definite length")
     {
         //check_parse_cbor({0xa0},json::object());
         check_parse_cbor({0xa1,0x62,'o','c',0x81,'\0'}, json::parse("{\"oc\": [0]}"));
         //check_parse_cbor({0xa1,0x62,'o','c',0x84,'\0','\1','\2','\3'}, json::parse("{\"oc\": [0, 1, 2, 3]}"));
     }
-    SECTION("maps with indefinite length")
+    SUBCASE("maps with indefinite length")
     {
         check_parse_cbor({0xbf,0xff},json::object());
         check_parse_cbor({0xbf,0x64,'N','a','m','e',0xbf,0xff,0xff},json::parse("{\"Name\":{}}"));
@@ -230,7 +230,7 @@ TEST_CASE("test_cbor_parsing")
                       json::parse("{\"-2\": true, \"true\": -2}"));
     }
 
-    SECTION("maps with non-string keys")
+    SUBCASE("maps with non-string keys")
     {
         check_parse_cbor({0xbf,                       // Start indefinite-length map
                            0x21,                   // First key, -2
@@ -297,7 +297,7 @@ TEST_CASE("cbor decimal fraction")
 
 TEST_CASE("test_decimal_as_string")
 {
-    SECTION("-2 27315")
+    SUBCASE("-2 27315")
     {
         std::vector<uint8_t> v = {0x82, // Array of length 2
                                   0x21, // -2
@@ -310,7 +310,7 @@ TEST_CASE("test_decimal_as_string")
         REQUIRE_FALSE(ec);
         CHECK(std::string("273.15") == s);
     }
-    SECTION("-6 27315")
+    SUBCASE("-6 27315")
     {
         std::vector<uint8_t> v = {0x82, // Array of length 2
                                   0x25, // -6
@@ -323,7 +323,7 @@ TEST_CASE("test_decimal_as_string")
         REQUIRE_FALSE(ec);
         CHECK(std::string("0.27315e-1") == s);
     }
-    SECTION("-5 27315")
+    SUBCASE("-5 27315")
     {
         std::vector<uint8_t> v = {0x82, // Array of length 2
                                   0x24, // -5
@@ -336,7 +336,7 @@ TEST_CASE("test_decimal_as_string")
         REQUIRE_FALSE(ec);
         CHECK(std::string("0.27315") == s);
     }
-    SECTION("0 27315")
+    SUBCASE("0 27315")
     {
         std::vector<uint8_t> v = {0x82, // Array of length 2
                                   0x00, // 0
@@ -349,7 +349,7 @@ TEST_CASE("test_decimal_as_string")
         REQUIRE_FALSE(ec);
         CHECK(std::string("27315.0") == s);
     }
-    SECTION("2 27315")
+    SUBCASE("2 27315")
     {
         std::vector<uint8_t> v = {0x82, // Array of length 2
                                   0x02, // 2
@@ -362,7 +362,7 @@ TEST_CASE("test_decimal_as_string")
         REQUIRE_FALSE(ec);
         CHECK(s == std::string("27315e2"));
     }
-    SECTION("-2 18446744073709551616")
+    SUBCASE("-2 18446744073709551616")
     {
         std::vector<uint8_t> v = {0x82, // Array of length 2
                                   0x21, // -2
@@ -375,7 +375,7 @@ TEST_CASE("test_decimal_as_string")
         REQUIRE_FALSE(ec);
         CHECK(std::string("184467440737095516.16") == s);
     }
-    SECTION("-2 -65537")
+    SUBCASE("-2 -65537")
     {
         std::vector<uint8_t> v = {0x82, // Array of length 2
                                   0x21, // -2
@@ -388,7 +388,7 @@ TEST_CASE("test_decimal_as_string")
         REQUIRE_FALSE(ec);
         CHECK(s == std::string("-655.37"));
     }
-    SECTION("-5 -65537")
+    SUBCASE("-5 -65537")
     {
         std::vector<uint8_t> v = {0x82, // Array of length 2
                                   0x24, // -5
@@ -401,7 +401,7 @@ TEST_CASE("test_decimal_as_string")
         REQUIRE_FALSE(ec);
         CHECK(s == std::string("-0.65537"));
     }
-    SECTION("-6 -65537")
+    SUBCASE("-6 -65537")
     {
         std::vector<uint8_t> v = {0x82, // Array of length 2
                                   0x25, // -6

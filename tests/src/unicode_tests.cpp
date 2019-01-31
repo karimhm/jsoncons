@@ -7,7 +7,7 @@
 #include <utility>
 #include <ctime>
 #include <string>
-#include <catch/catch.hpp>
+#include <doctest/doctest.h>
 
 using namespace jsoncons;
 

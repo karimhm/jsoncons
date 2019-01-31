@@ -6,7 +6,7 @@
 #endif
 #include <jsoncons/json.hpp>
 #include <jsoncons_ext/jsonpath/json_query.hpp>
-#include <catch/catch.hpp>
+#include <doctest/doctest.h>
 #include <iostream>
 #include <sstream>
 #include <vector>
@@ -59,7 +59,7 @@ TEST_CASE("jsonpath function tests")
     }
     )");
 
-    SECTION("sum")
+    SUBCASE("sum")
     {
         json result = json_query(store,"count($.store.book[*])");
 
@@ -69,7 +69,7 @@ TEST_CASE("jsonpath function tests")
         CHECK(result[0].as<size_t>() == expected);
     }
 
-    SECTION("keys")
+    SUBCASE("keys")
     {
         json result = json_query(store,"keys($.store.book[0])[*]");
 
@@ -78,30 +78,30 @@ TEST_CASE("jsonpath function tests")
         REQUIRE(result.size() == 4);
         CHECK(result == expected);
     }
-    SECTION("sum")
+    SUBCASE("sum")
     {
         json result = json_query(store,"sum($.store.book[*].price)");
         double expected = 53.92;
         REQUIRE(result.size() == 1);
-        CHECK(result[0].as<double>() == Approx(expected).epsilon(0.000001));
+        CHECK(result[0].as<double>() == doctest::Approx(expected).epsilon(0.000001));
     }
-    SECTION("sum in filter")
+    SUBCASE("sum in filter")
     {
         json result = json_query(store,"$.store.book[?(@.price > sum($.store.book[*].price) / count($.store.book[*]))].title");
         std::string expected = "The Lord of the Rings";
         REQUIRE(result.size() == 1);
         CHECK(result[0].as<std::string>() == expected);
     }
-    SECTION("avg")
+    SUBCASE("avg")
     {
         json result = json_query(store,"avg($.store.book[*].price)");
 
         double expected = 13.48;
 
         REQUIRE(result.size() == 1);
-        CHECK(result[0].as<double>() == Approx(expected).epsilon(0.000001));
+        CHECK(result[0].as<double>() == doctest::Approx(expected).epsilon(0.000001));
     }
-    SECTION("avg in filter")
+    SUBCASE("avg in filter")
     {
         json result = json_query(store,"$.store.book[?(@.price > avg($.store.book[*].price))].title");
         std::string expected = "The Lord of the Rings";
@@ -109,37 +109,37 @@ TEST_CASE("jsonpath function tests")
         CHECK(result[0].as<std::string>() == expected);
     }
 
-    SECTION("prod")
+    SUBCASE("prod")
     {
         json result = json_query(store,"prod($.store.book[*].price)");
 
         double expected = 24028.731766049998;
 
         REQUIRE(result.size() == 1);
-        CHECK(result[0].as<double>() == Approx(expected).epsilon(0.000001));
+        CHECK(result[0].as<double>() == doctest::Approx(expected).epsilon(0.000001));
     }
 
-    SECTION("min")
+    SUBCASE("min")
     {
         json result = json_query(store,"min($.store.book[*].price)");
 
         double expected = 8.95;
 
         REQUIRE(result.size() == 1);
-        CHECK(result[0].as<double>() == Approx(expected).epsilon(0.000001));
+        CHECK(result[0].as<double>() == doctest::Approx(expected).epsilon(0.000001));
     }
 
-    SECTION("max")
+    SUBCASE("max")
     {
         json result = json_query(store,"max($.store.book[*].price)");
 
         double expected = 22.99;
 
         REQUIRE(result.size() == 1);
-        CHECK(result[0].as<double>() == Approx(expected).epsilon(0.000001));
+        CHECK(result[0].as<double>() == doctest::Approx(expected).epsilon(0.000001));
     }
 
-    SECTION("max in filter")
+    SUBCASE("max in filter")
     {
         std::string path = "$.store.book[?(@.price < max($.store.book[*].price))].title";
 
@@ -153,7 +153,7 @@ TEST_CASE("jsonpath function tests")
     }
 #if !(defined(__GNUC__) && (__GNUC__ == 4 && __GNUC_MINOR__ < 9))
 // GCC 4.8 has broken regex support: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=53631
-    SECTION("tokenize")
+    SUBCASE("tokenize")
     {
         json j("The cat sat on the mat");
         json result = json_query(j,"tokenize($,'\\\\s+')[*]");
@@ -162,14 +162,14 @@ TEST_CASE("jsonpath function tests")
 
         CHECK(result == expected);
     }
-    SECTION("tokenize in filter")
+    SUBCASE("tokenize in filter")
     {
         json j = json::parse("[\"The cat sat on the mat\",\"The cat on the mat\"]");
         json result = json_query(j,"$.[?(tokenize(@,'\\\\s+')[2]=='sat')]");
 
         CHECK(result[0] == j[0]);
     }
-    SECTION("tokenize in filter 2")
+    SUBCASE("tokenize in filter 2")
     {
         json result = json_query(store,"$.store.book[?(tokenize(@.author,'\\\\s+')[1] == 'Waugh')].title");
         std::string expected = "Sword of Honour";

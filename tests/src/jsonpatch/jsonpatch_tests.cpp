@@ -4,7 +4,7 @@
 #if defined(_MSC_VER)
 #include "windows.h" // test no inadvertant macro expansions
 #endif
-#include <catch/catch.hpp>
+#include <doctest/doctest.h>
 #include <iostream>
 #include <sstream>
 #include <vector>

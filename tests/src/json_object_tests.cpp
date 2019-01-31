@@ -3,7 +3,7 @@
 
 #include <jsoncons/json.hpp>
 #include <jsoncons/json_serializer.hpp>
-#include <catch/catch.hpp>
+#include <doctest/doctest.h>
 #include <sstream>
 #include <vector>
 #include <utility>
@@ -15,7 +15,7 @@ using namespace jsoncons;
 
 TEST_CASE("json = json::object(first,last)")
 {
-    SECTION("copy map into json")
+    SUBCASE("copy map into json")
     {
         std::map<std::string,double> m = {{"c",1},{"b",2},{"a",3}};
 
@@ -31,7 +31,7 @@ TEST_CASE("json = json::object(first,last)")
 
 TEST_CASE("json insert(first,last) test")
 {
-    SECTION("copy map into json")
+    SUBCASE("copy map into json")
     {
         std::map<std::string,double> m1 = {{"f",4},{"e",5},{"d",6}};
         std::map<std::string,double> m2 = {{"c",1},{"b",2},{"a",3}};
@@ -51,7 +51,7 @@ TEST_CASE("json insert(first,last) test")
         CHECK(it++->key() == "e");
         CHECK(it++->key() == "f");
     }
-    SECTION("copy map into ojson")
+    SUBCASE("copy map into ojson")
     {
         std::map<std::string,double> m1 = {{"f",4},{"e",5},{"d",6}};
         std::map<std::string,double> m2 = {{"c",1},{"b",2},{"a",3}};
@@ -71,7 +71,7 @@ TEST_CASE("json insert(first,last) test")
         CHECK(it++->key() == "b");
         CHECK(it++->key() == "c");
     }
-    SECTION("move map into json")
+    SUBCASE("move map into json")
     {
         std::map<std::string,double> m1 = {{"a",1},{"b",2},{"c",3}};
         std::map<std::string,double> m2 = {{"d",4},{"e",5},{"f",6}};
@@ -95,14 +95,14 @@ TEST_CASE("json insert(first,last) test")
 
 TEST_CASE("json as<T>")
 {
-    SECTION("empty object as string")
+    SUBCASE("empty object as string")
     {
         json j;
         std::string s = j.as<std::string>();
         CHECK("{}" == s);
     }
 
-    SECTION("key not found")
+    SUBCASE("key not found")
     {
         try
         {
@@ -822,7 +822,7 @@ TEST_CASE("test_set_override")
     obj["height"] = "0.3";
 
     CHECK(obj["first_name"] == "Joe");
-    CHECK(obj["height"].as<double>() == Approx(0.3).epsilon(0.00000000001));
+    CHECK(obj["height"].as<double>() == doctest::Approx(0.3).epsilon(0.00000000001));
 }
 
 TEST_CASE("try_emplace tests")
@@ -842,14 +842,14 @@ TEST_CASE("try_emplace tests")
     }
     )");
 
-    SECTION("try_emplace(const string_view_type& name, Args&&... args)")
+    SUBCASE("try_emplace(const string_view_type& name, Args&&... args)")
     {
         j.try_emplace("c",3);
 
         CHECK(j == expected);
     }
 
-    SECTION("try_emplace(iterator hint, const string_view_type& name, Args&&... args)")
+    SUBCASE("try_emplace(iterator hint, const string_view_type& name, Args&&... args)")
     {
         json::object_iterator it = j.object_range().begin();
 

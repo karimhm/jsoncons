@@ -8,7 +8,7 @@
 #include <utility>
 #include <ctime>
 #include <limits>
-#include <catch/catch.hpp>
+#include <doctest/doctest.h>
 
 using namespace jsoncons;
 using namespace jsoncons::bson;
@@ -66,7 +66,7 @@ namespace jsoncons { namespace bson {
 
 TEST_CASE("serialize to bson")
 {
-    SECTION("array")
+    SUBCASE("array")
     {
         std::vector<uint8_t> v;
         bson_buffer_serializer serializer(v);
@@ -123,7 +123,7 @@ TEST_CASE("serialize to bson")
         jsoncons::bson::check_equal(v,bson);
 
     }
-    SECTION("object")
+    SUBCASE("object")
     {
         std::vector<uint8_t> v;
         bson_buffer_serializer serializer(v);
@@ -188,7 +188,7 @@ TEST_CASE("serialize to bson")
         jsoncons::bson::check_equal(v,bson);
     }
 
-    SECTION("outer object")
+    SUBCASE("outer object")
     {
         std::vector<uint8_t> v;
         bson_buffer_serializer serializer(v);
@@ -217,7 +217,7 @@ TEST_CASE("serialize to bson")
         jsoncons::bson::check_equal(v,bson);
     }
 
-    SECTION("outer array")
+    SUBCASE("outer array")
     {
         std::vector<uint8_t> v;
         bson_buffer_serializer serializer(v);

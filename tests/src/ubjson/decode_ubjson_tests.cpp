@@ -12,7 +12,7 @@
 #include <ctime>
 #include <limits>
 #include <iomanip>
-#include <catch/catch.hpp>
+#include <doctest/doctest.h>
 
 using namespace jsoncons;
 using namespace jsoncons::ubjson;
@@ -56,13 +56,13 @@ void check_decode_ubjson(const std::vector<uint8_t>& expected, const std::vector
 
 TEST_CASE("decode_number_ubjson_test")
 {
-    SECTION("null, true, false")
+    SUBCASE("null, true, false")
     {
         check_decode_ubjson({'Z'},json::null()); 
         check_decode_ubjson({'T'},json(true)); 
         check_decode_ubjson({'F'},json(false)); 
     }
-    SECTION("uint8")
+    SUBCASE("uint8")
     {
         check_decode_ubjson({'U',0x00},json(0U));
         check_decode_ubjson({'U',0x01},json(1U));
@@ -72,7 +72,7 @@ TEST_CASE("decode_number_ubjson_test")
         check_decode_ubjson({'U',0x7f},json(127U)); 
         check_decode_ubjson({'U',0xff},json(255U));
     }
-    SECTION("int8,int16,int32,int64")
+    SUBCASE("int8,int16,int32,int64")
     {
         check_decode_ubjson({'i',0xff},json(-1));
         check_decode_ubjson({'I',0x01,0x00},json(256));
@@ -90,28 +90,28 @@ TEST_CASE("decode_number_ubjson_test")
         check_decode_ubjson({'L',0xff,0xff,0xff,0xfe,0xff,0xff,0xff,0xff},json(-4294967297));
     }
 
-    SECTION("float32,float64")
+    SUBCASE("float32,float64")
     {
         check_decode_ubjson({'D',0,0,0,0,0,0,0,0},json(0.0));
         check_decode_ubjson({'D',0xbf,0xf0,0,0,0,0,0,0},json(-1.0));
         check_decode_ubjson({'D',0xc1,0x6f,0xff,0xff,0xe0,0,0,0},json(-16777215.0));
     }
 
-    SECTION("array")
+    SUBCASE("array")
     {
         check_decode_ubjson({'[',']'},json::parse("[]"));
         check_decode_ubjson({'[', 'Z', 'T', 'F', ']'},json::parse("[null,true,false]"));
         check_decode_ubjson({'[','#','i',0},json::parse("[]"));
         check_decode_ubjson({'[','#','i',1,'I',0xff,0},json::parse("[-256]"));
     }
-    SECTION("ubjson array optimized with type and count")
+    SUBCASE("ubjson array optimized with type and count")
     {
         check_decode_ubjson({'[','$','I','#','i',2,
                              0x01,0x00, // 256
                              0xff,0}, // -256
                              json::parse("[256,-256]"));
     }
-    SECTION("ubjson object optimized with type and count")
+    SUBCASE("ubjson object optimized with type and count")
     {
         check_decode_ubjson({'{','$','I','#','i',2,
                              'i',5,'f','i','r','s','t',
@@ -142,7 +142,7 @@ TEST_CASE("decode indefinite length ubjson arrays and maps")
     std::vector<uint8_t> v;
     ubjson_buffer_serializer serializer(v);
 
-    SECTION("[\"Hello\"]")
+    SUBCASE("[\"Hello\"]")
     {
         serializer.begin_array();
         serializer.string_value("Hello");
@@ -151,7 +151,7 @@ TEST_CASE("decode indefinite length ubjson arrays and maps")
         check_decode_ubjson({'[','S','U',0x05,'H','e','l','l','o',']'}, v);
     }
 
-    SECTION("{\"oc\": [0]}")
+    SUBCASE("{\"oc\": [0]}")
     {
         serializer.begin_object();
         serializer.name("oc");
@@ -163,7 +163,7 @@ TEST_CASE("decode indefinite length ubjson arrays and maps")
         check_decode_ubjson({'{','U',0x02,'o','c','[','U',0x00,']','}'}, v);
     }
 
-    SECTION("{\"oc\": [0,1,2,3]}")
+    SUBCASE("{\"oc\": [0,1,2,3]}")
     {
         serializer.begin_object();
         serializer.name("oc");

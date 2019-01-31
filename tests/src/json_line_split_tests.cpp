@@ -3,7 +3,7 @@
 
 #include <jsoncons/json.hpp>
 #include <jsoncons/json_serializer.hpp>
-#include <catch/catch.hpp>
+#include <doctest/doctest.h>
 #include <sstream>
 #include <vector>
 #include <utility>
@@ -53,7 +53,7 @@ TEST_CASE("json_serializer line split tests")
     }
 )");
 
-    SECTION("Default line splits")
+    SUBCASE("Default line splits")
     {
 std::string expected = R"({
     "data": {
@@ -74,7 +74,7 @@ std::string expected = R"({
         CHECK(os.str() == expected);
     }
 
-    SECTION("array_array same_line")
+    SUBCASE("array_array same_line")
     {
         json_options options;
         options.spaces_around_comma(spaces_option::no_spaces)
@@ -96,7 +96,7 @@ std::string expected = R"({
         CHECK(expected == os.str());
     }
 
-    SECTION("array_array new_line")
+    SUBCASE("array_array new_line")
     {
         json_options options;
         options.spaces_around_comma(spaces_option::no_spaces)
@@ -120,7 +120,7 @@ std::string expected = R"({
         CHECK(expected == os.str());
     }
 
-    SECTION("array_array multi_line")
+    SUBCASE("array_array multi_line")
     {
         json_options options;
         options.spaces_around_comma(spaces_option::no_spaces)
@@ -147,7 +147,7 @@ std::string expected = R"({
         CHECK(expected == os.str());
     }
 
-    SECTION("object_array same_line")
+    SUBCASE("object_array same_line")
     {
         json_options options;
         options.spaces_around_comma(spaces_option::no_spaces)
@@ -170,7 +170,7 @@ std::string expected = R"({
         CHECK(expected == os.str());
     }
 
-    SECTION("object_array new_line")
+    SUBCASE("object_array new_line")
     {
         json_options options;
         options.spaces_around_comma(spaces_option::no_spaces)
@@ -195,7 +195,7 @@ std::string expected = R"({
         CHECK(expected == os.str());
     }
 
-    SECTION("")
+    SUBCASE("")
     {
         json_options options;
         options.spaces_around_comma(spaces_option::no_spaces)

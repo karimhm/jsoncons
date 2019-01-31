@@ -1,7 +1,7 @@
 // Copyright 2013-2018 Daniel Parker
 // Distributed under Boost license
 
-#include <catch/catch.hpp>
+#include <doctest/doctest.h>
 #include <iostream>
 #include <sstream>
 #include <vector>
@@ -28,7 +28,7 @@ using namespace jsoncons;
 #if defined(_MSC_VER) && _MSC_VER >= 1900
 TEST_CASE("JSON Parsing Test Suite")
 {
-    SECTION("Expected success")
+    SUBCASE("Expected success")
     {
         std::string path = "./input/JSONTestSuite";
         for (auto& p : fs::directory_iterator(path))
@@ -48,7 +48,7 @@ TEST_CASE("JSON Parsing Test Suite")
             }
         }
     }
-    SECTION("Expected failure")
+    SUBCASE("Expected failure")
     {
         std::string path = "./input/JSONTestSuite";
         for (auto& p : fs::directory_iterator(path))

@@ -10,7 +10,7 @@
 #include <vector>
 #include <utility>
 #include <ctime>
-#include <catch/catch.hpp>
+#include <doctest/doctest.h>
 
 using namespace jsoncons;
 
@@ -206,7 +206,7 @@ TEST_CASE("test_traits3")
 
 TEST_CASE("test shift left")
 {
-    SECTION("n << 1")
+    SUBCASE("n << 1")
     {
         bignum n("1");
         bignum x = n << 1;
@@ -214,7 +214,7 @@ TEST_CASE("test shift left")
         x.dump(s);
         CHECK(s == "2");
     }
-    SECTION("n << 100")
+    SUBCASE("n << 100")
     {
         bignum n(1);
         bignum x = n << 100;
@@ -222,7 +222,7 @@ TEST_CASE("test shift left")
         x.dump(s);
         CHECK(s == "1267650600228229401496703205376");
     }
-    SECTION("n << 100, += 1")
+    SUBCASE("n << 100, += 1")
     {
         bignum n(1);
         bignum x = n << 100;
@@ -235,7 +235,7 @@ TEST_CASE("test shift left")
 
 TEST_CASE("times 10")
 {
-    SECTION("1")
+    SUBCASE("1")
     {
         bignum n("1234");
         bignum m = n * 10;
@@ -243,7 +243,7 @@ TEST_CASE("times 10")
         m.dump(s);
         CHECK(s == "12340");
     }
-    SECTION("31")
+    SUBCASE("31")
     {
         std::string expected("1234");
         bignum n(expected);
@@ -258,7 +258,7 @@ TEST_CASE("times 10")
         CHECK(s == expected);
         //std::cout << "x31: " << s << "\n";
     }
-    SECTION("32")
+    SUBCASE("32")
     {
         std::string expected("1234");
         bignum n(expected);

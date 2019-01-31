@@ -12,7 +12,7 @@
 #include <utility>
 #include <ctime>
 #include <limits>
-#include <catch/catch.hpp>
+#include <doctest/doctest.h>
 
 using namespace jsoncons;
 using namespace jsoncons::cbor;
@@ -347,7 +347,7 @@ TEST_CASE("cbor_view array comparison test")
     serializer3.flush();
     cbor_view v3 = buf3;
 
-    SECTION("operator== test")
+    SUBCASE("operator== test")
     {
         CHECK(v1 == v2);
         REQUIRE(v1.size() == 2);
@@ -356,7 +356,7 @@ TEST_CASE("cbor_view array comparison test")
         CHECK(v1[1] == v2[1]);
     }
 
-    SECTION("element operator== test")
+    SUBCASE("element operator== test")
     {
         CHECK_FALSE(v1 == v3);
         REQUIRE(v1.size() == 2);
@@ -414,7 +414,7 @@ TEST_CASE("cbor_view object comparison")
     serializer3.flush();
     cbor_view view3 = buf3;
 
-    SECTION("contains")
+    SUBCASE("contains")
     {
         CHECK(view1.contains("City"));
         CHECK(view1.contains("Amount"));
@@ -422,7 +422,7 @@ TEST_CASE("cbor_view object comparison")
         CHECK_FALSE(view1.contains("Country"));
     }
 
-    SECTION("empty")
+    SUBCASE("empty")
     {
         CHECK_FALSE(view3.empty());
         CHECK(view3["empty-object"].empty());
@@ -431,12 +431,12 @@ TEST_CASE("cbor_view object comparison")
         CHECK(view3["empty-byte_string"].empty());
     }
 
-    SECTION("size")
+    SUBCASE("size")
     {
         CHECK(view1.size() == 3);
     }
 
-    SECTION("operator==")
+    SUBCASE("operator==")
     {
         CHECK_FALSE(view1 == view2);
         CHECK_FALSE(view1["City"] == view2["City"]);
@@ -473,7 +473,7 @@ TEST_CASE("cbor_view member tests")
     serializer.flush();
     cbor_view view = buf;
 
-    SECTION("contains")
+    SUBCASE("contains")
     {
         CHECK(view.contains("City"));
         CHECK(view.contains("Amount"));
@@ -481,7 +481,7 @@ TEST_CASE("cbor_view member tests")
         CHECK_FALSE(view.contains("Country"));
     }
 
-    SECTION("empty")
+    SUBCASE("empty")
     {
         CHECK_FALSE(view.empty());
         CHECK(view["empty-object"].empty());
@@ -490,7 +490,7 @@ TEST_CASE("cbor_view member tests")
         CHECK(view["empty-byte_string"].empty());
     }
 
-    SECTION("size")
+    SUBCASE("size")
     {
         CHECK(view.size() == 7);
     }

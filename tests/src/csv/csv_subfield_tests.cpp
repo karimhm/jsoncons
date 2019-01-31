@@ -13,7 +13,7 @@
 #include <utility>
 #include <ctime>
 #include <iostream>
-#include <catch/catch.hpp>
+#include <doctest/doctest.h>
 
 using namespace jsoncons;
 using namespace jsoncons::csv;

@@ -3,7 +3,7 @@
 
 #include <jsoncons/json_exception.hpp>
 #include <jsoncons/json.hpp>
-#include <catch/catch.hpp>
+#include <doctest/doctest.h>
 #include <new>
 #include <string>
 

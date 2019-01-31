@@ -3,7 +3,7 @@
 
 #include <jsoncons/json.hpp>
 #include <jsoncons/json_serializer.hpp>
-#include <catch/catch.hpp>
+#include <doctest/doctest.h>
 #include <sstream>
 #include <vector>
 #include <utility>
@@ -34,7 +34,7 @@ TEST_CASE("json(string, semantic_tag_type::date_time)")
 
 TEST_CASE("json(string, semantic_tag_type::timestamp)")
 {
-    SECTION("positive integer")
+    SUBCASE("positive integer")
     {
         int t = 10000;
         json j(t, semantic_tag_type::timestamp);
@@ -42,7 +42,7 @@ TEST_CASE("json(string, semantic_tag_type::timestamp)")
         CHECK(j.semantic_tag() == semantic_tag_type::timestamp);
         CHECK(j.as<int>() == t);
     }
-    SECTION("negative integer")
+    SUBCASE("negative integer")
     {
         int t = -10000;
         json j(t, semantic_tag_type::timestamp);
@@ -50,7 +50,7 @@ TEST_CASE("json(string, semantic_tag_type::timestamp)")
         CHECK(j.semantic_tag() == semantic_tag_type::timestamp);
         CHECK(j.as<int>() == t);
     }
-    SECTION("floating point")
+    SUBCASE("floating point")
     {
         double t = 10000.1;
         json j(t, semantic_tag_type::timestamp);

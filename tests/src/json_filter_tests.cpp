@@ -5,7 +5,7 @@
 #include <jsoncons/json_filter.hpp>
 #include <jsoncons/json_reader.hpp>
 #include <jsoncons/json.hpp>
-#include <catch/catch.hpp>
+#include <doctest/doctest.h>
 #include <sstream>
 #include <vector>
 #include <utility>
@@ -139,7 +139,7 @@ TEST_CASE("test_rename_name")
     {
         std::cout << e.what() << std::endl;
     }
-    CHECK(j["store"]["book"][0]["price"].as<double>() == Approx(31.96).epsilon(0.001));
+    CHECK(j["store"]["book"][0]["price"].as<double>() == doctest::Approx(31.96).epsilon(0.001));
 
     std::stringstream ss;
     json_serializer serializer(ss);
@@ -147,7 +147,7 @@ TEST_CASE("test_rename_name")
     j.dump(filter);
 
     json j2 = json::parse(ss);
-    CHECK(j2["store"]["book"][0]["price2"].as<double>() == Approx(31.96).epsilon(0.001));
+    CHECK(j2["store"]["book"][0]["price2"].as<double>() == doctest::Approx(31.96).epsilon(0.001));
 }
 
 TEST_CASE("test_chained_filters")

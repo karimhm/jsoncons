@@ -5,7 +5,7 @@
 #include <jsoncons/json_serializer.hpp>
 #include <jsoncons/json_parser.hpp>
 #include <jsoncons/json_decoder.hpp>
-#include <catch/catch.hpp>
+#include <doctest/doctest.h>
 #include <sstream>
 #include <vector>
 #include <utility>

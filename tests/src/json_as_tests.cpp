@@ -3,7 +3,7 @@
 
 #include <jsoncons/json.hpp>
 #include <jsoncons/json_serializer.hpp>
-#include <catch/catch.hpp>
+#include <doctest/doctest.h>
 #include <sstream>
 #include <vector>
 #include <utility>
@@ -23,22 +23,22 @@ TEST_CASE("json::as<jsoncons::string_view>()")
 
 TEST_CASE("json::as<jsoncons::bignum>()")
 {
-    SECTION("from integer")
+    SUBCASE("from integer")
     {
         jsoncons::json j(-1000);
         CHECK(bool(j.as<jsoncons::bignum>() == jsoncons::bignum(-1000)));
     }
-    SECTION("from unsigned integer")
+    SUBCASE("from unsigned integer")
     {
         jsoncons::json j(1000u);
         CHECK(bool(j.as<jsoncons::bignum>() == jsoncons::bignum(1000u)));
     }
-    SECTION("from double")
+    SUBCASE("from double")
     {
         jsoncons::json j(1000.0);
         CHECK(bool(j.as<jsoncons::bignum>() == jsoncons::bignum(1000.0)));
     }
-    SECTION("from bignum")
+    SUBCASE("from bignum")
     {
         std::string s = "-18446744073709551617";
         jsoncons::json j(s,  jsoncons::semantic_tag_type::big_integer);

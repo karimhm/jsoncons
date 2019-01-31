@@ -14,7 +14,7 @@
 #include <ctime>
 #include <iostream>
 #include <fstream>
-#include <catch/catch.hpp>
+#include <doctest/doctest.h>
 
 using namespace jsoncons;
 using namespace jsoncons::csv;
