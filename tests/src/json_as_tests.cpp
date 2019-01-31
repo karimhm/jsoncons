@@ -57,7 +57,7 @@ TEST_CASE("json::as<__int128>()")
     jsoncons::json j(s);
 
     __int128 val = j.as<__int128>();
-    CHECK(result.value == val);
+    CHECK(bool(result.value == val));
 }
 
 TEST_CASE("json::as<unsigned __int128>()")
@@ -70,6 +70,6 @@ TEST_CASE("json::as<unsigned __int128>()")
     jsoncons::json j(s);
 
     unsigned __int128 val = j.as<unsigned __int128>();
-    CHECK(result.value == val);
+    CHECK(bool(result.value == val));
 }
 #endif
